@@ -179,6 +179,27 @@ Methods:
 2. getOwedShare() - Returns the Owed Share
 3. getNetBalance() - Returns the Net Balance
 
+### Group
+
+Methods:
+
+1. getId() - Returns the id of the group
+2. getName() - Returns the name of the group
+3. getUpdatedAt() - Get the time this group was last updated
+4. getWhiteBoard() - Get the whiteboard contents of this group
+5. isSimplifiedByDefault() - Returns if group is simplified by default or not
+6. getMembers() - Returns a list of ```Friend``` objects
+7. getOriginalDebts() - Returns a list of  ```Debt``` objects
+8. getType() - Returns the type of group
+9. getSimplifiedDebts() - Returns a list of  ```Debt``` objects
+10. getInviteLink() - Returns the invite link
+
+### FriendGroup
+
+Methods:
+
+1. getId() - Returns the id of the group
+2. getBalances() - Returns a list of ```Balance``` object
 
 
 
