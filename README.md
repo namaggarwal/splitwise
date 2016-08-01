@@ -41,7 +41,7 @@ url, secret = sObj.getAuthorizeURL()
 #redirect user to url
 ```
 
-1. After authorization splitwise will redirect the user back to the callback url that you provided during registration. It will also provide oauth_token and oauth_verifier that can be used along with secret from step 1 to get access token. The below snippet is from Flask application to extract parameters and then using SDK to get access token. This access token can be stored in your db to make calls on his/her behalf.
+2. After authorization splitwise will redirect the user back to the callback url that you provided during registration. It will also provide oauth_token and oauth_verifier that can be used along with secret from step 1 to get access token. The below snippet is from Flask application to extract parameters and then using SDK to get access token. This access token can be stored in your db to make calls on his/her behalf.
 
 ```python
 oauth_token    = request.args.get('oauth_token')
