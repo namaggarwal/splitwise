@@ -204,6 +204,71 @@ Methods:
 
 
 
+### Balance
+
+Methods:
+
+1. getCurrencyCode() - Returns the currency code.
+2. getAmount() - Returns the amount
+
+### Category
+
+Methods:
+
+1. getSubcategories() - Returns a list of ```Category``` objects
+2. getId() - Returns the id of category
+3. getName() - Returns the name of the category
+
+### Currency
+
+Methods:
+
+1. getCode() - Returns the Currency Code
+2. getUnit() - Returns the Currency Unit
+
+### Debt
+
+Methods:
+
+1. getFromUser() - Returns the id of the from user
+2. getToUser() - Returns the id of the to user
+3. getAmount() - Returns the amount of the debt
+4. getCurrencyCode() - Returns the currency code of debt
+
+
+### Expense
+
+1. getId() - Returns the id of expense
+2. getGroupId() - Returns the id of the group expense belongs to
+3. getDescription() - Returns the description of expense
+4. isRepeat() - Returns if expense is repeat or not
+5. getRepeatInterval() - Returns the repeat interval of expense
+6. getEmailReminder() - Returns Email reminder
+7. getEmailReminderInAdvance() - Returns email reminder in advance
+8. getNextRepeat() - Returns the time of next repeat
+9. getDetails() - Returns the detail of expense
+10. getCommentsCount() - Returns the number of comments
+11. getPayment() - Returns the payment of expense
+12. getCreationMethod() - Returns the creation method of expense
+13. getTransactionMethod() - Returns the transaction method of expense
+14. getTransactionConfirmed() - Returns if transaction is confirmed
+15. getCost() - Returns the cost of transaction
+16. getCurrencyCode() - Returns the currency code of transaction
+17. getCreatedBy() - Returns a ```User``` object of user who created the expense
+18. getDate() - Returns the expense date.
+19. getCreatedAt() - Returns the date time expense was created
+20. getUpdatedAt() - Returns the date time expense was last updated
+21. getDeletedAt() - Returns the date time expense was deleted
+22. getReceipt() - Returns a ```Receipt``` object for receipt
+23. getCategory() - Returns a ```Category``` object for category
+24. getUpdatedBy() - Returns a ```User``` object of user who last updated the expense
+25. getDeletedBy() - Returns a ```User``` object of user who deleted the expense
+26. getUsers() - Returns a list of ```ExpenseUser``` objects 
+27. getExpenseBundleId() - Returns Expense Bundle ID
+28. getFriendshipId() - Returns the Friendship ID
+29. getRepayments() - Returns a list of ```Debt``` objects
+
+
 License
 ----
 
