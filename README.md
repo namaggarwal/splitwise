@@ -238,6 +238,8 @@ Methods:
 
 ### Expense
 
+Methods:
+
 1. getId() - Returns the id of expense
 2. getGroupId() - Returns the id of the group expense belongs to
 3. getDescription() - Returns the description of expense
@@ -268,6 +270,26 @@ Methods:
 28. getFriendshipId() - Returns the Friendship ID
 29. getRepayments() - Returns a list of ```Debt``` objects
 
+
+### Picture
+
+Methods:
+
+1. getSmall() - Returns the link to the small image
+2. getMedium() - Returns the link to the medium image
+3. getLarge() - Returns the link to the large image
+
+### Receipt
+
+Methods:
+
+1. getOriginal() - Returns the link to the original uploaded receipt
+2. getLarge() - Returns the link to large image of uploaded receipt
+
+
+## Sample Application
+
+This is the [GitHub Link](#) to the sample application written in Flask to show the usage of splitwise application.
 
 License
 ----
