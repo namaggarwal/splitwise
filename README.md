@@ -289,7 +289,7 @@ Methods:
 
 ## Sample Application
 
-This is the [GitHub Link](#) to the sample application written in Flask to show the usage of splitwise application.
+This is the [GitHub Link](https://github.com/namaggarwal/flask-splitwise-example) to the sample application written in Flask to show the usage of splitwise application.
 
 License
 ----
