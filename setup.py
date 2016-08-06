@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+import os
 
 INSTALL_REQUIRES = []
 INSTALL_REQUIRES.append('oauth2')
