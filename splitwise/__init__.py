@@ -29,6 +29,8 @@ class Splitwise(object):
     GET_EXPENSES_URL    = "https://secure.splitwise.com/api/v3.0/get_expenses"
     GET_EXPENSE_URL     = "https://secure.splitwise.com/api/v3.0/get_expense"
 
+    debug = False
+
 
     def __init__(self,consumer_key,consumer_secret,access_token=None,debug=False):
         """ Initializes the splitwise class. Sets consumer and access token
@@ -47,6 +49,13 @@ class Splitwise(object):
         if access_token:
             self.setAccessToken(access_token)
 
+    @classmethod
+    def setDebug(cls,debug):
+        cls.debug = debug
+
+    @classmethod
+    def isDebug(cls):
+        return cls.debug
 
     def getAuthorizeURL(self):
 
@@ -54,6 +63,9 @@ class Splitwise(object):
 
         #Get the request token
         resp, content = client.request(Splitwise.REQUEST_TOKEN_URL, "POST")
+
+        if Splitwise.isDebug():
+            print(resp, content)
 
         #Check if the response is correct
         if resp['status'] != '200':
@@ -72,6 +84,9 @@ class Splitwise(object):
 
         resp, content = client.request(Splitwise.ACCESS_TOKEN_URL, "POST")
 
+        if Splitwise.isDebug():
+            print(resp, content)
+
         #Check if the response is correct
         if resp['status'] != '200':
             raise Exception("Invalid response %s. Please check your consumer key and secret." % resp['status'])
@@ -88,7 +103,10 @@ class Splitwise(object):
     def __makeRequest(self,url):
 
         resp, content = self.client.request(url, "GET")
-        #print content
+
+        if Splitwise.isDebug():
+            print(resp, content)
+
         #Check if the response is correct
         if resp['status'] != '200':
             raise Exception("Invalid response %s. Please check your consumer key and secret." % resp['status'])
