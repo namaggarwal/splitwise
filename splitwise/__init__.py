@@ -59,7 +59,7 @@ class Splitwise(object):
         if resp['status'] != '200':
             raise Exception("Invalid response %s. Please check your consumer key and secret." % resp['status'])
 
-        request_token = dict(parse_qsl(content))
+        request_token = dict(parse_qsl(content.decode("utf-8")))
 
         return "%s?oauth_token=%s" % (Splitwise.AUTHORIZE_URL, request_token['oauth_token']), request_token['oauth_token_secret']
 
@@ -68,7 +68,6 @@ class Splitwise(object):
 
         token = oauth.Token(oauth_token,oauth_token_secret)
         token.set_verifier(oauth_verifier)
-
         client = oauth.Client(self.consumer, token)
 
         resp, content = client.request(Splitwise.ACCESS_TOKEN_URL, "POST")
@@ -77,7 +76,7 @@ class Splitwise(object):
         if resp['status'] != '200':
             raise Exception("Invalid response %s. Please check your consumer key and secret." % resp['status'])
 
-        access_token = dict(parse_qsl(content))
+        access_token = dict(parse_qsl(content.decode("utf-8")))
 
         return access_token
 
