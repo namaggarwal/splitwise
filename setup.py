@@ -15,7 +15,7 @@ long_description = """
   """
 
 setup(name='splitwise',
-      version='0.0.2',
+      version='0.0.3',
       description='Splitwise API SDK',
       long_description=long_description,
       author='Naman Aggarwal',
