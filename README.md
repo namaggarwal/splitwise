@@ -2,6 +2,10 @@
 
 This is the python sdk for Splitwise APIs. At this point only GET requests are supported. Pull requests and bug reports are welcomed.
 
+## Latest Version
+
+The latest version of splitwise SDK is Splitwise-0.0.3
+
 ## Installation
 
 Install using pip :
@@ -26,9 +30,17 @@ To get an instance to splitwise just provide the consumer key and secret.
 sObj = Splitwise("<consumer key>","<consumer secret>")
 ```
 
+## Debug
+
+To get the debug logs use
+
+```python
+Splitwise.setDebug(True)
+```
+
 ## Usage
 
-### Authorize splitwise 
+### Authorize splitwise
 
 Before you can make call to splitwise, you need to get access token of the user on whose behalf you will be making call. Think of it as login with splitwise. Its based on OAuth2 and its a 2 step process.
 
@@ -47,10 +59,10 @@ Before you can make call to splitwise, you need to get access token of the user 
     ```python
     oauth_token    = request.args.get('oauth_token')
     oauth_verifier = request.args.get('oauth_verifier')
-    
+
     sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
     access_token = sObj.getAccessToken(oauth_token,session['secret'],oauth_verifier)
-    
+
     session['access_token'] = access_token
     ```
 
@@ -127,7 +139,7 @@ sObj.getExpenses()
 
 ### Get Expense
 
-You can use ```getExpense(id)``` to get the particular expense of the current user. It returns a ```Expense``` object. 
+You can use ```getExpense(id)``` to get the particular expense of the current user. It returns a ```Expense``` object.
 
 ```python
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
@@ -265,7 +277,7 @@ Methods:
 23. getCategory() - Returns a ```Category``` object for category
 24. getUpdatedBy() - Returns a ```User``` object of user who last updated the expense
 25. getDeletedBy() - Returns a ```User``` object of user who deleted the expense
-26. getUsers() - Returns a list of ```ExpenseUser``` objects 
+26. getUsers() - Returns a list of ```ExpenseUser``` objects
 27. getExpenseBundleId() - Returns Expense Bundle ID
 28. getFriendshipId() - Returns the Friendship ID
 29. getRepayments() - Returns a list of ```Debt``` objects
