@@ -15,13 +15,13 @@ long_description = """
   """
 
 setup(name='splitwise',
-      version='0.0.3',
+      version='0.0.4',
       description='Splitwise API SDK',
       long_description=long_description,
       author='Naman Aggarwal',
       author_email='nam.aggarwal@yahoo.com',
       url='https://github.com/namaggarwal/splitwise',
-      download_url='https://github.com/namaggarwal/splitwise/tarball/0.0.3',
+      download_url='https://github.com/namaggarwal/splitwise/tarball/0.0.4',
       license=license,
       packages=find_packages(),
       classifiers=[
