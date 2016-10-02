@@ -185,10 +185,14 @@ class Splitwise(object):
 
         options = {}
 
-        params = locals().keys()
+        #Copy of the locals is created as if I directly work on
+        #locals and create variables in the loop a dictionary changed
+        #error is thrown. Refer to bug #2 on Github
+        localCopy = dict(locals())
+        params = localCopy.keys()
         for param in params:
-            if param != 'self' and param != 'options' and locals().get(param) is not None:
-                options[param] = locals().get(param)
+            if param != 'self' and param != 'options' and localCopy.get(param) is not None:
+                options[param] = localCopy.get(param)
 
         url = Splitwise.GET_EXPENSES_URL
 
