@@ -119,7 +119,12 @@ class Splitwise(object):
 
         optstr = "?"
 
-        optstr += "&".join([k+"="+str(v) for k,v in options.iteritems()])
+        try:
+            opt = options.iteritems()
+        except AttributeError: #Python 3
+            opt = options.items()
+
+        optstr += "&".join([k+"="+str(v) for k,v in opt])
 
         return optstr
 
