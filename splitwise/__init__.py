@@ -1,7 +1,7 @@
 import oauth2 as oauth
 import time
 import json
-from splitwise.user import Friend
+from splitwise.user import Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
 from splitwise.category import Category
@@ -9,25 +9,31 @@ from splitwise.expense import Expense
 
 try:
     from urlparse import parse_qsl #Python 2.x
+    from urllib import urlencode
 except ImportError: #Python 3
-    from urllib.parse import parse_qsl
+    from urllib.parse import parse_qsl, urlencode
 
 
 class Splitwise(object):
     """ The Splitwise class to make the requests to splitwise server.
     """
 
+    SPLITWISE_BASE_URL = "https://secure.splitwise.com/"
+    SPLITWISE_VERSION  = "v3.0"
+
     #URLs to make the request
-    REQUEST_TOKEN_URL   = "https://secure.splitwise.com/api/v3.0/get_request_token"
-    ACCESS_TOKEN_URL    = "https://secure.splitwise.com/api/v3.0/get_access_token"
-    AUTHORIZE_URL       = "https://secure.splitwise.com/authorize"
-    GET_FRIENDS_URL     = "https://secure.splitwise.com/api/v3.0/get_friends"
-    GET_GROUPS_URL      = "https://secure.splitwise.com/api/v3.0/get_groups"
-    GET_GROUP_URL       = "https://secure.splitwise.com/api/v3.0/get_group"
-    GET_CURRENCY_URL    = "https://secure.splitwise.com/api/v3.0/get_currencies"
-    GET_CATEGORY_URL    = "https://secure.splitwise.com/api/v3.0/get_categories"
-    GET_EXPENSES_URL    = "https://secure.splitwise.com/api/v3.0/get_expenses"
-    GET_EXPENSE_URL     = "https://secure.splitwise.com/api/v3.0/get_expense"
+    REQUEST_TOKEN_URL   = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_request_token"
+    ACCESS_TOKEN_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_access_token"
+    AUTHORIZE_URL       = SPLITWISE_BASE_URL+"authorize"
+    GET_CURRENT_USER_URL= SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_current_user"
+    GET_FRIENDS_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_friends"
+    GET_GROUPS_URL      = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_groups"
+    GET_GROUP_URL       = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_group"
+    GET_CURRENCY_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_currencies"
+    GET_CATEGORY_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_categories"
+    GET_EXPENSES_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expenses"
+    GET_EXPENSE_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
+    CREATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_expense"
 
     debug = False
 
@@ -100,9 +106,12 @@ class Splitwise(object):
         self.client = oauth.Client(self.consumer, self.token)
 
 
-    def __makeRequest(self,url):
+    def __makeRequest(self,url,method="GET",data=None):
 
-        resp, content = self.client.request(url, "GET")
+        if data:
+            resp, content = self.client.request(url,method,body=urlencode(data))
+        else:
+            resp, content = self.client.request(url,method)
 
         if Splitwise.isDebug():
             print(resp, content)
@@ -114,19 +123,13 @@ class Splitwise(object):
         return content
 
     def __prepareOptionsUrl(self,options={}):
-        if not isinstance(options,dict) or len(options) == 0:
-            return ""
+        return "?"+urlencode(options)
 
-        optstr = "?"
+    def getCurrentUser(self):
 
-        try:
-            opt = options.iteritems()
-        except AttributeError: #Python 3
-            opt = options.items()
-
-        optstr += "&".join([k+"="+str(v) for k,v in opt])
-
-        return optstr
+        content = self.__makeRequest(Splitwise.GET_CURRENT_USER_URL)
+        content = json.loads(content.decode("utf-8"))
+        return CurrentUser(content["user"])
 
     def getFriends(self):
 
@@ -217,5 +220,37 @@ class Splitwise(object):
         expense = None
         if "expense" in content:
             expense = Expense(content["expense"])
+
+        return expense
+
+    def createExpense(self,expense):
+        #Get the expense Dict
+        expense_data = expense.__dict__
+
+        #Get users and store in a separate var
+        expense_users = expense.getUsers()
+        #Delete users from original dict as we
+        #need to put like users_1_
+        del expense_data['users']
+
+        #Add user values to expense_data
+        count = -1
+        for user in expense_users:
+            count += 1
+            user_dict =  user.__dict__
+
+            for key in user_dict:
+                if key == "id":
+                    gen_key = "user_id"
+                else:
+                    gen_key = key
+                expense_data["users__"+str(count)+"__"+gen_key] = user_dict[key]
+
+        content = self.__makeRequest(Splitwise.CREATE_EXPENSE_URL,"POST",expense_data)
+        content = json.loads(content.decode("utf-8"))
+        expense = None
+
+        if "expenses" in content:
+            expense = Expense(content["expenses"][0])
 
         return expense
