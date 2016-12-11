@@ -4,7 +4,7 @@ This is the python sdk for Splitwise APIs. At this point only GET requests and a
 
 ## Latest Version
 
-The latest version of splitwise SDK is Splitwise-0.0.6
+The latest version of splitwise SDK is Splitwise-0.0.5
 
 ## Installation
 
