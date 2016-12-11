@@ -1,6 +1,6 @@
 # Splitwise Python SDK
 
-This is the python sdk for Splitwise APIs. At this point only GET requests are supported. Pull requests and bug reports are welcomed.
+This is the python sdk for Splitwise APIs. At this point only GET requests and a single POST request ```createExpense``` is supported. Pull requests and bug reports are welcomed.
 
 ## Latest Version
 
