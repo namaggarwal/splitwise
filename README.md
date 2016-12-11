@@ -168,6 +168,8 @@ Following things need to be set on the ```Expense``` object.
 3. Users - Should be a list of ```ExpenseUser``` with id and paidShare and owedShare set.
 
 ```python
+from splitwise.expense import Expense
+
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 
