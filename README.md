@@ -76,6 +76,16 @@ sObj.setAccessToken(session['access_token'])
 sObj.getFriends()
 ```
 
+### Get Current User
+
+You can use ```getCurrentUser()``` to get the current user. It returns a ```CurrentUser``` objects.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+sObj.getCurrentUser()
+```
+
 ### Get Friends
 
 You can use ```getFriends()``` to get all the friends of the current user along with the balances. It returns a list of ```Friend``` objects.
@@ -145,6 +155,44 @@ You can use ```getExpense(id)``` to get the particular expense of the current us
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 sObj.getExpense(43233)
+```
+
+### Create Expense
+
+You can use ```createExpense(Expense)``` to create a new Expense. It takes in parameter a partial ```Expense``` object and returns an ```Expense``` object.
+
+Following things need to be set on the ```Expense``` object.
+
+1. Cost
+2. Description
+3. Users - Should be a list of ```ExpenseUser``` with id and paidShare and owedShare set.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+expense = Expense()
+expense.setCost('10')
+expense.setDescription("Testing")
+
+user1 = ExpenseUser()
+user1.setId(79774)
+user1.setPaidShare('10.00')
+user1.setOwedShare('2.0')
+
+user2 = ExpenseUser()
+user2.setId(281236)
+user2.setPaidShare('0.00')
+user2.setOwedShare('8.00')
+
+users = []
+users.append(user1)
+users.append(user2)
+
+expense.setUsers(users)
+
+expense = sObj.createExpense(expense)
+print expense.getId()
 ```
 
 
