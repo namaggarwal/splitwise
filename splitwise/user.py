@@ -40,6 +40,18 @@ class User(object):
     def getPicture(self):
         return self.picture
 
+    def setFirstName(self,first_name):
+        self.first_name = first_name
+
+    def setLastName(self,last_name):
+        self.last_name = last_name
+
+    def setEmail(self,email):
+        self.email = email
+
+    def setId(self,id):
+        self.id = id
+
 
 
 class CurrentUser(User):
@@ -100,11 +112,13 @@ class Friend(User):
 class ExpenseUser(User):
 
     def __init__(self,data=None):
-        User.__init__(self,data["user"])
 
-        self.paid_share  = data["paid_share"]
-        self.owed_share  = data["owed_share"]
-        self.net_balance = data["net_balance"]
+        if data:
+            User.__init__(self,data["user"])
+
+            self.paid_share  = data["paid_share"]
+            self.owed_share  = data["owed_share"]
+            self.net_balance = data["net_balance"]
 
 
     def getPaidShare(self):
@@ -115,3 +129,9 @@ class ExpenseUser(User):
 
     def getNetBalance(self):
         return self.net_balance
+
+    def setPaidShare(self,paid_share):
+        self.paid_share = paid_share
+
+    def setOwedShare(self,owed_share):
+        self.owed_share = owed_share
