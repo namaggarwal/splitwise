@@ -169,6 +169,7 @@ Following things need to be set on the ```Expense``` object.
 
 ```python
 from splitwise.expense import Expense
+from splitwise.user import ExpenseUser
 
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
