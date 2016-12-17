@@ -357,3 +357,14 @@ License
 ----
 
 MIT
+
+Donate
+----
+
+If you think this helped you and you want to donate, you can do it via -
+
+## Paypal
+[https://www.paypal.me/namanagg](https://www.paypal.me/namanagg)
+
+## Bitcoin
+1DNhyZ696ekq6sY5vYMcmBLxLzAtq3oYpM
