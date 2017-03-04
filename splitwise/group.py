@@ -40,7 +40,7 @@ class Group(object):
 
 
     def getId(self):
-        return self.getId
+        return self.id
 
     def getName(self):
         return self.name
