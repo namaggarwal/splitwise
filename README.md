@@ -78,12 +78,23 @@ sObj.getFriends()
 
 ### Get Current User
 
-You can use ```getCurrentUser()``` to get the current user. It returns a ```CurrentUser``` objects.
+You can use ```getCurrentUser()``` to get the current user. It returns a ```CurrentUser``` object.
 
 ```python
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 sObj.getCurrentUser()
+```
+
+### Get User by Id
+
+You can use ```getUser(id)``` to get the user. It returns a ```User``` object.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+id = 7123
+user = sObj.getUser(id)
 ```
 
 ### Get Friends
