@@ -86,7 +86,7 @@ sObj.setAccessToken(session['access_token'])
 sObj.getCurrentUser()
 ```
 
-### Get User by Id
+### Get User
 
 You can use ```getUser(id)``` to get the user. It returns a ```User``` object.
 
