@@ -131,6 +131,11 @@ class Splitwise(object):
         content = json.loads(content.decode("utf-8"))
         return CurrentUser(content["user"])
 
+    def getUser(self, id):
+        content = self.__makeRequest(Splitwise.GET_USERBYID_URL+"/"+str(id))
+        content = json.loads(content.decode("utf-8"))
+        return User(content["user"])
+
     def getFriends(self):
 
         content = self.__makeRequest(Splitwise.GET_FRIENDS_URL)
