@@ -26,6 +26,7 @@ class Splitwise(object):
     ACCESS_TOKEN_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_access_token"
     AUTHORIZE_URL       = SPLITWISE_BASE_URL+"authorize"
     GET_CURRENT_USER_URL= SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_current_user"
+    GET_USERBYID_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_user"
     GET_FRIENDS_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_friends"
     GET_GROUPS_URL      = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_groups"
     GET_GROUP_URL       = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_group"
