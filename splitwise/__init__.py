@@ -6,6 +6,7 @@ from splitwise.currency import Currency
 from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
+from splitwise.user import User
 
 try:
     from urlparse import parse_qsl #Python 2.x
@@ -26,6 +27,7 @@ class Splitwise(object):
     ACCESS_TOKEN_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_access_token"
     AUTHORIZE_URL       = SPLITWISE_BASE_URL+"authorize"
     GET_CURRENT_USER_URL= SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_current_user"
+    GET_USER_URL        = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_user"
     GET_FRIENDS_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_friends"
     GET_GROUPS_URL      = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_groups"
     GET_GROUP_URL       = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_group"
@@ -130,6 +132,11 @@ class Splitwise(object):
         content = self.__makeRequest(Splitwise.GET_CURRENT_USER_URL)
         content = json.loads(content.decode("utf-8"))
         return CurrentUser(content["user"])
+
+    def getUser(self, id):
+        content = self.__makeRequest(Splitwise.GET_USER_URL +"/"+str(id))
+        content = json.loads(content.decode("utf-8"))
+        return User(content["user"])
 
     def getFriends(self):
 

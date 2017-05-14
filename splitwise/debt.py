@@ -18,7 +18,7 @@ class Debt(object):
         return self.toUser
 
     def getAmount(self):
-        return amount
+        return self.amount
 
     def getCurrencyCode(self):
-        return currency_code
+        return self.currency_code
