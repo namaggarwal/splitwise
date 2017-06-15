@@ -36,6 +36,8 @@ class Splitwise(object):
     GET_EXPENSES_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expenses"
     GET_EXPENSE_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_expense"
+    CREATE_GROUP_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_group"
+    ADD_USER_TO_GROUP_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/add_user_to_group"
 
     debug = False
 
@@ -261,3 +263,20 @@ class Splitwise(object):
             expense = Expense(content["expenses"][0])
 
         return expense
+    
+    def createGroup(self, name=None, group_type=None, country_code=None):
+        # create expense group
+        group_info = dict(name=name, group_type=group_type, country_code=country_code)
+        content = self.__makeRequest(Splitwise.CREATE_GROUP_URL, "POST", group_info)
+        content = json.loads(content.decode("utf-8"))
+
+        return content
+
+    def addUserToGroup(self, first_name=None, last_name=None, email=None, id=0):
+        # add user to the group
+        user_info = dict(first_name=first_name, last_name=last_name, email=email, group_id=id)
+
+        content = self.__makeRequest(Splitwise.ADD_USER_TO_GROUP_URL, "POST", user_info)
+        content = json.loads(content.decode("utf-8"))
+
+        return content
