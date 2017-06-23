@@ -36,8 +36,7 @@ class Splitwise(object):
     GET_EXPENSES_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expenses"
     GET_EXPENSE_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_expense"
-    CREATE_GROUP_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_group"
-    ADD_USER_TO_GROUP_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/add_user_to_group"
+    CREATE_GROUP_URL = SPLITWISE_BASE_URL + "api/" + SPLITWISE_VERSION + "/create_group"
 
     debug = False
 
@@ -243,18 +242,7 @@ class Splitwise(object):
         del expense_data['users']
 
         #Add user values to expense_data
-        count = -1
-        for user in expense_users:
-            count += 1
-            user_dict =  user.__dict__
-
-            for key in user_dict:
-                if key == "id":
-                    gen_key = "user_id"
-                else:
-                    gen_key = key
-                expense_data["users__"+str(count)+"__"+gen_key] = user_dict[key]
-
+        Splitwise.setUserArray(expense_users, expense_data)
         content = self.__makeRequest(Splitwise.CREATE_EXPENSE_URL,"POST",expense_data)
         content = json.loads(content.decode("utf-8"))
         expense = None
@@ -263,20 +251,28 @@ class Splitwise(object):
             expense = Expense(content["expenses"][0])
 
         return expense
-    
-    def createGroup(self, name=None, group_type=None, country_code=None):
-        # create expense group
-        group_info = dict(name=name, group_type=group_type, country_code=country_code)
+
+    def createGroup(self, group):
+        # create group
+        group_info = group.__dict__
+
+        if "members" in group_info:
+            group_members = group.getMembers()
+            del group_info["members"]
+            Splitwise.setUserArray(group_members, group_info)
+
         content = self.__makeRequest(Splitwise.CREATE_GROUP_URL, "POST", group_info)
         content = json.loads(content.decode("utf-8"))
-
+        
         return content
 
-    def addUserToGroup(self, first_name=None, last_name=None, email=None, id=0):
-        # add user to the group
-        user_info = dict(first_name=first_name, last_name=last_name, email=email, group_id=id)
-
-        content = self.__makeRequest(Splitwise.ADD_USER_TO_GROUP_URL, "POST", user_info)
-        content = json.loads(content.decode("utf-8"))
-
-        return content
+    @staticmethod
+    def setUserArray(users, user_array):
+        for count, user in enumerate(users):
+            user_dict = user.__dict__
+            for key in user_dict:
+                if key == "id":
+                    gen_key = "user_id"
+                else:
+                    gen_key = key
+                user_array["users__" + str(count) + "__" + gen_key] = user_dict[key]
