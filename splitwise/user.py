@@ -26,7 +26,10 @@ class User(object):
             else:
                 self.registration_status = None
 
-            self.picture    = Picture(data["picture"])
+            if 'picture' in data:
+                self.picture = Picture(data["picture"])
+            else:
+                self.picture = None
 
     def getId(self):
         return self.id
