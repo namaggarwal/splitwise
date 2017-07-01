@@ -7,20 +7,29 @@ class User(object):
 
     def __init__(self,data=None):
 
-        self.id         = data["id"]
-        self.first_name = data["first_name"]
-        self.last_name  = data["last_name"]
-        if 'email' in data:
-            self.email      = data["email"]
-        else:
-            self.email  = None
+        if data:
+            self.first_name = data["first_name"]
+            self.last_name  = data["last_name"]
 
-        if 'registration_status' in data:
-            self.registration_status = data["registration_status"]
-        else:
-            self.registration_status = None
+            if 'id' in data:
+                self.id = data["id"]
+            else:
+                self.id = None
 
-        self.picture    = Picture(data["picture"])
+            if 'email' in data:
+                self.email  = data["email"]
+            else:
+                self.email  = None
+
+            if 'registration_status' in data:
+                self.registration_status = data["registration_status"]
+            else:
+                self.registration_status = None
+
+            if 'picture' in data:
+                self.picture = Picture(data["picture"])
+            else:
+                self.picture = None
 
     def getId(self):
         return self.id
