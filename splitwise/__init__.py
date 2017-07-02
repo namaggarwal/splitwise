@@ -41,7 +41,7 @@ class Splitwise(object):
     debug = False
 
 
-    def __init__(self,consumer_key,consumer_secret,access_token=None,debug=False):
+    def __init__(self,consumer_key,consumer_secret,access_token=None):
         """ Initializes the splitwise class. Sets consumer and access token
 
         Args:
