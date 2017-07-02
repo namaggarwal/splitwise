@@ -209,6 +209,40 @@ expense = sObj.createExpense(expense)
 print expense.getId()
 ```
 
+### Create Group
+
+You can use ```createGroup(Group)``` to create a new Group. It takes in parameter a partial ```Group``` object and returns an ```Group``` object.
+
+Following things need to be set on the ```Group``` object.
+
+1. Name
+2. Users - Should be a list of ```User``` with either FirstName, LastName and Email or just Id set.
+
+```python
+from splitwise.group import Group
+from splitwise.user import User
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+group = Group()
+group.setName("Testing")
+
+user1 = User()
+user1.setId(79774)
+
+user2 = User()
+user2.setId(281236)
+
+users = []
+users.append(user1)
+users.append(user2)
+
+group.setMembers(users)
+
+group = sObj.createGroup(group)
+print group.getId()
+```
 
 ## Objects
 
