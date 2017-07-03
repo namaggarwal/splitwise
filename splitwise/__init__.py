@@ -37,6 +37,7 @@ class Splitwise(object):
     GET_EXPENSE_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_expense"
     CREATE_GROUP_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_group"
+    ADD_USER_TO_GROUP_URL= SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/add_user_to_group"
 
     debug = False
 
@@ -280,3 +281,11 @@ class Splitwise(object):
                 else:
                     gen_key = key
                 user_array["users__" + str(count) + "__" + gen_key] = user_dict[key]
+
+    def addUserToGroup(self, add_user_request, group_id=0):
+        # add user to group
+        request = add_user_request.__dict__
+        request['group_id'] = group_id
+        content = self.__makeRequest(Splitwise.ADD_USER_TO_GROUP_URL, "POST", request)
+        content = json.loads(content.decode("utf-8"))
+        return content
