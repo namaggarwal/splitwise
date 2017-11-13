@@ -234,7 +234,7 @@ class Splitwise(object):
 
     def createExpense(self,expense):
         #Get the expense Dict
-        expense_data = expense.__dict__
+        expense_data = vars(expense)
 
         #Get users and store in a separate var
         expense_users = expense.getUsers()
@@ -255,7 +255,7 @@ class Splitwise(object):
 
     def createGroup(self, group):
         # create group
-        group_info = group.__dict__
+        group_info = vars(group)
 
         if "members" in group_info:
             group_members = group.getMembers()
@@ -274,7 +274,7 @@ class Splitwise(object):
     @staticmethod
     def setUserArray(users, user_array):
         for count, user in enumerate(users):
-            user_dict = user.__dict__
+            user_dict = vars(user)
             for key in user_dict:
                 if key == "id":
                     gen_key = "user_id"
@@ -282,9 +282,8 @@ class Splitwise(object):
                     gen_key = key
                 user_array["users__" + str(count) + "__" + gen_key] = user_dict[key]
 
-    def addUserToGroup(self, add_user_request, group_id=0):
-        # add user to group
-        request = add_user_request.__dict__
+    def addUserToGroup(self, user, group_id=0):
+        request = vars(user)
         request['group_id'] = group_id
         content = self.__makeRequest(Splitwise.ADD_USER_TO_GROUP_URL, "POST", request)
         content = json.loads(content.decode("utf-8"))
