@@ -283,7 +283,12 @@ class Splitwise(object):
                 user_array["users__" + str(count) + "__" + gen_key] = user_dict[key]
 
     def addUserToGroup(self, user, group_id=0):
-        request = vars(user)
+        if user.id:
+            request = {'user_id': user.id}
+        elif user.first_name and user.last_name and user.email:
+            request = {'first_name' : user.first_name, 'last_name' : user.last_name, 'email' : user.email}
+        else:
+            raise ValueError('Exepected a splitwise.User object with a valid id attribute or valid first_name, last_name and email attributes.')
         request['group_id'] = group_id
         content = self.__makeRequest(Splitwise.ADD_USER_TO_GROUP_URL, "POST", request)
         content = json.loads(content.decode("utf-8"))
