@@ -282,7 +282,8 @@ class Splitwise(object):
                     gen_key = key
                 user_array["users__" + str(count) + "__" + gen_key] = user_dict[key]
 
-    def addUserToGroup(self, user, group_id=0):
+    def addUserToGroup(self, user, group_id):
+
         if user.id:
             request = {'user_id': user.id}
         elif user.first_name and user.last_name and user.email:
