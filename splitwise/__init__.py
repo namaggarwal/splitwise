@@ -36,6 +36,8 @@ class Splitwise(object):
     GET_EXPENSES_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expenses"
     GET_EXPENSE_URL     = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_expense"
+    UPDATE_EXPENSE_URL  = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/update_expense"
+    UNDELETE_EXPENSE_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/undelete_expense"
     CREATE_GROUP_URL    = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_group"
 
     debug = False
@@ -251,6 +253,36 @@ class Splitwise(object):
             expense = Expense(content["expenses"][0])
 
         return expense
+
+    def updateExpense(self, expense):
+        #Get the expense Dict
+        expense_data = expense.__dict__
+
+        #Get users and store in a separate var
+        expense_users = expense.getUsers()
+        #Delete users from original dict as we
+        #need to put like users_1_
+        del expense_data['users']
+        expense_id = expense.id
+        del expense_data['id']
+
+        #Add user values to expense_data
+        Splitwise.setUserArray(expense_users, expense_data)
+        content = self.__makeRequest(Splitwise.UPDATE_EXPENSE_URL+'/' + str(expense_id),"POST",expense_data)
+        content = json.loads(content.decode("utf-8"))
+        expense = None
+
+        if "expenses" in content:
+            expense = Expense(content["expenses"][0])
+
+        return expense
+
+    def undeleteExpense(self, expense):
+        if isinstance(expense, int):
+            expense_id = expense
+        else:
+            expense_id = expense.id
+        self.__makeRequest(Splitwise.UNDELETE_EXPENSE_URL+'/' + str(expense_id),"POST",'')
 
     def createGroup(self, group):
         # create group
