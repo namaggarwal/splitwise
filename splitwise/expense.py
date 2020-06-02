@@ -152,7 +152,6 @@ class Expense(object):
     def getRepayments(self):
         return self.repayments
 
-
     def setGroupId(self,id):
         self.group_id = id
 
@@ -185,3 +184,6 @@ class Expense(object):
 
     def setUsers(self,users):
         self.users = users
+
+    def __getattr__(self, item):
+        return None
