@@ -1,29 +1,24 @@
 from setuptools import setup, find_packages
-import os
+from os import path
 
 INSTALL_REQUIRES = []
 INSTALL_REQUIRES.append('oauth2')
 
-license='MIT'
-if os.path.exists('LICENSE'):
-  license = open('LICENSE').read()
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+  long_description = f.read()
 
-long_description = """
-    The Splitwise SDK provides Splitwise APIs to get data from your Splitwise Account.
-    1. https://github.com/namaggarwal/splitwise - README
-    2. https://github.com/namaggarwal/flask-splitwise-example - Sample
-  """
 
 setup(name='splitwise',
       version='1.2.0',
       description='Splitwise API SDK',
       long_description=long_description,
-      long_description_content_type='text/plain',
+      long_description_content_type='text/markdown',
       author='Naman Aggarwal',
       author_email='nam.aggarwal@yahoo.com',
       url='https://github.com/namaggarwal/splitwise',
       download_url='https://github.com/namaggarwal/splitwise/tarball/1.1.0',
-      license=license,
+      license='MIT License',
       packages=find_packages(),
       classifiers=[
         'Intended Audience :: Developers',
