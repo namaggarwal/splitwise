@@ -241,6 +241,10 @@ class Splitwise(object):
         #need to put like users_1_
         del expense_data['users']
 
+        category = expense.getCategory()
+        if category:
+            expense_data["category_id"] = category.getId()
+
         #Add user values to expense_data
         Splitwise.setUserArray(expense_users, expense_data)
         content = self.__makeRequest(Splitwise.CREATE_EXPENSE_URL,"POST",expense_data)
