@@ -7,6 +7,7 @@ from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
 from splitwise.user import User
+from splitwise.error import SplitwiseError
 
 try:
     from urlparse import parse_qsl #Python 2.x
@@ -237,24 +238,32 @@ class Splitwise(object):
 
         #Get users and store in a separate var
         expense_users = expense.getUsers()
-        #Delete users from original dict as we
-        #need to put like users_1_
-        del expense_data['users']
+
+        if expense_users:
+            #Delete users from original dict as we
+            #need to put like users_1_
+            del expense_data['users']
+            #Add user values to expense_data
+            Splitwise.setUserArray(expense_users, expense_data)
 
         category = expense.getCategory()
         if category:
             expense_data["category_id"] = category.getId()
 
-        #Add user values to expense_data
-        Splitwise.setUserArray(expense_users, expense_data)
         content = self.__makeRequest(Splitwise.CREATE_EXPENSE_URL,"POST",expense_data)
         content = json.loads(content.decode("utf-8"))
         expense = None
+        errors = None
 
-        if "expenses" in content:
-            expense = Expense(content["expenses"][0])
+        if 'expenses' in content:
+            if len(content['expenses']) > 0:
+                expense = Expense(content["expenses"][0])
 
-        return expense
+        if 'errors' in content:
+            if 'base' in content['errors']:
+                errors = SplitwiseError(content['errors'])
+
+        return expense, errors
 
     def createGroup(self, group):
         # create group
@@ -268,11 +277,13 @@ class Splitwise(object):
         content = self.__makeRequest(Splitwise.CREATE_GROUP_URL, "POST", group_info)
         content = json.loads(content.decode("utf-8"))
         group_detail = None
-
+        errors = None
         if "group" in content:
             group_detail = Group(content["group"])
+            if "errors" in content["group"]:
+                errors = SplitwiseError(content["group"]["errors"])
 
-        return group_detail
+        return group_detail, errors
 
     @staticmethod
     def setUserArray(users, user_array):

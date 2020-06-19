@@ -185,5 +185,13 @@ class Expense(object):
     def setUsers(self,users):
         self.users = users
 
+    def addUser(self,user):
+        if not self.users:
+            self.users = []
+        self.users.append(user)
+
+    def setSplitEqually(self, shouldSplit=True):
+        self.split_equally = shouldSplit
+
     def __getattr__(self, item):
         return None
