@@ -260,7 +260,7 @@ class Splitwise(object):
                 expense = Expense(content["expenses"][0])
 
         if 'errors' in content:
-            if 'base' in content['errors']:
+            if len(content['errors']) != 0:
                 errors = SplitwiseError(content['errors'])
 
         return expense, errors
@@ -281,7 +281,8 @@ class Splitwise(object):
         if "group" in content:
             group_detail = Group(content["group"])
             if "errors" in content["group"]:
-                errors = SplitwiseError(content["group"]["errors"])
+                if len(content['errors']) != 0:
+                    errors = SplitwiseError(content["group"]["errors"])
 
         return group_detail, errors
 
