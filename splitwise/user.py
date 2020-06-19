@@ -91,26 +91,26 @@ class Friend(User):
     def __init__(self,data=None):
         User.__init__(self,data)
 
-        if 'updated_at' in data:
-            self.updated_at = data["updated_at"]
-        else:
-            self.updated_at = None
+        if data:
+            if 'updated_at' in data:
+                self.updated_at = data["updated_at"]
+            else:
+                self.updated_at = None
 
-        self.balances = []
+            self.balances = []
 
-        for balance in data["balance"]:
-            self.balances.append(Balance(balance))
+            for balance in data["balance"]:
+                self.balances.append(Balance(balance))
 
-        self.groups = []
-        if "groups" in data:
-            for group in data["groups"]:
-                self.groups.append(Group.FriendGroup(group))
-        else:
-            self.groups = None
+            self.groups = []
+            if "groups" in data:
+                for group in data["groups"]:
+                    self.groups.append(Group.FriendGroup(group))
+            else:
+                self.groups = None
 
     def getUpdatedAt(self):
         return self.updated_at
-
 
     def getBalances(self):
         return self.balances

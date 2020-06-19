@@ -86,6 +86,11 @@ class Group(object):
     def setMembers(self, members):
         self.members = members
 
+    def addMember(self, member):
+        if not hasattr(self, 'members'):
+            self.members = []
+        self.members.append(member)
+
 class FriendGroup(object):
 
 
