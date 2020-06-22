@@ -27,20 +27,30 @@ class Splitwise(object):
         SPLITWISE_VERSION+"/get_request_token"
     ACCESS_TOKEN_URL = SPLITWISE_BASE_URL+"api/" + \
         SPLITWISE_VERSION+"/get_access_token"
-    AUTHORIZE_URL = SPLITWISE_BASE_URL+"authorize"
+    AUTHORIZE_URL = SPLITWISE_BASE_URL + \
+        "authorize"
     GET_CURRENT_USER_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_current_user"
-    GET_USER_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_user"
-    GET_FRIENDS_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_friends"
-    GET_GROUPS_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_groups"
-    GET_GROUP_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_group"
-    GET_CURRENCY_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_currencies"
-    GET_CATEGORY_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_categories"
-    GET_EXPENSES_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expenses"
-    GET_EXPENSE_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/get_expense"
+    GET_USER_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_user"
+    GET_FRIENDS_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_friends"
+    GET_GROUPS_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_groups"
+    GET_GROUP_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_group"
+    GET_CURRENCY_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_currencies"
+    GET_CATEGORY_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_categories"
+    GET_EXPENSES_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_expenses"
+    GET_EXPENSE_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_expense"
-    CREATE_GROUP_URL = SPLITWISE_BASE_URL+"api/"+SPLITWISE_VERSION+"/create_group"
+    CREATE_GROUP_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/create_group"
 
     debug = False
 
@@ -50,7 +60,8 @@ class Splitwise(object):
         Args:
             consumer_key (str) : Consumer Key provided by Spliwise
             consumer_secret (str): Consumer Secret provided by Splitwise
-            access_token (:obj: `dict`) Access Token is a combination of oauth_token and oauth_token_secret
+            access_token (:obj: `dict`) Access Token is a combination of
+                                        oauth_token and oauth_token_secret
 
         Returns:
             A Splitwise Object
