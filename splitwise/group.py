@@ -1,19 +1,20 @@
 from splitwise.debt import Debt
 from splitwise.balance import Balance
 
+
 class Group(object):
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
         from splitwise.user import Friend
 
         if data:
-            self.id            = data["id"]
-            self.name          = data["name"]
-            self.updated_at    = data["updated_at"]
+            self.id = data["id"]
+            self.name = data["name"]
+            self.updated_at = data["updated_at"]
             self.simplify_by_default = data["simplify_by_default"]
 
             if "group_type" in data:
-                self.group_type    = data["group_type"]
+                self.group_type = data["group_type"]
             else:
                 self.group_type = None
             if "whiteboard" in data:
@@ -42,7 +43,6 @@ class Group(object):
             self.members = []
             for member in data["members"]:
                 self.members.append(Friend(member))
-
 
     def getId(self):
         return self.id
@@ -91,10 +91,10 @@ class Group(object):
             self.members = []
         self.members.append(member)
 
+
 class FriendGroup(object):
 
-
-    def __init__(self,data=None):
+    def __init__(self, data=None):
 
         self.id = data["group_id"]
         self.balances = []
