@@ -105,4 +105,4 @@ class FriendGroup(object):
         return self.id
 
     def getBalances(self):
-        return self.balance
+        return self.balances
