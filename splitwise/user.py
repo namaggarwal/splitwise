@@ -5,11 +5,10 @@ import splitwise.group as Group
 
 class User(object):
 
-    def __init__(self,data=None):
-
+    def __init__(self, data=None):
         if data:
             self.first_name = data["first_name"]
-            self.last_name  = data["last_name"]
+            self.last_name = data["last_name"]
 
             if 'id' in data:
                 self.id = data["id"]
@@ -17,9 +16,9 @@ class User(object):
                 self.id = None
 
             if 'email' in data:
-                self.email  = data["email"]
+                self.email = data["email"]
             else:
-                self.email  = None
+                self.email = None
 
             if 'registration_status' in data:
                 self.registration_status = data["registration_status"]
@@ -49,29 +48,27 @@ class User(object):
     def getPicture(self):
         return self.picture
 
-    def setFirstName(self,first_name):
+    def setFirstName(self, first_name):
         self.first_name = first_name
 
-    def setLastName(self,last_name):
+    def setLastName(self, last_name):
         self.last_name = last_name
 
-    def setEmail(self,email):
+    def setEmail(self, email):
         self.email = email
 
-    def setId(self,id):
+    def setId(self, id):
         self.id = id
-
 
 
 class CurrentUser(User):
 
-    def __init__(self,data=None):
-        User.__init__(self,data)
+    def __init__(self, data=None):
+        User.__init__(self, data)
         self.default_currency = data["default_currency"]
         self.locale = data["locale"]
         self.date_format = data["date_format"]
         self.default_group_id = data["default_group_id"]
-
 
     def getDefaultCurrency(self):
         return self.default_currency
@@ -88,8 +85,8 @@ class CurrentUser(User):
 
 class Friend(User):
 
-    def __init__(self,data=None):
-        User.__init__(self,data)
+    def __init__(self, data=None):
+        User.__init__(self, data)
 
         if data:
             if 'updated_at' in data:
@@ -118,17 +115,17 @@ class Friend(User):
     def getGroups(self):
         return self.groups
 
+
 class ExpenseUser(User):
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
 
         if data:
-            User.__init__(self,data["user"])
+            User.__init__(self, data["user"])
 
-            self.paid_share  = data["paid_share"]
-            self.owed_share  = data["owed_share"]
+            self.paid_share = data["paid_share"]
+            self.owed_share = data["owed_share"]
             self.net_balance = data["net_balance"]
-
 
     def getPaidShare(self):
         return self.paid_share
@@ -139,8 +136,8 @@ class ExpenseUser(User):
     def getNetBalance(self):
         return self.net_balance
 
-    def setPaidShare(self,paid_share):
+    def setPaidShare(self, paid_share):
         self.paid_share = paid_share
 
-    def setOwedShare(self,owed_share):
+    def setOwedShare(self, owed_share):
         self.owed_share = owed_share
