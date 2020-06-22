@@ -82,11 +82,14 @@ class Splitwise(object):
         # Check if the response is correct
         if resp['status'] != '200':
             raise Exception(
-                "Invalid response %s. Please check your consumer key and secret." % resp['status'])
+                "Invalid response %s. \
+                  Please check your consumer key and secret." % resp['status'])
 
         request_token = dict(parse_qsl(content.decode("utf-8")))
 
-        return "%s?oauth_token=%s" % (Splitwise.AUTHORIZE_URL, request_token['oauth_token']), request_token['oauth_token_secret']
+        return "%s?oauth_token=%s" % (
+            Splitwise.AUTHORIZE_URL, request_token['oauth_token']
+        ), request_token['oauth_token_secret']
 
     def getAccessToken(self, oauth_token, oauth_token_secret, oauth_verifier):
 
@@ -203,7 +206,16 @@ class Splitwise(object):
 
         return group
 
-    def getExpenses(self, offset=None, limit=None, group_id=None, friendship_id=None, dated_after=None, dated_before=None, updated_after=None, updated_before=None):
+    def getExpenses(self,
+                    offset=None,
+                    limit=None,
+                    group_id=None,
+                    friendship_id=None,
+                    dated_after=None,
+                    dated_before=None,
+                    updated_after=None,
+                    updated_before=None
+                    ):
 
         options = {}
 
