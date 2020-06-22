@@ -24,8 +24,8 @@ class GetUserTestCase(unittest.TestCase):
 
     def test_getUser_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
-                "Invalid response %s. Please check your consumer key and secret." % 404)
+            "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):
             self.sObj.getUser(12323)
-            mockMakeRequest.assert_called_with(
-                "https://secure.splitwise.com/api/v3.0/get_user/12323")
+        mockMakeRequest.assert_called_with(
+            "https://secure.splitwise.com/api/v3.0/get_user/12323")

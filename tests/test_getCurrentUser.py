@@ -31,8 +31,8 @@ class GetCurrentUserTestCase(unittest.TestCase):
 
     def test_getCurrentUser_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
-                "Invalid response %s. Please check your consumer key and secret." % 404)
+            "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):
-            self.sObj.getCurrentUser(12323)
-            mockMakeRequest.assert_called_with(
-                "https://secure.splitwise.com/api/v3.0/get_user/12323")
+            self.sObj.getCurrentUser()
+        mockMakeRequest.assert_called_with(
+            "https://secure.splitwise.com/api/v3.0/get_current_user")
