@@ -1,10 +1,9 @@
 class Currency(object):
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
 
         self.code = data["currency_code"]
         self.unit = data["unit"]
-
 
     def getCode(self):
         return self.code
