@@ -1,6 +1,9 @@
 from splitwise import Splitwise
 import unittest
-from unittest.mock import patch
+try:
+    from unittest.mock import patch
+except ImportError:  # Python 2
+    from mock import patch
 
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
