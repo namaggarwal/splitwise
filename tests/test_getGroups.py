@@ -26,9 +26,18 @@ class GetGroupsTestCase(unittest.TestCase):
         self.assertEqual(groups[0].getMembers()[0].getFirstName(), 'Naman')
         self.assertEqual(groups[0].getMembers()[0].getLastName(), 'Aggarwal')
         self.assertEqual(groups[0].getMembers()[0].getEmail(), 'naman@yahoo.com')
-        self.assertEqual(groups[0].getMembers()[0].getPicture().getSmall(), 'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg')
-        self.assertEqual(groups[0].getMembers()[0].getPicture().getMedium(), 'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg')
-        self.assertEqual(groups[0].getMembers()[0].getPicture().getLarge(), 'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg')
+        self.assertEqual(
+          groups[0].getMembers()[0].getPicture().getSmall(),
+          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg'
+        )
+        self.assertEqual(
+          groups[0].getMembers()[0].getPicture().getMedium(),
+          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg'
+        )
+        self.assertEqual(
+          groups[0].getMembers()[0].getPicture().getLarge(),
+          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg'
+        )
         self.assertEqual(groups[0].getMembers()[0].getRegistrationStatus(), 'confirmed')
         self.assertEqual(len(groups[0].getMembers()[0].getBalances()), 2)
         self.assertEqual(groups[0].getMembers()[0].getBalances()[0].getAmount(), '115000.0')
