@@ -1,48 +1,45 @@
 from splitwise.debt import Debt
-from splitwise.user import User,ExpenseUser
+from splitwise.user import User, ExpenseUser
 from splitwise.receipt import Receipt
 from splitwise.category import Category
 
+
 class Expense(object):
-
-    def __init__(self,data=None):
-
+    def __init__(self, data=None):
         if data:
-
-            self.id                        = data["id"]
-            self.group_id                  = data["group_id"]
-            self.description               = data["description"]
-            self.repeats                   = data["repeats"]
-            self.repeat_interval           = data["repeat_interval"]
-            self.email_reminder            = data["email_reminder"]
+            self.id = data["id"]
+            self.group_id = data["group_id"]
+            self.description = data["description"]
+            self.repeats = data["repeats"]
+            self.repeat_interval = data["repeat_interval"]
+            self.email_reminder = data["email_reminder"]
             self.email_reminder_in_advance = data["email_reminder_in_advance"]
-            self.next_repeat               = data["next_repeat"]
-            self.details                   = data["details"]
-            self.comments_count            = data["comments_count"]
-            self.payment                   = data["payment"]
-            self.creation_method           = data["creation_method"]
-            self.transaction_method        = data["transaction_method"]
-            self.transaction_confirmed     = data["transaction_confirmed"]
-            self.cost                      = data["cost"]
-            self.currency_code             = data["currency_code"]
-            self.created_by                = User(data["created_by"])
-            self.date                      = data["date"]
-            self.created_at                = data["created_at"]
-            self.updated_at                = data["updated_at"]
-            self.deleted_at                = data["deleted_at"]
-            self.receipt                   = Receipt(data["receipt"])
-            self.category                  = Category(data["category"])
+            self.next_repeat = data["next_repeat"]
+            self.details = data["details"]
+            self.comments_count = data["comments_count"]
+            self.payment = data["payment"]
+            self.creation_method = data["creation_method"]
+            self.transaction_method = data["transaction_method"]
+            self.transaction_confirmed = data["transaction_confirmed"]
+            self.cost = data["cost"]
+            self.currency_code = data["currency_code"]
+            self.created_by = User(data["created_by"])
+            self.date = data["date"]
+            self.created_at = data["created_at"]
+            self.updated_at = data["updated_at"]
+            self.deleted_at = data["deleted_at"]
+            self.receipt = Receipt(data["receipt"])
+            self.category = Category(data["category"])
 
             if data["updated_by"] is not None:
-                self.updated_by                = User(data["updated_by"])
+                self.updated_by = User(data["updated_by"])
             else:
                 self.updated_by = None
 
             if data["deleted_by"] is not None:
-                self.deleted_by                = User(data["deleted_by"])
+                self.deleted_by = User(data["deleted_by"])
             else:
                 self.deleted_by = None
-
 
             if "friendship_id" in data:
                 self.friendship_id = data["friendship_id"]
@@ -54,8 +51,6 @@ class Expense(object):
             else:
                 self.expense_bundle_id = None
 
-
-
             self.repayments = []
             for repayment in data["repayments"]:
                 self.repayments.append(Debt(repayment))
@@ -63,7 +58,6 @@ class Expense(object):
             self.users = []
             for user in data["users"]:
                 self.users.append(ExpenseUser(user))
-
 
     def getId(self):
         return self.id
@@ -152,40 +146,40 @@ class Expense(object):
     def getRepayments(self):
         return self.repayments
 
-    def setGroupId(self,id):
+    def setGroupId(self, id):
         self.group_id = id
 
-    def setDescription(self,desc):
+    def setDescription(self, desc):
         self.description = desc
 
-    def setPayment(self,payment):
+    def setPayment(self, payment):
         self.payment = payment
 
-    def setCost(self,cost):
+    def setCost(self, cost):
         self.cost = cost
 
-    def setFriendshipId(self,f_id):
+    def setFriendshipId(self, f_id):
         self.friendship_id = f_id
 
-    def setCreationMethod(self,creation_method):
+    def setCreationMethod(self, creation_method):
         self.creation_method = creation_method
 
-    def setDate(self,date):
+    def setDate(self, date):
         self.date = date
 
-    def setRepeatInterval(self,repeat_interval):
+    def setRepeatInterval(self, repeat_interval):
         self.repeat_interval = repeat_interval
 
-    def setCurrencyCode(self,currency_code):
+    def setCurrencyCode(self, currency_code):
         self.currency_code = currency_code
 
-    def setCategory(self,category):
+    def setCategory(self, category):
         self.category = category
 
-    def setUsers(self,users):
+    def setUsers(self, users):
         self.users = users
 
-    def addUser(self,user):
+    def addUser(self, user):
         if not self.users:
             self.users = []
         self.users.append(user)

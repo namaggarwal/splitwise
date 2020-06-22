@@ -1,6 +1,6 @@
 class Category(object):
 
-    def __init__(self,data=None):
+    def __init__(self, data=None):
         if data:
             self.id = data["id"]
             self.name = data["name"]
