@@ -7,7 +7,7 @@ except ImportError:  # Python 2
 
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
-class GetCurrenciesTestCase(unittest.TestCase):
+class GetExpenseTestCase(unittest.TestCase):
 
     def setUp(self):
         self.sObj = Splitwise('consumerkey', 'consumersecret')
