@@ -19,47 +19,184 @@ class GetGroupsTestCase(unittest.TestCase):
             "https://secure.splitwise.com/api/v3.0/get_groups")
         self.assertEqual(len(groups), 2)
         self.assertEqual(groups[0].getId(), 0)
-        self.assertEqual(groups[0].getName(), 'Non-group expenses')
-        self.assertEqual(groups[0].getType(), None)
+        self.assertEqual(groups[0].getName(), "Non-group expenses")
+        self.assertEqual(groups[0].getUpdatedAt(), "2020-06-22T16:27:14Z")
         self.assertEqual(len(groups[0].getMembers()), 1)
         self.assertEqual(groups[0].getMembers()[0].getId(), 79774)
-        self.assertEqual(groups[0].getMembers()[0].getFirstName(), 'Naman')
-        self.assertEqual(groups[0].getMembers()[0].getLastName(), 'Aggarwal')
-        self.assertEqual(groups[0].getMembers()[0].getEmail(), 'naman@yahoo.com')
-        self.assertEqual(
-          groups[0].getMembers()[0].getPicture().getSmall(),
-          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg'
-        )
-        self.assertEqual(
-          groups[0].getMembers()[0].getPicture().getMedium(),
-          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg'
-        )
-        self.assertEqual(
-          groups[0].getMembers()[0].getPicture().getLarge(),
-          'https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg'
-        )
-        self.assertEqual(groups[0].getMembers()[0].getRegistrationStatus(), 'confirmed')
+        self.assertEqual(groups[0].getMembers()[0].getFirstName(), "Naman")
+        self.assertEqual(groups[0].getMembers()[0].getLastName(), "Aggarwal")
+        self.assertEqual(groups[0].getMembers()[0].getPicture().getSmall(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg")
+        self.assertEqual(groups[0].getMembers()[0].getPicture().getMedium(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg")
+        self.assertEqual(groups[0].getMembers()[0].getPicture().getLarge(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg")
+        self.assertEqual(groups[0].getMembers()[0].getEmail(), "naman@yahoo.com")
+        self.assertEqual(groups[0].getMembers()[0].getRegistrationStatus(), "confirmed")
         self.assertEqual(len(groups[0].getMembers()[0].getBalances()), 2)
-        self.assertEqual(groups[0].getMembers()[0].getBalances()[0].getAmount(), '115000.0')
-        self.assertEqual(groups[0].getMembers()[0].getBalances()[0].getCurrencyCode(), 'INR')
-        self.assertEqual(groups[0].isSimplifiedByDefault(), False)
+        self.assertEqual(groups[0].getMembers()[0].getBalances()[0].getAmount(), "115000.0")
+        self.assertEqual(groups[0].getMembers()[0].getBalances()[0].getCurrencyCode(), "INR")
+        self.assertEqual(groups[0].getMembers()[0].getBalances()[1].getAmount(), "2162.82")
+        self.assertEqual(groups[0].getMembers()[0].getBalances()[1].getCurrencyCode(), "SGD")
         self.assertEqual(len(groups[0].getOriginalDebts()), 2)
         self.assertEqual(groups[0].getOriginalDebts()[0].getToUser(), 79774)
         self.assertEqual(groups[0].getOriginalDebts()[0].getFromUser(), 18145926)
-        self.assertEqual(groups[0].getOriginalDebts()[0].getAmount(), '115000.0')
-        self.assertEqual(groups[0].getOriginalDebts()[0].getCurrencyCode(), 'INR')
+        self.assertEqual(groups[0].getOriginalDebts()[0].getAmount(), "115000.0")
+        self.assertEqual(groups[0].getOriginalDebts()[0].getCurrencyCode(), "INR")
+        self.assertEqual(groups[0].getOriginalDebts()[1].getToUser(), 79774)
+        self.assertEqual(groups[0].getOriginalDebts()[1].getFromUser(), 784241)
+        self.assertEqual(groups[0].getOriginalDebts()[1].getAmount(), "2162.82")
+        self.assertEqual(groups[0].getOriginalDebts()[1].getCurrencyCode(), "SGD")
         self.assertEqual(len(groups[0].getSimplifiedDebts()), 2)
-        self.assertEqual(groups[0].getSimplifiedDebts()[0].getFromUser(), 18145926)
         self.assertEqual(groups[0].getSimplifiedDebts()[0].getToUser(), 79774)
-        self.assertEqual(groups[0].getSimplifiedDebts()[0].getAmount(), '115000.0')
-        self.assertEqual(groups[0].getSimplifiedDebts()[0].getCurrencyCode(), 'INR')
-        self.assertEqual(groups[0].getWhiteBoard(), None)
-        self.assertEqual(groups[0].getInviteLink(), None)
+        self.assertEqual(groups[0].getSimplifiedDebts()[0].getFromUser(), 18145926)
+        self.assertEqual(groups[0].getSimplifiedDebts()[0].getAmount(), "115000.0")
+        self.assertEqual(groups[0].getSimplifiedDebts()[0].getCurrencyCode(), "INR")
+        self.assertEqual(groups[0].getSimplifiedDebts()[1].getToUser(), 79774)
+        self.assertEqual(groups[0].getSimplifiedDebts()[1].getFromUser(), 784241)
+        self.assertEqual(groups[0].getSimplifiedDebts()[1].getAmount(), "2162.82")
+        self.assertEqual(groups[0].getSimplifiedDebts()[1].getCurrencyCode(), "SGD")
+        # self.assertEqual(groups[0].getAvatar().getOriginal(), None)
+        # self.assertEqual(groups[0].getAvatar().getXxlarge(),
+        #                   "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-nongroup-1000px.png")
+        # self.assertEqual(groups[0].getAvatar().getXlarge(),
+        #                   "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-nongroup-500px.png")
+        # self.assertEqual(groups[0].getAvatar().getLarge(),
+        #                   "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-nongroup-200px.png")
+        # self.assertEqual(groups[0].getAvatar().getMedium(),
+        #                   "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-nongroup-100px.png")
+        # self.assertEqual(groups[0].getAvatar().getSmall(),
+        #                   "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-nongroup-50px.png")
+        # self.assertEqual(groups[0].getCoverPhoto().getXxlarge(
+        # ), "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-nongroup-1000px.png")
+        # self.assertEqual(groups[0].getCoverPhoto().getXlarge(
+        # ), "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-nongroup-500px.png")
+        self.assertEqual(groups[1].getId(), 10843533)
+        self.assertEqual(groups[1].getName(), "Flatmates Again")
+        self.assertEqual(groups[1].getUpdatedAt(), "2020-06-22T07:17:54Z")
+        self.assertEqual(len(groups[1].getMembers()), 4)
+        self.assertEqual(groups[1].getMembers()[0].getId(), 79774)
+        self.assertEqual(groups[1].getMembers()[0].getFirstName(), "Naman")
+        self.assertEqual(groups[1].getMembers()[0].getLastName(), "Aggarwal")
+        self.assertEqual(groups[1].getMembers()[0].getPicture().getSmall(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg")
+        self.assertEqual(groups[1].getMembers()[0].getPicture().getMedium(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg")
+        self.assertEqual(groups[1].getMembers()[0].getPicture().getLarge(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg")
+        self.assertEqual(groups[1].getMembers()[0].getEmail(), "naman@yahoo.com")
+        self.assertEqual(groups[1].getMembers()[0].getRegistrationStatus(), "confirmed")
+        self.assertEqual(len(groups[1].getMembers()[0].getBalances()), 1)
+        self.assertEqual(groups[1].getMembers()[0].getBalances()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getMembers()[0].getBalances()[0].getAmount(), "-20.13")
+        self.assertEqual(groups[1].getMembers()[1].getId(), 281236)
+        self.assertEqual(groups[1].getMembers()[1].getFirstName(), "Siddharth")
+        self.assertEqual(groups[1].getMembers()[1].getLastName(), "Goel")
+        self.assertEqual(groups[1].getMembers()[1].getPicture().getSmall(
+        ), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/small_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg")
+        self.assertEqual(groups[1].getMembers()[1].getPicture().getMedium(
+        ), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg")
+        self.assertEqual(groups[1].getMembers()[1].getPicture().getLarge(
+        ), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/large_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg")
+        self.assertEqual(groups[1].getMembers()[1].getEmail(), "siddharth98391@gmail.com")
+        self.assertEqual(groups[1].getMembers()[1].getRegistrationStatus(), "confirmed")
+        self.assertEqual(len(groups[1].getMembers()[1].getBalances()), 1)
+        self.assertEqual(groups[1].getMembers()[1].getBalances()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getMembers()[1].getBalances()[0].getAmount(), "978.02")
+        self.assertEqual(groups[1].getMembers()[2].getId(), 643871)
+        self.assertEqual(groups[1].getMembers()[2].getFirstName(), "Shantanu")
+        self.assertEqual(groups[1].getMembers()[2].getLastName(), "Alshi")
+        self.assertEqual(groups[1].getMembers()[2].getPicture().getSmall(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-50px.png")
+        self.assertEqual(groups[1].getMembers()[2].getPicture().getMedium(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-100px.png")
+        self.assertEqual(groups[1].getMembers()[2].getPicture().getLarge(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-200px.png")
+        self.assertEqual(groups[1].getMembers()[2].getEmail(), "shantanuals@gmail.com")
+        self.assertEqual(groups[1].getMembers()[2].getRegistrationStatus(), "confirmed")
+        self.assertEqual(len(groups[1].getMembers()[2].getBalances()), 1)
+        self.assertEqual(groups[1].getMembers()[2].getBalances()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getMembers()[2].getBalances()[0].getAmount(), "-957.89")
+        self.assertEqual(groups[1].getMembers()[3].getId(), 784241)
+        self.assertEqual(groups[1].getMembers()[3].getFirstName(), "ruks")
+        self.assertEqual(groups[1].getMembers()[3].getLastName(), None)
+        self.assertEqual(groups[1].getMembers()[3].getPicture().getSmall(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-50px.png")
+        self.assertEqual(groups[1].getMembers()[3].getPicture().getMedium(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-100px.png")
+        self.assertEqual(groups[1].getMembers()[3].getPicture().getLarge(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-200px.png")
+        self.assertEqual(groups[1].getMembers()[3].getEmail(), "rukmanivaithy@gmail.com")
+        self.assertEqual(groups[1].getMembers()[3].getRegistrationStatus(), "confirmed")
+        self.assertEqual(len(groups[1].getMembers()[3].getBalances()), 1)
+        self.assertEqual(groups[1].getMembers()[3].getBalances()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getMembers()[3].getBalances()[0].getAmount(), "0.0")
+        self.assertEqual(len(groups[1].getOriginalDebts()), 6)
+        self.assertEqual(groups[1].getOriginalDebts()[0].getFromUser(), 281236)
+        self.assertEqual(groups[1].getOriginalDebts()[0].getToUser(), 79774)
+        self.assertEqual(groups[1].getOriginalDebts()[0].getAmount(), "2304.26")
+        self.assertEqual(groups[1].getOriginalDebts()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[1].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[1].getFromUser(), 79774)
+        self.assertEqual(groups[1].getOriginalDebts()[1].getToUser(), 643871)
+        self.assertEqual(groups[1].getOriginalDebts()[1].getAmount(), "2314.73")
+        self.assertEqual(groups[1].getOriginalDebts()[2].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[2].getFromUser(), 79774)
+        self.assertEqual(groups[1].getOriginalDebts()[2].getToUser(), 784241)
+        self.assertEqual(groups[1].getOriginalDebts()[2].getAmount(), "9.66")
+        self.assertEqual(groups[1].getOriginalDebts()[3].getFromUser(), 643871)
+        self.assertEqual(groups[1].getOriginalDebts()[3].getToUser(), 281236)
+        self.assertEqual(groups[1].getOriginalDebts()[3].getAmount(), "2520.67")
+        self.assertEqual(groups[1].getOriginalDebts()[3].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[4].getFromUser(), 784241)
+        self.assertEqual(groups[1].getOriginalDebts()[4].getToUser(), 281236)
+        self.assertEqual(groups[1].getOriginalDebts()[4].getAmount(), "761.61")
+        self.assertEqual(groups[1].getOriginalDebts()[4].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[5].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getOriginalDebts()[5].getFromUser(), 643871)
+        self.assertEqual(groups[1].getOriginalDebts()[5].getToUser(), 784241)
+        self.assertEqual(groups[1].getOriginalDebts()[5].getAmount(), "751.95")
+        self.assertEqual(len(groups[1].getSimplifiedDebts()), 2)
+        self.assertEqual(groups[1].getSimplifiedDebts()[0].getFromUser(), 79774)
+        self.assertEqual(groups[1].getSimplifiedDebts()[0].getToUser(), 281236)
+        self.assertEqual(groups[1].getSimplifiedDebts()[0].getAmount(), "20.13")
+        self.assertEqual(groups[1].getSimplifiedDebts()[0].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getSimplifiedDebts()[1].getFromUser(), 643871)
+        self.assertEqual(groups[1].getSimplifiedDebts()[1].getToUser(), 281236)
+        self.assertEqual(groups[1].getSimplifiedDebts()[1].getAmount(), "957.89")
+        self.assertEqual(groups[1].getSimplifiedDebts()[1].getCurrencyCode(), "SGD")
+        self.assertEqual(groups[1].getWhiteBoard(), None)
+        self.assertEqual(groups[1].getType(), "apartment")
+        self.assertEqual(groups[1].getInviteLink(), "https://www.splitwise.com/join/d7bsHriQF5A+1pjy")
+        # self.assertEqual(groups[1].getAvatar().getOriginal(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getAvatar().getXxlarge(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/xxlarge_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getAvatar().getXlarge(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/xlarge_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getAvatar().getLarge(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/large_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getAvatar().getMedium(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/medium_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getAvatar().getSmall(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/small_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getCoverPhoto().getXxlarge(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/xxlarge_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
+        # self.assertEqual(groups[1].getCoverPhoto().getXlarge(
+        # ),
+        # "https://splitwise.s3.amazonaws.com/uploads/group/avatar/10843533/xlarge_a3734b4d-817e-42f4-9763-8001b12e33b8.jpeg")
 
     def test_getGroups_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):
             self.sObj.getGroups()
-            mockMakeRequest.assert_called_with(
+        mockMakeRequest.assert_called_with(
                 "https://secure.splitwise.com/api/v3.0/get_groups")
