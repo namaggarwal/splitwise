@@ -2,8 +2,12 @@ from splitwise import Splitwise
 import unittest
 try:
     from unittest.mock import patch
+    from urllib.parse import parse_qs
+    import urllib.parse as urlparse
 except ImportError:  # Python 2
     from mock import patch
+    from urlparse import parse_qs
+    import urlparse
 
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
@@ -14,9 +18,12 @@ class GetExpensesTestCase(unittest.TestCase):
 
     def test_getExpenses_limit_and_offset_success(self, mockMakeRequest):
         mockMakeRequest.return_value = '{"expenses":[{"id":1010395720,"group_id":10843533,"friendship_id":null,"expense_bundle_id":null,"description":"Potato","repeats":false,"repeat_interval":"never","email_reminder":false,"email_reminder_in_advance":-1,"next_repeat":null,"details":null,"comments_count":0,"payment":false,"creation_method":"equal","transaction_method":"offline","transaction_confirmed":false,"transaction_id":null,"cost":"0.9","currency_code":"SGD","repayments":[{"from":281236,"to":79774,"amount":"0.3"},{"from":643871,"to":79774,"amount":"0.3"}],"date":"2020-06-23T09:32:56Z","created_at":"2020-06-23T09:33:05Z","created_by":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"},"custom_picture":true},"updated_at":"2020-06-23T09:33:05Z","updated_by":null,"deleted_at":null,"deleted_by":null,"category":{"id":12,"name":"Groceries"},"receipt":{"large":null,"original":null},"users":[{"user":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"}},"user_id":79774,"paid_share":"0.9","owed_share":"0.3","net_balance":"0.6"},{"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"}},"user_id":281236,"paid_share":"0.0","owed_share":"0.3","net_balance":"-0.3"},{"user":{"id":643871,"first_name":"Shantanu","last_name":"Alshi","picture":{"medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-100px.png"}},"user_id":643871,"paid_share":"0.0","owed_share":"0.3","net_balance":"-0.3"}]},{"id":1009711631,"group_id":10843533,"friendship_id":null,"expense_bundle_id":null,"description":"Mexican Dinner","repeats":false,"repeat_interval":"never","email_reminder":true,"email_reminder_in_advance":null,"next_repeat":null,"details":"","comments_count":0,"payment":false,"creation_method":"split","transaction_method":"offline","transaction_confirmed":false,"transaction_id":null,"cost":"32.7","currency_code":"SGD","repayments":[{"from":281236,"to":79774,"amount":"10.9"},{"from":643871,"to":79774,"amount":"10.9"}],"date":"2020-06-22T07:17:32Z","created_at":"2020-06-22T07:17:54Z","created_by":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"},"custom_picture":true},"updated_at":"2020-06-22T07:17:54Z","updated_by":null,"deleted_at":null,"deleted_by":null,"category":{"id":13,"name":"Dining out"},"receipt":{"large":null,"original":null},"users":[{"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"}},"user_id":281236,"paid_share":"0.0","owed_share":"10.9","net_balance":"-10.9"},{"user":{"id":643871,"first_name":"Shantanu","last_name":"Alshi","picture":{"medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-100px.png"}},"user_id":643871,"paid_share":"0.0","owed_share":"10.9","net_balance":"-10.9"},{"user":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"}},"user_id":79774,"paid_share":"32.7","owed_share":"10.9","net_balance":"21.8"}]}]}'.encode('utf-8')  # noqa: E501
-        expenses = self.sObj.getExpenses(2, 2)
-        mockMakeRequest.assert_called_with(
-            "https://secure.splitwise.com/api/v3.0/get_expenses?offset=2&limit=2")
+        expenses = self.sObj.getExpenses(2, 3)
+        args, kwargs = mockMakeRequest.call_args
+        parsed = urlparse.urlparse(args[0])
+        qs = parse_qs(parsed.query)
+        self.assertEqual(qs['offset'], ['2'])
+        self.assertEqual(qs['limit'], ['3'])
         self.assertEqual(len(expenses), 2)
         self.assertEqual(expenses[0].getId(), 1010395720)
         self.assertEqual(expenses[0].getGroupId(), 10843533)
@@ -145,15 +152,26 @@ class GetExpensesTestCase(unittest.TestCase):
 
     def test_getExpenses_all_options_success(self, mockMakeRequest):
         mockMakeRequest.return_value = '{"expenses":[{"id":1010395720,"group_id":10843533,"friendship_id":null,"expense_bundle_id":null,"description":"Potato","repeats":false,"repeat_interval":"never","email_reminder":false,"email_reminder_in_advance":-1,"next_repeat":null,"details":null,"comments_count":0,"payment":false,"creation_method":"equal","transaction_method":"offline","transaction_confirmed":false,"transaction_id":null,"cost":"0.9","currency_code":"SGD","repayments":[{"from":281236,"to":79774,"amount":"0.3"},{"from":643871,"to":79774,"amount":"0.3"}],"date":"2020-06-23T09:32:56Z","created_at":"2020-06-23T09:33:05Z","created_by":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"},"custom_picture":true},"updated_at":"2020-06-23T09:33:05Z","updated_by":null,"deleted_at":null,"deleted_by":null,"category":{"id":12,"name":"Groceries"},"receipt":{"large":null,"original":null},"users":[{"user":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"}},"user_id":79774,"paid_share":"0.9","owed_share":"0.3","net_balance":"0.6"},{"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"}},"user_id":281236,"paid_share":"0.0","owed_share":"0.3","net_balance":"-0.3"},{"user":{"id":643871,"first_name":"Shantanu","last_name":"Alshi","picture":{"medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-100px.png"}},"user_id":643871,"paid_share":"0.0","owed_share":"0.3","net_balance":"-0.3"}]},{"id":1009711631,"group_id":10843533,"friendship_id":null,"expense_bundle_id":null,"description":"Mexican Dinner","repeats":false,"repeat_interval":"never","email_reminder":true,"email_reminder_in_advance":null,"next_repeat":null,"details":"","comments_count":0,"payment":false,"creation_method":"split","transaction_method":"offline","transaction_confirmed":false,"transaction_id":null,"cost":"32.7","currency_code":"SGD","repayments":[{"from":281236,"to":79774,"amount":"10.9"},{"from":643871,"to":79774,"amount":"10.9"}],"date":"2020-06-22T07:17:32Z","created_at":"2020-06-22T07:17:54Z","created_by":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"},"custom_picture":true},"updated_at":"2020-06-22T07:17:54Z","updated_by":null,"deleted_at":null,"deleted_by":null,"category":{"id":13,"name":"Dining out"},"receipt":{"large":null,"original":null},"users":[{"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"}},"user_id":281236,"paid_share":"0.0","owed_share":"10.9","net_balance":"-10.9"},{"user":{"id":643871,"first_name":"Shantanu","last_name":"Alshi","picture":{"medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-blue19-100px.png"}},"user_id":643871,"paid_share":"0.0","owed_share":"10.9","net_balance":"-10.9"},{"user":{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg"}},"user_id":79774,"paid_share":"32.7","owed_share":"10.9","net_balance":"21.8"}]}]}'.encode('utf-8')  # noqa: E501
-        self.sObj.getExpenses(2, 2, "123", "1234", "2020-12-12", "2020-12-19", "2020-12-13", "2020-12-18")
-        mockMakeRequest.assert_called_with(
-            "https://secure.splitwise.com/api/v3.0/get_expenses?offset=2&limit=2&group_id=123&friendship_id=1234&dated_after=\
-2020-12-12&dated_before=2020-12-19&updated_after=2020-12-13&updated_before=2020-12-18")
+        self.sObj.getExpenses(2, 3, "123", "1234", "2020-12-12", "2020-12-19", "2020-12-13", "2020-12-18")
+        args, kwargs = mockMakeRequest.call_args
+        parsed = urlparse.urlparse(args[0])
+        qs = parse_qs(parsed.query)
+        self.assertEqual(qs['offset'], ['2'])
+        self.assertEqual(qs['limit'], ['3'])
+        self.assertEqual(qs['group_id'], ['123'])
+        self.assertEqual(qs['friendship_id'], ['1234'])
+        self.assertEqual(qs['dated_after'], ['2020-12-12'])
+        self.assertEqual(qs['dated_before'], ['2020-12-19'])
+        self.assertEqual(qs['updated_after'], ['2020-12-13'])
+        self.assertEqual(qs['updated_before'], ['2020-12-18'])
 
     def test_getExpenses_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):
-            self.sObj.getExpenses(2, 2)
-        mockMakeRequest.assert_called_with(
-            "https://secure.splitwise.com/api/v3.0/get_expenses?offset=2&limit=2")
+            self.sObj.getExpenses(2, 3)
+        args, kwargs = mockMakeRequest.call_args
+        parsed = urlparse.urlparse(args[0])
+        qs = parse_qs(parsed.query)
+        self.assertEqual(qs['offset'], ['2'])
+        self.assertEqual(qs['limit'], ['3'])
