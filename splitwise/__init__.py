@@ -8,6 +8,8 @@ from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1
 from requests import Request, sessions
+from splitwise.exception import SplitwiseException
+
 try:
     from urlparse import parse_qs  # Python 2.x
     from urllib import urlencode
