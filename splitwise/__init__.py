@@ -1,11 +1,10 @@
 import oauth2 as oauth
 import json
-from splitwise.user import Friend, CurrentUser
+from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
-from splitwise.user import User
 from splitwise.error import SplitwiseError
 
 try:
@@ -51,6 +50,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/create_expense"
     CREATE_GROUP_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_group"
+    ADD_USER_TO_GROUP_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/add_user_to_group"
 
     debug = False
 
@@ -315,6 +316,34 @@ class Splitwise(object):
                     errors = SplitwiseError(content["group"]["errors"])
 
         return group_detail, errors
+
+    def addUserToGroup(self, user, group_id):
+        # Get the user data
+        request_data = user.__dict__
+        request_data["group_id"] = group_id
+
+        if "id" in request_data:
+            request_data["user_id"] = request_data["id"]
+            del request_data["id"]
+
+        content = self.__makeRequest(
+            Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
+        content = json.loads(content.decode("utf-8"))
+        errors = None
+        success = False
+        user = None
+        if "success" in content:
+            success = content["success"]
+
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        if 'user' in content:
+            if content['user'] is not None:
+                user = Friend(content['user'])
+
+        return success, user, errors
 
     @staticmethod
     def setUserArray(users, user_array):
