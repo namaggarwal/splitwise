@@ -36,18 +36,24 @@ class CreateGroupTestCase(unittest.TestCase):
         self.assertEqual(groupRes.getMembers()[0].getId(), 79774)
         self.assertEqual(groupRes.getMembers()[0].getFirstName(), "Naman")
         self.assertEqual(groupRes.getMembers()[0].getLastName(), "Aggarwal")
-        self.assertEqual(groupRes.getMembers()[0].getPicture().getSmall(), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg")
-        self.assertEqual(groupRes.getMembers()[0].getPicture().getMedium(), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg")
-        self.assertEqual(groupRes.getMembers()[0].getPicture().getLarge(), "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg")
+        self.assertEqual(groupRes.getMembers()[0].getPicture().getSmall(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg")
+        self.assertEqual(groupRes.getMembers()[0].getPicture().getMedium(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg")
+        self.assertEqual(groupRes.getMembers()[0].getPicture().getLarge(),
+                         "https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg")
         self.assertEqual(groupRes.getMembers()[0].getEmail(), "nam.aggarwal@yahoo.com")
         self.assertEqual(groupRes.getMembers()[0].getRegistrationStatus(), "confirmed")
         self.assertEqual(len(groupRes.getMembers()[0].getBalances()), 0)
         self.assertEqual(groupRes.getMembers()[1].getId(), 784241)
         self.assertEqual(groupRes.getMembers()[1].getFirstName(), "ruks")
         self.assertEqual(groupRes.getMembers()[1].getLastName(), None)
-        self.assertEqual(groupRes.getMembers()[1].getPicture().getSmall(), "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-50px.png")
-        self.assertEqual(groupRes.getMembers()[1].getPicture().getMedium(), "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-100px.png")
-        self.assertEqual(groupRes.getMembers()[1].getPicture().getLarge(), "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-200px.png")
+        self.assertEqual(groupRes.getMembers()[1].getPicture().getSmall(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-50px.png")
+        self.assertEqual(groupRes.getMembers()[1].getPicture().getMedium(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-100px.png")
+        self.assertEqual(groupRes.getMembers()[1].getPicture().getLarge(),
+                         "https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-200px.png")
         self.assertEqual(groupRes.getMembers()[1].getEmail(), "rukmanivaithy@gmail.com")
         self.assertEqual(groupRes.getMembers()[1].getRegistrationStatus(), "confirmed")
         self.assertEqual(len(groupRes.getMembers()[1].getBalances()), 0)
@@ -57,13 +63,20 @@ class CreateGroupTestCase(unittest.TestCase):
         self.assertEqual(groupRes.getType(), "apartment")
         self.assertEqual(groupRes.getInviteLink(), "https://www.splitwise.com/join/1EUrTyyCHj7+1pjy")
         # self.assertEqual(groupRes.getAvatar().getOriginal(), None)
-        # self.assertEqual(groupRes.getAvatar().getXxlarge(), "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-1000px.png")
-        # self.assertEqual(groupRes.getAvatar().getXlarge(), "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-500px.png")
-        # self.assertEqual(groupRes.getAvatar().getLarge(), "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-200px.png")
-        # self.assertEqual(groupRes.getAvatar().getMedium(), "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-100px.png")
-        # self.assertEqual(groupRes.getAvatar().getSmall(), "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-50px.png")
-        # self.assertEqual(groupRes.getCoverPhoto().getXxlarge(), "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png")
-        # self.assertEqual(groupRes.getCoverPhoto().getXlarge(), "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png")
+        # self.assertEqual(groupRes.getAvatar().getXxlarge(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-1000px.png")
+        # self.assertEqual(groupRes.getAvatar().getXlarge(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-500px.png")
+        # self.assertEqual(groupRes.getAvatar().getLarge(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-200px.png")
+        # self.assertEqual(groupRes.getAvatar().getMedium(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-100px.png")
+        # self.assertEqual(groupRes.getAvatar().getSmall(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-50px.png")
+        # self.assertEqual(groupRes.getCoverPhoto().getXxlarge(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png")
+        # self.assertEqual(groupRes.getCoverPhoto().getXlarge(),
+        # "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png")
 
     def test_createGroup_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(

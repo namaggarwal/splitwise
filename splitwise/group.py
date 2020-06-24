@@ -11,6 +11,7 @@ class Group(object):
             self.id = data["id"]
             self.name = data["name"]
             self.updated_at = data["updated_at"]
+            self.created_at = data["created_at"]
             self.simplify_by_default = data["simplify_by_default"]
 
             if "group_type" in data:
@@ -49,6 +50,9 @@ class Group(object):
 
     def getName(self):
         return self.name
+
+    def getCreatedAt(self):
+        return self.created_at
 
     def getUpdatedAt(self):
         return self.updated_at
@@ -95,11 +99,14 @@ class Group(object):
 class FriendGroup(object):
 
     def __init__(self, data=None):
+        if data:
+            self.id = data["group_id"]
+            self.balances = []
+            for balance in data["balance"]:
+                self.balances.append(Balance(balance))
 
-        self.id = data["group_id"]
-        self.balances = []
-        for balance in data["balance"]:
-            self.balances.append(Balance(balance))
+    def setId(self, id):
+        self.id = id
 
     def getId(self):
         return self.id
