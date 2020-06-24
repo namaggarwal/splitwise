@@ -1,17 +1,18 @@
-import oauth2 as oauth
 import json
+import requests
 from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
-
+from requests_oauthlib import OAuth1
+from requests import Request, sessions
 try:
-    from urlparse import parse_qsl  # Python 2.x
+    from urlparse import parse_qs  # Python 2.x
     from urllib import urlencode
 except ImportError:  # Python 3
-    from urllib.parse import parse_qsl, urlencode
+    from urllib.parse import parse_qs, urlencode
 
 
 class Splitwise(object):
@@ -67,8 +68,8 @@ class Splitwise(object):
         Returns:
             A Splitwise Object
         """
-        self.consumer = oauth.Consumer(consumer_key, consumer_secret)
-
+        self.consumer_key = consumer_key
+        self.consumer_secret = consumer_secret
         # If access token is present then set the Access token
         if access_token:
             self.setAccessToken(access_token)
@@ -81,70 +82,83 @@ class Splitwise(object):
     def isDebug(cls):
         return cls.debug
 
-    def getAuthorizeURL(self):
-
-        client = oauth.Client(self.consumer)
-
-        # Get the request token
-        resp, content = client.request(Splitwise.REQUEST_TOKEN_URL, "POST")
-
+    @classmethod
+    def printResponse(cls, response):
         if Splitwise.isDebug():
-            print(resp, content)
+            print("<<<<<< RESPONSE <<<<<<<")
+            print("<<<<< STATUS <<<<<")
+            print(response.status_code)
+            print("<<<<< HEADERS <<<<<")
+            print(response.headers)
+            print("<<<<< CONTENT <<<<<")
+            print(response.content)
 
-        # Check if the response is correct
-        if resp['status'] != '200':
-            raise Exception(
-                "Invalid response %s. \
-                  Please check your consumer key and secret." % resp['status'])
+    def getAuthorizeURL(self):
+        oauth1 = OAuth1(
+            self.consumer_key,
+            client_secret=self.consumer_secret)
 
-        request_token = dict(parse_qsl(content.decode("utf-8")))
+        response = requests.post(Splitwise.REQUEST_TOKEN_URL, auth=oauth1)
+        Splitwise.printResponse(response)
+
+        if response.status_code != 200:
+            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
+
+        credentials = parse_qs(response.content.decode('utf-8'))
 
         return "%s?oauth_token=%s" % (
-            Splitwise.AUTHORIZE_URL, request_token['oauth_token']
-        ), request_token['oauth_token_secret']
+            Splitwise.AUTHORIZE_URL, credentials.get('oauth_token')[0]
+        ), credentials.get('oauth_token_secret')[0]
 
     def getAccessToken(self, oauth_token, oauth_token_secret, oauth_verifier):
 
-        token = oauth.Token(oauth_token, oauth_token_secret)
-        token.set_verifier(oauth_verifier)
-        client = oauth.Client(self.consumer, token)
+        oauth1 = OAuth1(
+            self.consumer_key,
+            client_secret=self.consumer_secret,
+            resource_owner_key=oauth_token,
+            resource_owner_secret=oauth_token_secret,
+            verifier=oauth_verifier
+        )
 
-        resp, content = client.request(Splitwise.ACCESS_TOKEN_URL, "POST")
+        response = requests.post(Splitwise.ACCESS_TOKEN_URL, auth=oauth1)
+        Splitwise.printResponse(response)
 
-        if Splitwise.isDebug():
-            print(resp, content)
+        if response.status_code != 200:
+            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
 
-        # Check if the response is correct
-        if resp['status'] != '200':
-            raise Exception(
-                "Invalid response %s. Please check your consumer key and secret." % resp['status'])
-
-        access_token = dict(parse_qsl(content.decode("utf-8")))
-
-        return access_token
+        credentials = parse_qs(response.content.decode('utf-8'))
+        return {
+            "oauth_token": credentials.get("oauth_token")[0],
+            "oauth_token_secret": credentials.get("oauth_token_secret")[0],
+        }
 
     def setAccessToken(self, access_token):
-        self.token = oauth.Token(
-            key=access_token["oauth_token"], secret=access_token["oauth_token_secret"])
-        self.client = oauth.Client(self.consumer, self.token)
+        oauth1 = OAuth1(self.consumer_key,
+                        client_secret=self.consumer_secret,
+                        resource_owner_key=access_token['oauth_token'],
+                        resource_owner_secret=access_token['oauth_token_secret'])
+
+        self.client = Request(auth=oauth1)
 
     def __makeRequest(self, url, method="GET", data=None):
 
-        if data:
-            resp, content = self.client.request(
-                url, method, body=urlencode(data))
-        else:
-            resp, content = self.client.request(url, method)
+        self.client.url = url
+        self.client.method = method
+        self.client.data = data
 
-        if Splitwise.isDebug():
-            print(resp, content)
+        prep_req = self.client.prepare()
+
+        with sessions.Session() as session:
+            resp = session.send(prep_req)
+
+        Splitwise.printResponse(resp)
 
         # Check if the response is correct
-        if resp['status'] != '200':
+        if resp.status_code != 200:
             raise Exception(
-                "Invalid response %s. Please check your consumer key and secret." % resp['status'])
+                "Invalid response %s. Please check your consumer key and secret." % resp.status_code)
 
-        return content
+        return resp.content
 
     def __prepareOptionsUrl(self, options={}):
         return "?"+urlencode(options)
