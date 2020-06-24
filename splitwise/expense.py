@@ -59,6 +59,11 @@ class Expense(object):
             for user in data["users"]:
                 self.users.append(ExpenseUser(user))
 
+            if "transaction_id" in data:
+                self.transaction_id = data["transaction_id"]
+            else:
+                self.transaction_id = None
+
     def getId(self):
         return self.id
 
@@ -186,6 +191,9 @@ class Expense(object):
 
     def setSplitEqually(self, shouldSplit=True):
         self.split_equally = shouldSplit
+
+    def getTransactionId(self):
+        return self.transaction_id
 
     def __getattr__(self, item):
         return None
