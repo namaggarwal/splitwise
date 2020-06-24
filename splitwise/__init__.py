@@ -311,7 +311,7 @@ class Splitwise(object):
         if "group" in content:
             group_detail = Group(content["group"])
             if "errors" in content["group"]:
-                if len(content['errors']) != 0:
+                if len(content["group"]['errors']) != 0:
                     errors = SplitwiseError(content["group"]["errors"])
 
         return group_detail, errors

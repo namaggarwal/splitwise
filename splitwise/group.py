@@ -11,6 +11,7 @@ class Group(object):
             self.id = data["id"]
             self.name = data["name"]
             self.updated_at = data["updated_at"]
+            self.created_at = data["created_at"]
             self.simplify_by_default = data["simplify_by_default"]
 
             if "group_type" in data:
@@ -50,6 +51,9 @@ class Group(object):
     def getName(self):
         return self.name
 
+    def getCreatedAt(self):
+        return self.created_at
+
     def getUpdatedAt(self):
         return self.updated_at
 
@@ -68,6 +72,9 @@ class Group(object):
     def getType(self):
         return self.group_type
 
+    def getGroupType(self):
+        return self.group_type
+
     def getSimplifiedDebts(self):
         return self.simplified_debts
 
@@ -77,8 +84,14 @@ class Group(object):
     def setName(self, name):
         self.name = name
 
+    def setType(self, group_type):
+        self.group_type = group_type
+
     def setGroupType(self, group_type):
         self.group_type = group_type
+
+    def setWhiteBoard(self, whiteboard):
+        self.whiteboard = whiteboard
 
     def setCountryCode(self, country_code):
         self.country_code = country_code
@@ -95,14 +108,17 @@ class Group(object):
 class FriendGroup(object):
 
     def __init__(self, data=None):
+        if data:
+            self.id = data["group_id"]
+            self.balances = []
+            for balance in data["balance"]:
+                self.balances.append(Balance(balance))
 
-        self.id = data["group_id"]
-        self.balances = []
-        for balance in data["balance"]:
-            self.balances.append(Balance(balance))
+    def setId(self, id):
+        self.id = id
 
     def getId(self):
         return self.id
 
     def getBalances(self):
-        return self.balance
+        return self.balances
