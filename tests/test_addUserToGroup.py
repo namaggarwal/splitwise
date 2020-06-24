@@ -39,11 +39,17 @@ class AddUserToGroupTestCase(unittest.TestCase):
     def test_addUserToGroup_with_email_success(self, mockMakeRequest):
         mockMakeRequest.return_value = '{"success":true,"user":{"id":62,"first_name":"Testes","last_name":null,"picture":{"small":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-50px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-100px.png","large":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-200px.png"},"custom_picture":false,"email":"test@test.com","registration_status":"confirmed","balance":[]},"errors":{}}'.encode('utf-8')  # noqa: E501
         user = User()
-        user.setId(281236)
+        user.setFirstName("testFirst")
+        user.setLastName("testLast")
+        user.setEmail("test@test.com")
         success, userRes, errors = self.sObj.addUserToGroup(user, 19481273)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/add_user_to_group", "POST",
-            {'group_id': 19481273, 'user_id': 281236})
+            {'first_name': 'testFirst',
+             'last_name': 'testLast',
+             'email': 'test@test.com',
+             'group_id': 19481273
+             })
         self.assertTrue(success)
         self.assertIsNone(errors)
         self.assertEqual(userRes.getId(), 62)
@@ -58,6 +64,19 @@ class AddUserToGroupTestCase(unittest.TestCase):
         self.assertEqual(userRes.getEmail(), "test@test.com")
         self.assertEqual(userRes.getRegistrationStatus(), "confirmed")
         self.assertEqual(len(userRes.getBalances()), 0)
+
+    def test_addUserToGroup_error(self, mockMakeRequest):
+        mockMakeRequest.return_value = '{"success":false,"user":null,"errors":{"memberships.user.first_name":["can\'t be blank"]}}'.encode('utf-8')  # noqa: E501
+        user = User()
+        success, userRes, errors = self.sObj.addUserToGroup(user, 19481273)
+        mockMakeRequest.assert_called_with(
+            "https://secure.splitwise.com/api/v3.0/add_user_to_group", "POST",
+            {
+                'group_id': 19481273
+            })
+        self.assertIsNone(userRes)
+        self.assertFalse(success)
+        self.assertEqual(errors.getErrors(), {'memberships.user.first_name': ["can't be blank"]})
 
     def test_createGroup_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
