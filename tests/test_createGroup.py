@@ -86,6 +86,18 @@ class CreateGroupTestCase(unittest.TestCase):
         # self.assertEqual(groupRes.getCoverPhoto().getXlarge(),
         # "https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png")
 
+    def test_createGroup_error(self, mockMakeRequest):
+        mockMakeRequest.return_value = '{"group":{"id":null,"name":null,"created_at":null,"updated_at":null,"members":[],"simplify_by_default":false,"original_debts":[],"simplified_debts":[],"whiteboard":null,"group_type":"apartment","invite_link":"https://www.splitwise.com/join/vmz4CdiY3LM+1pjy","errors":{"name":["can\'t be blank"]},"avatar":{"original":null,"xxlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-teal1-house-1000px.png","xlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-teal1-house-500px.png","large":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-teal1-house-200px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-teal1-house-100px.png","small":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-teal1-house-50px.png"},"custom_avatar":false,"cover_photo":{"xxlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-teal-1000px.png","xlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-teal-500px.png"}}}'.encode('utf-8')  # noqa: E501
+        group = Group()
+        user = FriendGroup()
+        user.setId(784241)
+        group.addMember(user)
+        groupRes, error = self.sObj.createGroup(group)
+        mockMakeRequest.assert_called_with(
+            "https://secure.splitwise.com/api/v3.0/create_group", "POST",
+            {"users__0__user_id": 784241})
+        self.assertEqual(error.getErrors(), {"name": ["can\'t be blank"]})
+
     def test_createGroup_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
