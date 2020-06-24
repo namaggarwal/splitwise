@@ -17,6 +17,8 @@ class CreateGroupTestCase(unittest.TestCase):
         mockMakeRequest.return_value = '{"group":{"id":19481273,"name":"TestName","created_at":"2020-06-24T05:02:06Z","updated_at":"2020-06-24T05:02:06Z","members":[{"id":79774,"first_name":"Naman","last_name":"Aggarwal","picture":{"small":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/small_mypic.jpg","medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/medium_mypic.jpg","large":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/79774/large_mypic.jpg"},"custom_picture":true,"email":"nam.aggarwal@yahoo.com","registration_status":"confirmed","balance":[]},{"id":784241,"first_name":"ruks","last_name":null,"picture":{"small":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-50px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-100px.png","large":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-ruby47-200px.png"},"custom_picture":false,"email":"rukmanivaithy@gmail.com","registration_status":"confirmed","balance":[]}],"simplify_by_default":false,"original_debts":[],"simplified_debts":[],"whiteboard":null,"group_type":"apartment","invite_link":"https://www.splitwise.com/join/1EUrTyyCHj7+1pjy","avatar":{"original":null,"xxlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-1000px.png","xlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-500px.png","large":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-200px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-100px.png","small":"https://s3.amazonaws.com/splitwise/uploads/group/default_avatars/avatar-ruby9-house-50px.png"},"custom_avatar":false,"cover_photo":{"xxlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-1000px.png","xlarge":"https://s3.amazonaws.com/splitwise/uploads/group/default_cover_photos/coverphoto-ruby-500px.png"}}}'.encode('utf-8')  # noqa: E501
         group = Group()
         group.setName("TestName")
+        group.setWhiteBoard("test Whiteboard")
+        group.setType("apartment")
         user = FriendGroup()
         user.setId(784241)
         group.addMember(user)
@@ -26,7 +28,13 @@ class CreateGroupTestCase(unittest.TestCase):
         groupRes, error = self.sObj.createGroup(group)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/create_group", "POST",
-            {"users__0__user_id": 784241, "users__1__user_id": 123, "name": "TestName"})
+            {
+                "users__0__user_id": 784241,
+                "users__1__user_id": 123,
+                "name": "TestName", "whiteboard":
+                "test Whiteboard",
+                "group_type": "apartment"
+            })
         self.assertIsNone(error)
         self.assertEqual(groupRes.getId(), 19481273)
         self.assertEqual(groupRes.getName(), "TestName")
@@ -59,7 +67,7 @@ class CreateGroupTestCase(unittest.TestCase):
         self.assertEqual(len(groupRes.getMembers()[1].getBalances()), 0)
         self.assertEqual(len(groupRes.getOriginalDebts()), 0)
         self.assertEqual(len(groupRes.getSimplifiedDebts()), 0)
-        # self.assertEqual(groupRes.getWhiteboard(), None)
+        self.assertEqual(groupRes.getWhiteBoard(), None)
         self.assertEqual(groupRes.getType(), "apartment")
         self.assertEqual(groupRes.getInviteLink(), "https://www.splitwise.com/join/1EUrTyyCHj7+1pjy")
         # self.assertEqual(groupRes.getAvatar().getOriginal(), None)

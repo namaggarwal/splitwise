@@ -72,6 +72,9 @@ class Group(object):
     def getType(self):
         return self.group_type
 
+    def getGroupType(self):
+        return self.group_type
+
     def getSimplifiedDebts(self):
         return self.simplified_debts
 
@@ -81,8 +84,14 @@ class Group(object):
     def setName(self, name):
         self.name = name
 
+    def setType(self, group_type):
+        self.group_type = group_type
+
     def setGroupType(self, group_type):
         self.group_type = group_type
+
+    def setWhiteBoard(self, whiteboard):
+        self.whiteboard = whiteboard
 
     def setCountryCode(self, country_code):
         self.country_code = country_code
