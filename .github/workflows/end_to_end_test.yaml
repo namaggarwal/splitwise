@@ -1,0 +1,14 @@
+name: Run on demand
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+  ondemand:
+    runs-on: ubuntu-latest
+    if: github.event.comment.body == 'run integration tests'
+
+    steps:
+      - name: Hello world
+        run: echo Hello world, I was run on demand by ${GITHUB_ACTOR}
