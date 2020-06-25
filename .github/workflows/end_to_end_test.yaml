@@ -7,7 +7,6 @@ on:
 jobs:
   ondemand:
     runs-on: ubuntu-latest
-    if: github.event.comment.body == 'run integration tests'
 
     steps:
       - name: Hello world
