@@ -1,13 +1,29 @@
-name: Run on demand
+name: End to End Tests
 
 on:
   pull_request:
-    types: [opened]
-  issue_comment:
-    types: [created]
+    types: [opened, reopened]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [2.7, 3.7]
     steps:
-      - run: 'echo test'
+      - name: print
+        run: |
+          echo ${GITHUB_ACTOR}
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest mock
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Test with pytest
+        run: |
+          pytest e2e-tests
