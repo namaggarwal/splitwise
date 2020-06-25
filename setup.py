@@ -11,7 +11,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 setup(name='splitwise',
-      version='1.2.0',
+      version='1.3.0',
       description='Splitwise API SDK',
       long_description=long_description,
       long_description_content_type='text/markdown',
