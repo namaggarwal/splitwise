@@ -5,9 +5,8 @@ on:
     types: [created, edited]
 
 jobs:
-  ondemand:
+  build:
     runs-on: ubuntu-latest
-    if: always()
     steps:
       - name: Hello world
         run: echo Hello world, I was run on demand by ${GITHUB_ACTOR}
