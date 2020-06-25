@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    if: ${GITHUB_ACTOR} == 'namaggarwal'
+    if: github.actor == 'namaggarwal'
     runs-on: ubuntu-latest
     strategy:
       matrix:
