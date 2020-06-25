@@ -28,4 +28,4 @@ jobs:
           flake8 . --count --max-complexity=10 --statistics
       - name: Test with pytest
         run: |
-          pytest
+          pytest tests
