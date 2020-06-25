@@ -1,5 +1,4 @@
 import json
-import requests
 from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
@@ -8,7 +7,7 @@ from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1
 from requests import Request, sessions
-from splitwise.exception import SplitwiseException
+from splitwise.exception import SplitwiseException, SplitwiseUnauthorizedException, SplitwiseBadRequestException, SplitwiseNotFoundException
 
 try:
     from urlparse import parse_qs  # Python 2.x
@@ -85,6 +84,19 @@ class Splitwise(object):
         return cls.debug
 
     @classmethod
+    def printRequest(cls, request):
+        if Splitwise.isDebug():
+            print(">>>>>> REQUEST >>>>>>>")
+            print(">>>>> METHOD >>>>>")
+            print(request.method)
+            print(">>>>> URL >>>>>")
+            print(request.body)
+            print(">>>>> HEADERS >>>>>")
+            print(request.headers)
+            print(">>>>> BODY >>>>>")
+            print(request.body)
+
+    @classmethod
     def printResponse(cls, response):
         if Splitwise.isDebug():
             print("<<<<<< RESPONSE <<<<<<<")
@@ -98,15 +110,12 @@ class Splitwise(object):
     def getAuthorizeURL(self):
         oauth1 = OAuth1(
             self.consumer_key,
-            client_secret=self.consumer_secret)
+            client_secret=self.consumer_secret
+        )
 
-        response = requests.post(Splitwise.REQUEST_TOKEN_URL, auth=oauth1)
-        Splitwise.printResponse(response)
+        content = self.__makeRequest(Splitwise.REQUEST_TOKEN_URL, method='POST', auth=oauth1)
 
-        if response.status_code != 200:
-            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
-
-        credentials = parse_qs(response.content.decode('utf-8'))
+        credentials = parse_qs(content)
 
         return "%s?oauth_token=%s" % (
             Splitwise.AUTHORIZE_URL, credentials.get('oauth_token')[0]
@@ -122,13 +131,13 @@ class Splitwise(object):
             verifier=oauth_verifier
         )
 
-        response = requests.post(Splitwise.ACCESS_TOKEN_URL, auth=oauth1)
-        Splitwise.printResponse(response)
+        try:
+            content = self.__makeRequest(Splitwise.ACCESS_TOKEN_URL, 'POST', auth=oauth1)
+        except SplitwiseUnauthorizedException as e:
+            e.setMessage("Your oauth token could be expired or check your consumer id and secret")
+            raise
 
-        if response.status_code != 200:
-            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
-
-        credentials = parse_qs(response.content.decode('utf-8'))
+        credentials = parse_qs(content)
         return {
             "oauth_token": credentials.get("oauth_token")[0],
             "oauth_token_secret": credentials.get("oauth_token_secret")[0],
@@ -142,25 +151,37 @@ class Splitwise(object):
 
         self.client = Request(auth=oauth1)
 
-    def __makeRequest(self, url, method="GET", data=None):
+    def __makeRequest(self, url, method="GET", data=None, auth=None):
 
-        self.client.url = url
-        self.client.method = method
-        self.client.data = data
+        if auth is None:
+            self.client.url = url
+            self.client.method = method
+            self.client.data = data
+            requestObj = self.client
+        else:
+            requestObj = Request(method=method, url=url, data=data, auth=auth)
 
-        prep_req = self.client.prepare()
+        prep_req = requestObj.prepare()
+        Splitwise.printRequest(prep_req)
 
         with sessions.Session() as session:
-            resp = session.send(prep_req)
+            response = session.send(prep_req)
 
-        Splitwise.printResponse(resp)
+        Splitwise.printResponse(response)
 
-        # Check if the response is correct
-        if resp.status_code != 200:
-            raise Exception(
-                "Invalid response %s. Please check your consumer key and secret." % resp.status_code)
+        if response.status_code == 200:
+            return response.content.decode("utf-8")
 
-        return resp.content
+        if response.status_code == 401:
+            raise SplitwiseUnauthorizedException("Please check your token or consumer id and secret", response=response)
+
+        if response.status_code == 400:
+            raise SplitwiseBadRequestException("Please check your request", response=response)
+
+        if response.status_code == 404:
+            raise SplitwiseNotFoundException("", "", response)
+
+        raise SplitwiseException("Unknown error happened", response.content, response.status_code, response.headers)
 
     def __prepareOptionsUrl(self, options={}):
         return "?"+urlencode(options)

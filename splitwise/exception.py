@@ -4,7 +4,7 @@ class SplitwiseException(Exception):
         message=None,
         http_body=None,
         http_status=None,
-        headers=None
+        http_headers=None
     ):
         super(SplitwiseException, self).__init__(message)
 
@@ -19,12 +19,12 @@ class SplitwiseException(Exception):
         self._message = message
         self.http_body = http_body
         self.http_status = http_status
-        self.headers = headers or {}
+        self.http_headers = http_headers or {}
         self.errors = {}
-        if "error" in self.http_body:
+        if hasattr(self.http_body, "error"):
             self.errors = {"base": self.http_body["error"]}
 
-        if "errors" in self.http_body:
+        if hasattr(self.http_body, "errors"):
             self.errors = self.http_body["errors"]
 
     def __str__(self):
@@ -38,13 +38,34 @@ class SplitwiseException(Exception):
             self.http_status
         )
 
+    def setMessage(self, message):
+        self._message = message
+
+
+class SplitwiseUnauthorizedException(SplitwiseException):
+    def __init__(
+        self,
+        message,
+        response
+    ):
+
+        super(SplitwiseUnauthorizedException, self).__init__(
+          message=message,
+          http_body=response.content,
+          http_status=response.status_code,
+          http_headers=response.headers
+        )
+
 
 class SplitwiseBadRequestException(SplitwiseException):
     pass
 
 
 class SplitwiseNotFoundException(SplitwiseException):
-    def __init__(self, name, id, http_body=None, headers=None):
+    def __init__(self, name, id, response):
         super(SplitwiseNotFoundException, self).__init__(
-            "%s(%r with id %id does not exist)" % (self.__class__.__name__, name, id), http_body, 404, headers
+            "%s(%r with id %r does not exist)" % (self.__class__.__name__, name, id),
+            http_body=response.content,
+            http_status=404,
+            http_headers=response.headers
         )
