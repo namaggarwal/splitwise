@@ -10,6 +10,7 @@ from requests import Request, sessions
 from splitwise.exception import (SplitwiseException,
                                  SplitwiseUnauthorizedException,
                                  SplitwiseBadRequestException,
+                                 SplitwiseNotAllowedException,
                                  SplitwiseNotFoundException
                                  )
 
@@ -174,31 +175,43 @@ class Splitwise(object):
         Splitwise.printResponse(response)
 
         if response.status_code == 200:
-            return response.content.decode("utf-8")
+            if (response.content and hasattr(response.content, "decode")):
+                return response.content.decode("utf-8")
+            return response.content
 
         if response.status_code == 401:
             raise SplitwiseUnauthorizedException("Please check your token or consumer id and secret", response=response)
+
+        if response.status_code == 403:
+            raise SplitwiseNotAllowedException("You are not allowed to perform this operation", response=response)
 
         if response.status_code == 400:
             raise SplitwiseBadRequestException("Please check your request", response=response)
 
         if response.status_code == 404:
-            raise SplitwiseNotFoundException("", "", response)
+            raise SplitwiseNotFoundException("Required resource is not found", response)
 
-        raise SplitwiseException("Unknown error happened", response.content, response.status_code, response.headers)
+        raise SplitwiseException("Unknown error happened", response)
 
     def __prepareOptionsUrl(self, options={}):
         return "?"+urlencode(options)
 
     def getCurrentUser(self):
-
         content = self.__makeRequest(Splitwise.GET_CURRENT_USER_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         return CurrentUser(content["user"])
 
     def getUser(self, id):
-        content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        try:
+            content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch user with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("User with id %d does not exist" % id)
+            raise
+
+        content = json.loads(content)
         return User(content["user"])
 
     def getFriends(self):

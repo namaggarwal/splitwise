@@ -1,4 +1,7 @@
-class SplitwiseException(Exception):
+import json
+
+
+class SplitwiseBaseException(Exception):
     def __init__(
         self,
         message=None,
@@ -6,7 +9,7 @@ class SplitwiseException(Exception):
         http_status=None,
         http_headers=None
     ):
-        super(SplitwiseException, self).__init__(message)
+        super(SplitwiseBaseException, self).__init__(message)
 
         if http_body and hasattr(http_body, "decode"):
             try:
@@ -21,11 +24,15 @@ class SplitwiseException(Exception):
         self.http_status = http_status
         self.http_headers = http_headers or {}
         self.errors = {}
-        if hasattr(self.http_body, "error"):
-            self.errors = {"base": self.http_body["error"]}
-
-        if hasattr(self.http_body, "errors"):
-            self.errors = self.http_body["errors"]
+        if self.http_body:
+            try:
+                body = json.loads(self.http_body)
+                if "error" in body:
+                    self.errors = {"base": body["error"]}
+                if "errors" in body:
+                    self.errors = body["errors"]
+            except Exception:
+                pass
 
     def __str__(self):
         msg = self._message or "<empty message>"
@@ -42,30 +49,32 @@ class SplitwiseException(Exception):
         self._message = message
 
 
-class SplitwiseUnauthorizedException(SplitwiseException):
+class SplitwiseException(SplitwiseBaseException):
     def __init__(
         self,
         message,
         response
     ):
 
-        super(SplitwiseUnauthorizedException, self).__init__(
-          message=message,
-          http_body=response.content,
-          http_status=response.status_code,
-          http_headers=response.headers
+        super(SplitwiseException, self).__init__(
+            message=message,
+            http_body=response.content,
+            http_status=response.status_code,
+            http_headers=response.headers
         )
+
+
+class SplitwiseUnauthorizedException(SplitwiseException):
+    pass
 
 
 class SplitwiseBadRequestException(SplitwiseException):
     pass
 
 
+class SplitwiseNotAllowedException(SplitwiseException):
+    pass
+
+
 class SplitwiseNotFoundException(SplitwiseException):
-    def __init__(self, name, id, response):
-        super(SplitwiseNotFoundException, self).__init__(
-            "%s(%r with id %r does not exist)" % (self.__class__.__name__, name, id),
-            http_body=response.content,
-            http_status=404,
-            http_headers=response.headers
-        )
+    pass
