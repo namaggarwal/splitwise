@@ -217,7 +217,7 @@ class Splitwise(object):
     def getFriends(self):
 
         content = self.__makeRequest(Splitwise.GET_FRIENDS_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         friends = []
         if "friends" in content:
