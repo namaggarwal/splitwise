@@ -19,8 +19,11 @@ class GroupTestCase(unittest.TestCase):
     def test_group_flow(self):
         group = Group()
         group.setName("Splitwise_test_case")
+        # Create Group
         group, error = self.sObj.createGroup(group)
         self.assertIsNotNone(group.getId())
+        # Delete Group
+        self.sObj.deleteGroup(group.getId())
 
     def test_group_invalidkeys_fail(self):
         sObj = Splitwise('consumerkey', 'consumersecret', {"oauth_token": "sdsd", "oauth_token_secret": "sdsdd"})
