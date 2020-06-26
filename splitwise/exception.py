@@ -53,15 +53,17 @@ class SplitwiseException(SplitwiseBaseException):
     def __init__(
         self,
         message,
-        response
+        response=None
     ):
 
         super(SplitwiseException, self).__init__(
-            message=message,
-            http_body=response.content,
-            http_status=response.status_code,
-            http_headers=response.headers
+            message=message
         )
+
+        if response is not None:
+            self.http_body = response.content,
+            self.http_status = response.status_code,
+            self.http_headers = response.headers
 
 
 class SplitwiseUnauthorizedException(SplitwiseException):
