@@ -229,7 +229,7 @@ class Splitwise(object):
     def getGroups(self):
 
         content = self.__makeRequest(Splitwise.GET_GROUPS_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         groups = []
         if "groups" in content:
@@ -241,7 +241,7 @@ class Splitwise(object):
     def getCurrencies(self):
 
         content = self.__makeRequest(Splitwise.GET_CURRENCY_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         currencies = []
         if "currencies" in content:
@@ -253,7 +253,7 @@ class Splitwise(object):
     def getCategories(self):
 
         content = self.__makeRequest(Splitwise.GET_CATEGORY_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         categories = []
 
         if "categories" in content:
@@ -265,7 +265,7 @@ class Splitwise(object):
     def getGroup(self, id=0):
 
         content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         group = None
         if "group" in content:
             group = Group(content["group"])
@@ -298,7 +298,7 @@ class Splitwise(object):
 
         url += self.__prepareOptionsUrl(options)
         content = self.__makeRequest(url)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expenses = []
         if "expenses" in content:
             for e in content["expenses"]:
@@ -308,7 +308,7 @@ class Splitwise(object):
 
     def getExpense(self, id):
         content = self.__makeRequest(Splitwise.GET_EXPENSE_URL+"/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expense = None
         if "expense" in content:
             expense = Expense(content["expense"])
@@ -335,7 +335,7 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.CREATE_EXPENSE_URL, "POST", expense_data)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expense = None
         errors = None
 
@@ -360,7 +360,7 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.CREATE_GROUP_URL, "POST", group_info)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         group_detail = None
         errors = None
         if "group" in content:
@@ -382,7 +382,7 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         errors = None
         success = False
         user = None

@@ -13,7 +13,7 @@ class GetCurrenciesTestCase(unittest.TestCase):
         self.sObj = Splitwise('consumerkey', 'consumersecret')
 
     def test_getCurrencies_success(self, mockMakeRequest):
-        mockMakeRequest.return_value = '{"currencies":[{"currency_code":"AED","unit":"DH"},{"currency_code":"AFN","unit":"Afs"},{"currency_code":"ALL","unit":"L"}]}'.encode('utf-8')  # noqa: E501
+        mockMakeRequest.return_value = '{"currencies":[{"currency_code":"AED","unit":"DH"},{"currency_code":"AFN","unit":"Afs"},{"currency_code":"ALL","unit":"L"}]}'  # noqa: E501
         currencies = self.sObj.getCurrencies()
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/get_currencies")
