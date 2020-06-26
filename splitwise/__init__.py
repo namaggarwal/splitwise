@@ -59,6 +59,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/create_group"
     ADD_USER_TO_GROUP_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/add_user_to_group"
+    DELETE_GROUP_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/delete_group"
 
     debug = False
 
@@ -399,7 +401,7 @@ class Splitwise(object):
         errors = None
         success = False
         user = None
-        if "success" in content:
+        if 'success' in content:
             success = content["success"]
 
         if 'errors' in content:
@@ -411,6 +413,29 @@ class Splitwise(object):
                 user = Friend(content['user'])
 
         return success, user, errors
+
+    def deleteGroup(self, id):
+        errors = None
+        success = False
+        try:
+            content = self.__makeRequest(
+                Splitwise.DELETE_GROUP_URL+"/"+str(id), "POST")
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access group with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % id)
+            raise
+
+        content = json.loads(content)
+        if 'success' in content:
+            success = content["success"]
+
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        return success, errors
 
     @staticmethod
     def setUserArray(users, user_array):
