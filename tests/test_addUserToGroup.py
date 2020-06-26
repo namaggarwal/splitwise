@@ -14,7 +14,7 @@ class AddUserToGroupTestCase(unittest.TestCase):
         self.sObj = Splitwise('consumerkey', 'consumersecret')
 
     def test_addUserToGroup_withid_success(self, mockMakeRequest):
-        mockMakeRequest.return_value = '{"success":true,"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"small":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/small_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg","medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg","large":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/large_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"},"custom_picture":true,"email":"siddharth98391@gmail.com","registration_status":"confirmed","balance":[]},"errors":{}}'.encode('utf-8')  # noqa: E501
+        mockMakeRequest.return_value = '{"success":true,"user":{"id":281236,"first_name":"Siddharth","last_name":"Goel","picture":{"small":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/small_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg","medium":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/medium_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg","large":"https://splitwise.s3.amazonaws.com/uploads/user/avatar/281236/large_f5fccc37-0a88-4519-9398-59c8c19b92aa.jpeg"},"custom_picture":true,"email":"siddharth98391@gmail.com","registration_status":"confirmed","balance":[]},"errors":{}}'  # noqa: E501
         user = User()
         user.setId(281236)
         success, userRes, errors = self.sObj.addUserToGroup(user, 19481273)
@@ -37,7 +37,7 @@ class AddUserToGroupTestCase(unittest.TestCase):
         self.assertEqual(len(userRes.getBalances()), 0)
 
     def test_addUserToGroup_with_email_success(self, mockMakeRequest):
-        mockMakeRequest.return_value = '{"success":true,"user":{"id":62,"first_name":"Testes","last_name":null,"picture":{"small":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-50px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-100px.png","large":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-200px.png"},"custom_picture":false,"email":"test@test.com","registration_status":"confirmed","balance":[]},"errors":{}}'.encode('utf-8')  # noqa: E501
+        mockMakeRequest.return_value = '{"success":true,"user":{"id":62,"first_name":"Testes","last_name":null,"picture":{"small":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-50px.png","medium":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-100px.png","large":"https://s3.amazonaws.com/splitwise/uploads/user/default_avatars/avatar-orange16-200px.png"},"custom_picture":false,"email":"test@test.com","registration_status":"confirmed","balance":[]},"errors":{}}'  # noqa: E501
         user = User()
         user.setFirstName("testFirst")
         user.setLastName("testLast")
@@ -66,7 +66,7 @@ class AddUserToGroupTestCase(unittest.TestCase):
         self.assertEqual(len(userRes.getBalances()), 0)
 
     def test_addUserToGroup_error(self, mockMakeRequest):
-        mockMakeRequest.return_value = '{"success":false,"user":null,"errors":{"memberships.user.first_name":["can\'t be blank"]}}'.encode('utf-8')  # noqa: E501
+        mockMakeRequest.return_value = '{"success":false,"user":null,"errors":{"memberships.user.first_name":["can\'t be blank"]}}'  # noqa: E501
         user = User()
         success, userRes, errors = self.sObj.addUserToGroup(user, 19481273)
         mockMakeRequest.assert_called_with(

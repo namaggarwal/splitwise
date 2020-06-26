@@ -1,5 +1,4 @@
 import json
-import requests
 from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
@@ -8,6 +7,13 @@ from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1
 from requests import Request, sessions
+from splitwise.exception import (SplitwiseException,
+                                 SplitwiseUnauthorizedException,
+                                 SplitwiseBadRequestException,
+                                 SplitwiseNotAllowedException,
+                                 SplitwiseNotFoundException
+                                 )
+
 try:
     from urlparse import parse_qs  # Python 2.x
     from urllib import urlencode
@@ -83,6 +89,19 @@ class Splitwise(object):
         return cls.debug
 
     @classmethod
+    def printRequest(cls, request):
+        if Splitwise.isDebug():
+            print(">>>>>> REQUEST >>>>>>>")
+            print(">>>>> METHOD >>>>>")
+            print(request.method)
+            print(">>>>> URL >>>>>")
+            print(request.body)
+            print(">>>>> HEADERS >>>>>")
+            print(request.headers)
+            print(">>>>> BODY >>>>>")
+            print(request.body)
+
+    @classmethod
     def printResponse(cls, response):
         if Splitwise.isDebug():
             print("<<<<<< RESPONSE <<<<<<<")
@@ -96,15 +115,12 @@ class Splitwise(object):
     def getAuthorizeURL(self):
         oauth1 = OAuth1(
             self.consumer_key,
-            client_secret=self.consumer_secret)
+            client_secret=self.consumer_secret
+        )
 
-        response = requests.post(Splitwise.REQUEST_TOKEN_URL, auth=oauth1)
-        Splitwise.printResponse(response)
+        content = self.__makeRequest(Splitwise.REQUEST_TOKEN_URL, method='POST', auth=oauth1)
 
-        if response.status_code != 200:
-            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
-
-        credentials = parse_qs(response.content.decode('utf-8'))
+        credentials = parse_qs(content)
 
         return "%s?oauth_token=%s" % (
             Splitwise.AUTHORIZE_URL, credentials.get('oauth_token')[0]
@@ -120,13 +136,13 @@ class Splitwise(object):
             verifier=oauth_verifier
         )
 
-        response = requests.post(Splitwise.ACCESS_TOKEN_URL, auth=oauth1)
-        Splitwise.printResponse(response)
+        try:
+            content = self.__makeRequest(Splitwise.ACCESS_TOKEN_URL, 'POST', auth=oauth1)
+        except SplitwiseUnauthorizedException as e:
+            e.setMessage("Your oauth token could be expired or check your consumer id and secret")
+            raise
 
-        if response.status_code != 200:
-            raise Exception("Invalid response %d. Please check your consumer key and secret." % response.status_code)
-
-        credentials = parse_qs(response.content.decode('utf-8'))
+        credentials = parse_qs(content)
         return {
             "oauth_token": credentials.get("oauth_token")[0],
             "oauth_token_secret": credentials.get("oauth_token_secret")[0],
@@ -140,44 +156,68 @@ class Splitwise(object):
 
         self.client = Request(auth=oauth1)
 
-    def __makeRequest(self, url, method="GET", data=None):
+    def __makeRequest(self, url, method="GET", data=None, auth=None):
 
-        self.client.url = url
-        self.client.method = method
-        self.client.data = data
+        if auth is None:
+            self.client.url = url
+            self.client.method = method
+            self.client.data = data
+            requestObj = self.client
+        else:
+            requestObj = Request(method=method, url=url, data=data, auth=auth)
 
-        prep_req = self.client.prepare()
+        prep_req = requestObj.prepare()
+        Splitwise.printRequest(prep_req)
 
         with sessions.Session() as session:
-            resp = session.send(prep_req)
+            response = session.send(prep_req)
 
-        Splitwise.printResponse(resp)
+        Splitwise.printResponse(response)
 
-        # Check if the response is correct
-        if resp.status_code != 200:
-            raise Exception(
-                "Invalid response %s. Please check your consumer key and secret." % resp.status_code)
+        if response.status_code == 200:
+            if (response.content and hasattr(response.content, "decode")):
+                return response.content.decode("utf-8")
+            return response.content
 
-        return resp.content
+        if response.status_code == 401:
+            raise SplitwiseUnauthorizedException("Please check your token or consumer id and secret", response=response)
+
+        if response.status_code == 403:
+            raise SplitwiseNotAllowedException("You are not allowed to perform this operation", response=response)
+
+        if response.status_code == 400:
+            raise SplitwiseBadRequestException("Please check your request", response=response)
+
+        if response.status_code == 404:
+            raise SplitwiseNotFoundException("Required resource is not found", response)
+
+        raise SplitwiseException("Unknown error happened", response)
 
     def __prepareOptionsUrl(self, options={}):
         return "?"+urlencode(options)
 
     def getCurrentUser(self):
-
         content = self.__makeRequest(Splitwise.GET_CURRENT_USER_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         return CurrentUser(content["user"])
 
     def getUser(self, id):
-        content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        try:
+            content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch user with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("User with id %d does not exist" % id)
+            raise
+
+        content = json.loads(content)
         return User(content["user"])
 
     def getFriends(self):
 
         content = self.__makeRequest(Splitwise.GET_FRIENDS_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         friends = []
         if "friends" in content:
@@ -189,7 +229,7 @@ class Splitwise(object):
     def getGroups(self):
 
         content = self.__makeRequest(Splitwise.GET_GROUPS_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         groups = []
         if "groups" in content:
@@ -201,7 +241,7 @@ class Splitwise(object):
     def getCurrencies(self):
 
         content = self.__makeRequest(Splitwise.GET_CURRENCY_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
 
         currencies = []
         if "currencies" in content:
@@ -213,7 +253,7 @@ class Splitwise(object):
     def getCategories(self):
 
         content = self.__makeRequest(Splitwise.GET_CATEGORY_URL)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         categories = []
 
         if "categories" in content:
@@ -223,9 +263,16 @@ class Splitwise(object):
         return categories
 
     def getGroup(self, id=0):
+        try:
+            content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch group with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % id)
+            raise
 
-        content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         group = None
         if "group" in content:
             group = Group(content["group"])
@@ -258,7 +305,7 @@ class Splitwise(object):
 
         url += self.__prepareOptionsUrl(options)
         content = self.__makeRequest(url)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expenses = []
         if "expenses" in content:
             for e in content["expenses"]:
@@ -268,7 +315,7 @@ class Splitwise(object):
 
     def getExpense(self, id):
         content = self.__makeRequest(Splitwise.GET_EXPENSE_URL+"/"+str(id))
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expense = None
         if "expense" in content:
             expense = Expense(content["expense"])
@@ -295,7 +342,7 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.CREATE_EXPENSE_URL, "POST", expense_data)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         expense = None
         errors = None
 
@@ -320,7 +367,7 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.CREATE_GROUP_URL, "POST", group_info)
-        content = json.loads(content.decode("utf-8"))
+        content = json.loads(content)
         group_detail = None
         errors = None
         if "group" in content:
@@ -339,10 +386,16 @@ class Splitwise(object):
         if "id" in request_data:
             request_data["user_id"] = request_data["id"]
             del request_data["id"]
-
-        content = self.__makeRequest(
-            Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
-        content = json.loads(content.decode("utf-8"))
+        try:
+            content = self.__makeRequest(
+                Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access group with id %d" % group_id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % group_id)
+            raise
+        content = json.loads(content)
         errors = None
         success = False
         user = None
