@@ -263,8 +263,15 @@ class Splitwise(object):
         return categories
 
     def getGroup(self, id=0):
+        try:
+            content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch group with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % id)
+            raise
 
-        content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
         content = json.loads(content)
         group = None
         if "group" in content:
@@ -379,9 +386,15 @@ class Splitwise(object):
         if "id" in request_data:
             request_data["user_id"] = request_data["id"]
             del request_data["id"]
-
-        content = self.__makeRequest(
-            Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
+        try:
+            content = self.__makeRequest(
+                Splitwise.ADD_USER_TO_GROUP_URL, "POST", request_data)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access group with id %d" % group_id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % group_id)
+            raise
         content = json.loads(content)
         errors = None
         success = False
