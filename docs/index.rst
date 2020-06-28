@@ -52,6 +52,19 @@ splitwise SDK supports
 
 Splitwise officially supports Python 2.7 & 3.4–3.7, and runs great on PyPy.
 
+The User Documentation / Guide
+------------------------------
+
+If you are looking information on how to use this SDK. This part of documentation
+explains that
+
+.. toctree::
+   :maxdepth: 3
+
+   user/intro
+   user/install
+
+
 The API Documentation / Guide
 -----------------------------
 
@@ -59,14 +72,9 @@ If you are looking for information on a specific function, class, or method,
 this part of the documentation is for you.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    api
-
-.. toctree::
-   :maxdepth: 3
-   :caption: Contents:
-
 
 
 Indices and tables

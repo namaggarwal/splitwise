@@ -87,3 +87,44 @@ Currency
 
 .. autoclass:: splitwise.currency.Currency
    :members:
+
+
+Errors
+------
+
+.. autoclass:: splitwise.error.SplitwiseError
+   :members:
+
+
+Exceptions
+----------
+
+SplitwiseBaseException
+^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: splitwise.exception.SplitwiseBaseException
+   :members:
+
+SplitwiseException
+^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: splitwise.exception.SplitwiseException
+   :members:
+
+SplitwiseUnauthorizedException
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: splitwise.exception.SplitwiseUnauthorizedException
+   :members:
+
+SplitwiseNotAllowedException
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: splitwise.exception.SplitwiseNotAllowedException
+   :members:
+
+SplitwiseNotFoundException
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: splitwise.exception.SplitwiseNotFoundException
+   :members:

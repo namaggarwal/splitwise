@@ -21,6 +21,7 @@ class Category(object):
 
     def getId(self):
         """ Returns the id of the category
+
         Returns:
             long: ID of the category
         """
