@@ -64,7 +64,7 @@ this part of the documentation is for you.
    api
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
 

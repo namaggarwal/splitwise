@@ -15,7 +15,7 @@ import sys
 
 sys.path.insert(0, os.path.abspath('..'))
 
-import splitwise
+import splitwise  # noqa: E402
 
 
 # -- Project information -----------------------------------------------------

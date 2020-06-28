@@ -15,3 +15,14 @@ via this class.
 
 .. autoclass:: splitwise.Splitwise
    :members:
+
+Modals
+------
+
+There are several modal objects in this SDK
+
+User
+^^^^
+
+.. autoclass:: splitwise.user.User
+   :members:

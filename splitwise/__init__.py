@@ -287,7 +287,7 @@ class Splitwise(object):
         """ Gets the list of users friends.
 
         Returns:
-            list: List of :obj:`splitwise.user.Friend` objects
+            :obj:`list` of :obj:`splitwise.user.Friend`: List of Friends
         """
         content = self.__makeRequest(Splitwise.GET_FRIENDS_URL)
         content = json.loads(content)
@@ -303,7 +303,7 @@ class Splitwise(object):
         """ Gets the list of groups a user is part of.
 
         Returns:
-            list: List of :obj:`splitwise.group.Group` objects
+            :obj:`list` of :obj:`splitwise.group.Group`: List of Groups
         """
         content = self.__makeRequest(Splitwise.GET_GROUPS_URL)
         content = json.loads(content)
@@ -319,7 +319,7 @@ class Splitwise(object):
         """ Gets the list of curriencies in Splitwise.
 
         Returns:
-            list: List of :obj:`splitwise.currency.Currency` objects
+            :obj:`list` of :obj:`splitwise.currency.Currency`: List of Currency
         """
         content = self.__makeRequest(Splitwise.GET_CURRENCY_URL)
         content = json.loads(content)
@@ -335,7 +335,7 @@ class Splitwise(object):
         """ Gets the list of categories in Splitwise.
 
         Returns:
-            list: List of :obj:`splitwise.category.Category` objects
+            :obj:`list` of :obj:`splitwise.category.Category`: List of Category
         """
         content = self.__makeRequest(Splitwise.GET_CATEGORY_URL)
         content = json.loads(content)
@@ -395,7 +395,7 @@ class Splitwise(object):
             updated_before(str, optional): ISO 8601 Date time. Return expenses updated before this date
 
         Returns:
-            list: A list of :obj:`splitwise.expense.Expense`): Objects
+            :obj:`list` of :obj:`splitwise.expense.Expense`: List of Expense
         """
 
         options = {}

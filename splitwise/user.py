@@ -4,7 +4,16 @@ import splitwise.group as Group
 
 
 class User(object):
+    """ Contains basic user data.
 
+    Attributes:
+        id(str, optional): ID of the user
+        first_name(str, optional): First name of the user
+        last_name(str, optional): Last name of the user
+        email(str, optional): Email of the user
+        registration_status(str, optional): Registration status of the user
+        picture(:obj:`splitwise.picture.Picture`, optional): Profile picture of the user
+    """
     def __init__(self, data=None):
         if data:
             self.first_name = data["first_name"]
