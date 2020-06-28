@@ -1,5 +1,10 @@
 # Splitwise Python SDK
 
+![](https://pepy.tech/badge/splitwise)
+![](https://img.shields.io/pypi/l/splitwise.svg)
+![](https://img.shields.io/pypi/wheel/splitwise.svg)
+![](https://img.shields.io/pypi/pyversions/splitwise.svg)
+
 This is the python sdk for Splitwise APIs. Pull requests and bug reports are welcomed.
 
 ## Latest Version
