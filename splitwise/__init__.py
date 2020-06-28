@@ -1,3 +1,22 @@
+"""Splitwise Python SDK
+
+Splitwise Python SDK provides a simple interface to access splitwise APIs
+
+    Typical usage:
+
+    >>> s = Splitwise("consumer_key", "consumer_secret")
+    >>> s.setAccessToken(access_token)
+    >>> s.getCurrentUser().getId()
+    78322
+    >>> expense = Expense()
+    >>> expense.setGroupId("19433671")
+    >>> expense.setSplitEqually()
+    >>> expense.setCost("10")
+    >>> created_expense, errors = s.createExpense(expense)
+    >>> created_expense.getId()
+    897763
+
+"""
 import json
 from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
@@ -14,6 +33,8 @@ from splitwise.exception import (SplitwiseException,
                                  SplitwiseNotFoundException
                                  )
 
+from .__version__ import __version__  # noqa: F401
+
 try:
     from urlparse import parse_qs  # Python 2.x
     from urllib import urlencode
@@ -22,7 +43,12 @@ except ImportError:  # Python 3
 
 
 class Splitwise(object):
-    """ The Splitwise class to make the requests to splitwise server.
+    """ The Splitwise class that provides all the functionality.
+
+    Attributes:
+        consumer_key(str): Consumer Key provided by Splitwise.
+        consumer_secret(str): Consumer Secret provided by Splitwise.
+        client(:obj:`requests.Request`, optional): A request.Request object with an auth.
     """
 
     SPLITWISE_BASE_URL = "https://secure.splitwise.com/"
@@ -65,16 +91,14 @@ class Splitwise(object):
     debug = False
 
     def __init__(self, consumer_key, consumer_secret, access_token=None):
-        """ Initializes the splitwise class. Sets consumer and access token
+        """
 
         Args:
-            consumer_key (str) : Consumer Key provided by Spliwise
-            consumer_secret (str): Consumer Secret provided by Splitwise
-            access_token (:obj: `dict`) Access Token is a combination of
+            consumer_key(str): Consumer Key provided by Spliwise
+            consumer_secret(str): Consumer Secret provided by Splitwise
+            access_token(:obj:`dict`, optional): Access Token is a combination of
                                         oauth_token and oauth_token_secret
 
-        Returns:
-            A Splitwise Object
         """
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
@@ -115,6 +139,14 @@ class Splitwise(object):
             print(response.content)
 
     def getAuthorizeURL(self):
+        """ Provides the Authorize URL for end user's authentication
+
+        Returns:
+            tuple: tuple containing:
+              auth_url(str): URL that user should be redirected to for authorization
+
+              oauth_token_secret(str): Token secret that should be saved to redeem token
+        """
         oauth1 = OAuth1(
             self.consumer_key,
             client_secret=self.consumer_secret
@@ -129,7 +161,19 @@ class Splitwise(object):
         ), credentials.get('oauth_token_secret')[0]
 
     def getAccessToken(self, oauth_token, oauth_token_secret, oauth_verifier):
+        """ Provides the OAuth1.0 access token
 
+        Args:
+            oauth_token(str): The OAuth 1.0 token got from the redirect URL
+            oauth_token_secret(str): The OAuth 1.0 token secret got while generating the auth URL
+            oauth_verifier(str): The OAuth 1.0 token verifier got from the redirect URL
+
+        Returns:
+            dict: dict containing:
+              oauth_token(str): The OAuth 1.0 token
+
+              oauth_token_secret(str): The OAuth 1.0 token secret
+        """
         oauth1 = OAuth1(
             self.consumer_key,
             client_secret=self.consumer_secret,
@@ -151,6 +195,16 @@ class Splitwise(object):
         }
 
     def setAccessToken(self, access_token):
+        """ Sets the OAuth1.0 access token, this should be done to make any authorized calls
+
+        Args:
+            access_token(:obj:`dict`): dict containing
+
+                                oauth_token(str): The OAuth 1.0 token
+
+                                oauth_token_secret(str): The OAuth 1.0 token secret
+
+        """
         oauth1 = OAuth1(self.consumer_key,
                         client_secret=self.consumer_secret,
                         resource_owner_key=access_token['oauth_token'],
@@ -199,11 +253,24 @@ class Splitwise(object):
         return "?"+urlencode(options)
 
     def getCurrentUser(self):
+        """ Gets the current authorized user's data
+
+        Returns:
+            :obj:`splitwise.user.CurrentUser`: CurrentUser object containing user data
+        """
         content = self.__makeRequest(Splitwise.GET_CURRENT_USER_URL)
         content = json.loads(content)
         return CurrentUser(content["user"])
 
     def getUser(self, id):
+        """ Gets the friends user's data given the ids
+
+        Args:
+            id (long): ID of the user whose information is needed
+
+        Returns:
+            :obj:`splitwise.user.User`: User object containing user data
+        """
         try:
             content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
         except SplitwiseNotAllowedException as e:
@@ -217,7 +284,11 @@ class Splitwise(object):
         return User(content["user"])
 
     def getFriends(self):
+        """ Gets the list of users friends.
 
+        Returns:
+            list: List of :obj:`splitwise.user.Friend` objects
+        """
         content = self.__makeRequest(Splitwise.GET_FRIENDS_URL)
         content = json.loads(content)
 
@@ -229,7 +300,11 @@ class Splitwise(object):
         return friends
 
     def getGroups(self):
+        """ Gets the list of groups a user is part of.
 
+        Returns:
+            list: List of :obj:`splitwise.group.Group` objects
+        """
         content = self.__makeRequest(Splitwise.GET_GROUPS_URL)
         content = json.loads(content)
 
@@ -241,7 +316,11 @@ class Splitwise(object):
         return groups
 
     def getCurrencies(self):
+        """ Gets the list of curriencies in Splitwise.
 
+        Returns:
+            list: List of :obj:`splitwise.currency.Currency` objects
+        """
         content = self.__makeRequest(Splitwise.GET_CURRENCY_URL)
         content = json.loads(content)
 
@@ -253,7 +332,11 @@ class Splitwise(object):
         return currencies
 
     def getCategories(self):
+        """ Gets the list of categories in Splitwise.
 
+        Returns:
+            list: List of :obj:`splitwise.category.Category` objects
+        """
         content = self.__makeRequest(Splitwise.GET_CATEGORY_URL)
         content = json.loads(content)
         categories = []
@@ -265,6 +348,14 @@ class Splitwise(object):
         return categories
 
     def getGroup(self, id=0):
+        """ Gets the detail of particular group a user is part of.
+
+        Args:
+            id(long, optional): ID of the group. Default value is 0, and means non-group expenses
+
+        Returns:
+            :obj:`splitwise.group.Group`: Object representing a group
+        """
         try:
             content = self.__makeRequest(Splitwise.GET_GROUP_URL+"/"+str(id))
         except SplitwiseNotAllowedException as e:
@@ -291,6 +382,21 @@ class Splitwise(object):
                     updated_after=None,
                     updated_before=None
                     ):
+        """ Gets the list of expenses given parameters.
+
+        Args:
+            offset(int, optional): Number of expenses to be skipped
+            limit(int, optional): Number of expenses to be returned
+            group_id(long, optional): GroupID of the expenses
+            friendship_id(long, optional): FriendshipID of the expenses
+            dated_after(str, optional): ISO 8601 Date time. Return expenses later that this date
+            dated_before(str, optional): ISO 8601 Date time. Return expenses earlier than this date
+            updated_after(str, optional): ISO 8601 Date time. Return expenses updated after this date
+            updated_before(str, optional): ISO 8601 Date time. Return expenses updated before this date
+
+        Returns:
+            list: A list of :obj:`splitwise.expense.Expense`): Objects
+        """
 
         options = {}
 
@@ -316,6 +422,14 @@ class Splitwise(object):
         return expenses
 
     def getExpense(self, id):
+        """ Gets the detail of the expense given the expense id.
+
+        Args:
+            id(long, optional): ID of the expense.
+
+        Returns:
+            :obj:`splitwise.expense.Expense`: Object representing an expense
+        """
         content = self.__makeRequest(Splitwise.GET_EXPENSE_URL+"/"+str(id))
         content = json.loads(content)
         expense = None
@@ -325,6 +439,17 @@ class Splitwise(object):
         return expense
 
     def createExpense(self, expense):
+        """ Creates a new expense.
+
+        Args:
+            expense(:obj:`splitwise.expense.Expense`): Splitwise Expense Object.
+
+        Returns:
+            tuple: tuple containing:
+              expense(:obj:`splitwise.expense.Expense`): Object with Expense detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
         # Get the expense Dict
         expense_data = expense.__dict__
 
@@ -359,6 +484,17 @@ class Splitwise(object):
         return expense, errors
 
     def createGroup(self, group):
+        """ Creates a new Group.
+
+        Args:
+            group(:obj:`splitwise.group.Group`): Splitwise Group Object.
+
+        Returns:
+            tuple: tuple containing:
+              group(:obj:`splitwise.group.Group`): Object with Group detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
         # create group
         group_info = group.__dict__
 
@@ -381,6 +517,20 @@ class Splitwise(object):
         return group_detail, errors
 
     def addUserToGroup(self, user, group_id):
+        """ Adds a user to the group.
+
+        Args:
+            user(:obj:`splitwise.user.User`): User to be added
+            group_id(long): ID of the group
+
+        Returns:
+            tuple: tuple containing:
+              success(bool): True if group deleted, False otherwise
+
+              user(:obj:`splitwise.user.Friend`): Object representing added user details
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
         # Get the user data
         request_data = user.__dict__
         request_data["group_id"] = group_id
@@ -415,6 +565,17 @@ class Splitwise(object):
         return success, user, errors
 
     def deleteGroup(self, id):
+        """ Deletes the group with given id.
+
+        Args:
+            id(long): ID of the group to be deleted.
+
+        Returns:
+            tuple: tuple containing:
+              success(bool): True if group deleted, False otherwise
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
         errors = None
         success = False
         try:
