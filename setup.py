@@ -16,7 +16,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 about = {}
-with open(path.join(this_directory, 'splitwise', '__version__.py'), 'r', 'utf-8') as f:
+with open(path.join(this_directory, 'splitwise', '__version__.py'), mode='r', encoding='utf-8') as f:
     exec(f.read(), about)
 
 setup(name=about['__title__'],
