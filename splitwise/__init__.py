@@ -48,7 +48,7 @@ class Splitwise(object):
     Attributes:
         consumer_key(str): Consumer Key provided by Splitwise.
         consumer_secret(str): Consumer Secret provided by Splitwise.
-        client(:obj:`requests.Request`, optional): A request.Request object with an auth.
+        auth(:obj:`requests.AuthBase`, optional): A request.AuthBase object that defines an auth.
     """
 
     SPLITWISE_BASE_URL = "https://secure.splitwise.com/"
@@ -102,6 +102,7 @@ class Splitwise(object):
         """
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
+        self.auth = None
         # If access token is present then set the Access token
         if access_token:
             self.setAccessToken(access_token)
@@ -210,17 +211,14 @@ class Splitwise(object):
                         resource_owner_key=access_token['oauth_token'],
                         resource_owner_secret=access_token['oauth_token_secret'])
 
-        self.client = Request(auth=oauth1)
+        self.auth = oauth1
 
     def __makeRequest(self, url, method="GET", data=None, auth=None):
 
-        if auth is None:
-            self.client.url = url
-            self.client.method = method
-            self.client.data = data
-            requestObj = self.client
-        else:
-            requestObj = Request(method=method, url=url, data=data, auth=auth)
+        if auth is None and self.auth:
+            auth = self.auth
+
+        requestObj = Request(method=method, url=url, data=data, auth=auth)
 
         prep_req = requestObj.prepare()
         Splitwise.printRequest(prep_req)

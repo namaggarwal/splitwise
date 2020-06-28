@@ -40,15 +40,16 @@ Features
 
 splitwise SDK supports
 
-- Fetching current user info
-- Fetching user's friends
-- Fetching user's expenses
-- Fetching user's groups
-- Fetching currencies
-- Fetching categories
-- Creating a new group
-- Creating a new expense
-- Deleting an existing group
+- :ref:`Fetching current user info <exCurrentUser>`
+- :ref:`Fetching user's friends <exFriends>`
+- :ref:`Fetching user's expenses <exExpenses>`
+- :ref:`Creating a new expense <exNExpense>`
+- :ref:`Fetching user's groups <exGroups>`
+- :ref:`Creating a new group <exNGroup>`
+- :ref:`Adding user to group <exAGroup>`
+- :ref:`Deleting an existing group <exDGroup>`
+- :ref:`Fetching currencies <exCurrencies>`
+- :ref:`Fetching categories <exCategories>`
 
 Splitwise officially supports Python 2.7 & 3.4–3.7, and runs great on PyPy.
 
@@ -63,6 +64,9 @@ explains that
 
    user/intro
    user/install
+   user/authenticate
+   user/example
+
 
 
 The API Documentation / Guide
@@ -76,6 +80,24 @@ this part of the documentation is for you.
 
    api
 
+
+Contributing Guide
+------------------
+
+If you are looking to contribute to this SDK, this part is for you.
+
+.. toctree::
+   :maxdepth: 3
+
+   contri
+
+Donate
+------
+
+.. toctree::
+   :maxdepth: 3
+
+   donate
 
 Indices and tables
 ==================
