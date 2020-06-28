@@ -327,50 +327,125 @@ class Expense(object):
         return self.friendship_id
 
     def getRepayments(self):
+        """ Returns the list of repayments
+
+        Returns:
+            :obj:`list` of :obj:`splitwise.debt.Debt`: list of debts
+        """
         return self.repayments
 
     def setGroupId(self, id):
+        """ Sets the group id of the expense
+
+        Args:
+            id(long): Group ID of the expense
+        """
         self.group_id = id
 
     def setDescription(self, desc):
+        """ Sets the description of the expense
+
+        Args:
+            desc(str): description of the expense
+        """
         self.description = desc
 
     def setPayment(self, payment):
+        """ Sets the payment of the expense
+
+        Args:
+            payment(bool): payment of the expense
+        """
         self.payment = payment
 
     def setCost(self, cost):
+        """ Sets the cost of the expense
+
+        Args:
+            cost(str): cost of the expense
+        """
         self.cost = cost
 
     def setFriendshipId(self, f_id):
+        """ Sets the friendship id of the expense
+
+        Args:
+            f_id(long): friendship id of the expense
+        """
         self.friendship_id = f_id
 
     def setCreationMethod(self, creation_method):
+        """ Sets the creation method of the expense
+
+        Args:
+            creation_method(str): creation method of the expense
+        """
         self.creation_method = creation_method
 
     def setDate(self, date):
+        """ Sets the date of the expense
+
+        Args:
+            date(str): date of the expense
+        """
         self.date = date
 
     def setRepeatInterval(self, repeat_interval):
+        """ Sets to repeat the interval of expense
+
+        Args:
+            repeat_interval(str): repeat interval of the expense
+        """
         self.repeat_interval = repeat_interval
 
     def setCurrencyCode(self, currency_code):
+        """ Sets the currency code of the expense
+
+        Args:
+            currency_code(str): currency code of the expense
+        """
         self.currency_code = currency_code
 
     def setCategory(self, category):
+        """ Sets to category of the expense
+
+        Args:
+            category(:obj:`splitwise.category.Category`): category of the expense
+        """
         self.category = category
 
     def setUsers(self, users):
+        """ Sets to users of the expense
+
+        Args:
+            users(:obj:`list` of :obj:`splitwise.user.ExpenseUser`): List of users
+        """
         self.users = users
 
     def addUser(self, user):
+        """ Add a user to the expense
+
+        Args:
+            user(:obj:`splitwise.user.ExpenseUser`): user to add to expense
+        """
         if not self.users:
             self.users = []
         self.users.append(user)
 
-    def setSplitEqually(self, shouldSplit=True):
-        self.split_equally = shouldSplit
+    def setSplitEqually(self, should_split=True):
+        """ Set if expense should be split equally
+
+        Args:
+            should_split(bool, optional): Should the expense be split equally. Default value is True
+        """
+        self.split_equally = should_split
 
     def getTransactionId(self):
+        """ Sets the transaction id of the expense
+
+        Args:
+            transaction_id(long): transaction id of the expense
+        """
         return self.transaction_id
 
     def __getattr__(self, item):
