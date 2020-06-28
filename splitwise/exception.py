@@ -2,6 +2,15 @@ import json
 
 
 class SplitwiseBaseException(Exception):
+    """ Base exception class for splitwise.
+
+    Attributes:
+        message(str, optional): Exception message
+        http_body(str, optional): HTTP body
+        http_status(int, optional): HTTP status code
+        http_headers(:obj:`dict`, optional): Dict containing header key and value
+        errors(:obj:`json`, optional): JSON errors
+    """
     def __init__(
         self,
         message=None,
@@ -9,6 +18,13 @@ class SplitwiseBaseException(Exception):
         http_status=None,
         http_headers=None
     ):
+        """
+          Args:
+                message(str, optional): Exception message
+                http_body(str, optional): HTTP body
+                http_status(int, optional): HTTP status code
+                http_headers(:obj:`dict`, optional): Dict containing header key and value
+        """
         super(SplitwiseBaseException, self).__init__(message)
 
         if http_body and hasattr(http_body, "decode"):
@@ -46,16 +62,29 @@ class SplitwiseBaseException(Exception):
         )
 
     def setMessage(self, message):
+        """ Sets the exception message
+          Args:
+                message(str): Exception message
+        """
         self._message = message
 
 
 class SplitwiseException(SplitwiseBaseException):
+    """ Exception based on requests library Response.
+
+        Inherits: :class:`splitwise.exception.SplitwiseBaseException`
+    """
     def __init__(
         self,
         message,
         response=None
     ):
+        """ Exception based on requests library Response.
 
+        Args:
+            message(str): Exception message
+            response(:obj:`requests.Response`, optional): response object from requests library
+        """
         super(SplitwiseException, self).__init__(
             message=message
         )
@@ -67,16 +96,32 @@ class SplitwiseException(SplitwiseBaseException):
 
 
 class SplitwiseUnauthorizedException(SplitwiseException):
+    """ Exception when request to splitwise is unauthorized
+
+        Inherits: :class:`splitwise.exception.SplitwiseException`
+    """
     pass
 
 
 class SplitwiseBadRequestException(SplitwiseException):
+    """ Exception when request returns bad request
+
+        Inherits: :class:`splitwise.exception.SplitwiseException`
+    """
     pass
 
 
 class SplitwiseNotAllowedException(SplitwiseException):
+    """ Exception when request to splitwise is not allowed
+
+        Inherits: :class:`splitwise.exception.SplitwiseException`
+    """
     pass
 
 
 class SplitwiseNotFoundException(SplitwiseException):
+    """ Exception when request to splitwise returns not found
+
+        Inherits: :class:`splitwise.exception.SplitwiseBaseException`
+    """
     pass

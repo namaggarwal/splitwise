@@ -1,10 +1,19 @@
 # Splitwise Python SDK
 
-This is the python sdk for Splitwise APIs. At this point only GET requests and a single POST request ```createExpense``` is supported. Pull requests and bug reports are welcomed.
+![](https://pepy.tech/badge/splitwise)
+![](https://img.shields.io/pypi/l/splitwise.svg)
+![](https://img.shields.io/pypi/wheel/splitwise.svg)
+![](https://img.shields.io/pypi/pyversions/splitwise.svg)
+
+This is the python sdk for Splitwise APIs. Pull requests and bug reports are welcomed.
 
 ## Latest Version
 
-The latest version of splitwise SDK is Splitwise-1.3.0
+The latest version of splitwise SDK is Splitwise-2.0.0
+
+## Docs
+
+The detailed docs are hosted at [readthedocs.org](https://readthedocs.org/projects/splitwise/)
 
 ## Installation
 
@@ -205,7 +214,7 @@ users.append(user2)
 
 expense.setUsers(users)
 
-expense = sObj.createExpense(expense)
+expense, errors = sObj.createExpense(expense)
 print expense.getId()
 ```
 
@@ -240,9 +249,43 @@ users.append(user2)
 
 group.setMembers(users)
 
-group = sObj.createGroup(group)
+group, errors = sObj.createGroup(group)
 print group.getId()
 ```
+
+### Add user to group
+You can use ```addUserToGroup(User, group_id)``` to add user to group. It takes in a `splitwise.user.User`
+object that has either `id` or `firstName` and `email` set and a `group_id`.
+
+```python
+from splitwise.group import Group
+from splitwise.user import User
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+user = User()
+user.setId(1223)
+
+success, user, errors = sObj.addUserToGroup(user, 4456)
+
+print(success)
+```
+
+
+### Delete group
+You can use ```deleteGroup(group_id)``` to delete an existing group.
+
+```python
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+success, errors = sObj.deleteGroup(4456)
+
+print(success)
+```
+
 
 ## Objects
 
@@ -256,6 +299,10 @@ Methods:
 4. getEmail() - Returns the email of the user
 5. getRegistrationStatus() - Returns the registraion status of the user
 6. getPicture() - Returns a ```Picture``` object containing picture details
+7. setId(id) - Sets the id of the user
+8. setFirstName(first_name) - Sets the first name of user
+9. setLastName(last_name) - Sets the last name of user
+10. setEmail(email) - Sets the email of the user
 
 ### CurrentUser
 
@@ -281,12 +328,13 @@ Methods:
 ### Expense User
 ExpenseUser is inherited from ```User```. All the methods of user are available for Expense User.
 
-
 Methods:
 
 1. getPaidShare() - Returns the Paid Share
 2. getOwedShare() - Returns the Owed Share
 3. getNetBalance() - Returns the Net Balance
+4. setPaidShare(paid_share) - Sets the Paid Share
+5. setOwedShare(owed_share) - Sets the Owed Share
 
 ### Group
 
@@ -300,8 +348,17 @@ Methods:
 6. getMembers() - Returns a list of ```Friend``` objects
 7. getOriginalDebts() - Returns a list of  ```Debt``` objects
 8. getType() - Returns the type of group
-9. getSimplifiedDebts() - Returns a list of  ```Debt``` objects
-10. getInviteLink() - Returns the invite link
+9. getGroupType() - Returns the type of group
+10. getSimplifiedDebts() - Returns a list of  ```Debt``` objects
+11. getInviteLink() - Returns the invite link
+12. setName(name) - Sets the name of the group
+13. setCountryCode(code) - Sets the country code of the group
+14. setWhiteBoard(text) - Sets the whiteboard contents of this group
+15. isSimplifiedByDefault(bool) - Sets if group is simplified by default or not
+16. setMembers(users) - Sets a list of ```Friend``` objects
+17. addMember(user) - Add to a list of ```Friend``` objects
+18. setType(type) - Sets the type of group
+19. setGroupType(type) - Sets the type of group
 
 ### FriendGroup
 
@@ -309,8 +366,7 @@ Methods:
 
 1. getId() - Returns the id of the group
 2. getBalances() - Returns a list of ```Balance``` object
-
-
+3. setId(id) - sets the id of the group
 
 ### Balance
 
@@ -377,7 +433,16 @@ Methods:
 27. getExpenseBundleId() - Returns Expense Bundle ID
 28. getFriendshipId() - Returns the Friendship ID
 29. getRepayments() - Returns a list of ```Debt``` objects
-
+30. setGroupId(id) - Sets the id of the group expense belongs to
+31. setDescription(description) - Sets the description of expense
+31. setRepeatInterval(interval) - Sets the repeat interval of expense
+33. setCost(cost) - Sets the cost of transaction
+34. setCurrencyCode(code) - Sets the currency code of transaction
+35. setSplitEqually(is_split_equally) - Sets if expense is to be split equally
+36. setReceipt(receipt) - Sets a ```Receipt``` object for receipt
+37. setCategory(category) - Sets a ```Category``` object for category
+38. setUsers(users) - Sets a list of ```ExpenseUser``` objects
+39. addUser(user) - Adds to a list of ```ExpenseUser``` objects
 
 ### Picture
 
