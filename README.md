@@ -44,7 +44,8 @@ sObj = Splitwise("<consumer key>","<consumer secret>")
 To get the debug logs use
 
 ```python
-Splitwise.setDebug(True)
+import logging
+logging.basicConfig(level=logging.DEBUG)
 ```
 
 ## Usage
