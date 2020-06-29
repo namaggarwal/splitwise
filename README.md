@@ -44,15 +44,18 @@ sObj = Splitwise("<consumer key>","<consumer secret>")
 To get the debug logs use
 
 ```python
-Splitwise.setDebug(True)
+import logging
+logging.basicConfig(level=logging.DEBUG)
 ```
 
 ## Usage
 
 ### Authorize splitwise
 
-Before you can make call to splitwise, you need to get access token of the user on whose behalf you will be making call. Think of it as login with splitwise. Its based on OAuth2 and its a 2 step process.
+Before you can make call to splitwise, you need to get access token of the user on whose behalf you will be making call. Think of it as login with splitwise. Its based on OAuth and its a 2 step process.
 
+
+#### OAuth1
 
 1. Get the Authorize URL and Secret. Redirect the user to the Authorize url and store the secret in somewhere for eg in session.
 
@@ -74,6 +77,10 @@ Before you can make call to splitwise, you need to get access token of the user 
 
     session['access_token'] = access_token
     ```
+
+#### OAuth2
+
+It is now possible to use OAuth2 with Splitwise. For details you can refer to [readthedocs.org](https://readthedocs.org/projects/splitwise/)
 
 ### Get data from splitwise
 

@@ -24,8 +24,9 @@ from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
-from requests_oauthlib import OAuth1
+from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
 from requests import Request, sessions
+
 from splitwise.exception import (SplitwiseException,
                                  SplitwiseUnauthorizedException,
                                  SplitwiseBadRequestException,
@@ -53,7 +54,7 @@ class Splitwise(object):
 
     SPLITWISE_BASE_URL = "https://secure.splitwise.com/"
     SPLITWISE_VERSION = "v3.0"
-
+    OAUTH_BASE_URL = "https://www.splitwise.com/"
     # URLs to make the request
     REQUEST_TOKEN_URL = SPLITWISE_BASE_URL+"api/" + \
         SPLITWISE_VERSION+"/get_request_token"
@@ -61,6 +62,10 @@ class Splitwise(object):
         SPLITWISE_VERSION+"/get_access_token"
     AUTHORIZE_URL = SPLITWISE_BASE_URL + \
         "authorize"
+    OAUTH_AUTHORIZE_URL = OAUTH_BASE_URL + "oauth/" \
+        "authorize"
+    OAUTH2_TOKEN_URL = OAUTH_BASE_URL + "oauth/" \
+        "token"
     GET_CURRENT_USER_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_current_user"
     GET_USER_URL = SPLITWISE_BASE_URL + \
@@ -90,7 +95,7 @@ class Splitwise(object):
 
     debug = False
 
-    def __init__(self, consumer_key, consumer_secret, access_token=None):
+    def __init__(self, consumer_key, consumer_secret, access_token=None, oauth2_access_token=None):
         """
 
         Args:
@@ -98,6 +103,8 @@ class Splitwise(object):
             consumer_secret(str): Consumer Secret provided by Splitwise
             access_token(:obj:`dict`, optional): Access Token is a combination of
                                         oauth_token and oauth_token_secret
+            oauth2_access_token(:obj:`dict`, optional): OAuth2 Access Token is a combination of
+                                        access_token and token_type
 
         """
         self.consumer_key = consumer_key
@@ -107,37 +114,22 @@ class Splitwise(object):
         if access_token:
             self.setAccessToken(access_token)
 
-    @classmethod
-    def setDebug(cls, debug):
-        cls.debug = debug
+        if oauth2_access_token:
+            self.setOAuth2AccessToken(oauth2_access_token)
 
-    @classmethod
-    def isDebug(cls):
-        return cls.debug
+    def getOAuth2AuthorizeURL(self, redirect_uri, state=None):
+        """ Provides the Authorize URL for end user's authentication
 
-    @classmethod
-    def printRequest(cls, request):
-        if Splitwise.isDebug():
-            print(">>>>>> REQUEST >>>>>>>")
-            print(">>>>> METHOD >>>>>")
-            print(request.method)
-            print(">>>>> URL >>>>>")
-            print(request.body)
-            print(">>>>> HEADERS >>>>>")
-            print(request.headers)
-            print(">>>>> BODY >>>>>")
-            print(request.body)
+        Returns:
+            tuple: tuple containing:
+              auth_url(str): URL that user should be redirected to for authorization
 
-    @classmethod
-    def printResponse(cls, response):
-        if Splitwise.isDebug():
-            print("<<<<<< RESPONSE <<<<<<<")
-            print("<<<<< STATUS <<<<<")
-            print(response.status_code)
-            print("<<<<< HEADERS <<<<<")
-            print(response.headers)
-            print("<<<<< CONTENT <<<<<")
-            print(response.content)
+              oauth_token_secret(str): Token secret that should be saved to redeem token
+        """
+        oauth = OAuth2Session(self.consumer_key, redirect_uri=redirect_uri, state=state)
+        authorization_url, state = oauth.authorization_url(Splitwise.OAUTH_AUTHORIZE_URL)
+
+        return authorization_url, state
 
     def getAuthorizeURL(self):
         """ Provides the Authorize URL for end user's authentication
@@ -154,12 +146,34 @@ class Splitwise(object):
         )
 
         content = self.__makeRequest(Splitwise.REQUEST_TOKEN_URL, method='POST', auth=oauth1)
-
         credentials = parse_qs(content)
 
         return "%s?oauth_token=%s" % (
             Splitwise.AUTHORIZE_URL, credentials.get('oauth_token')[0]
         ), credentials.get('oauth_token_secret')[0]
+
+    def getOAuth2AccessToken(self, code, redirect_uri):
+        """ Provides the OAuth1.0 access token
+
+        Args:
+            code(str): code from the query param after redirect
+            redirect_uri(str): Redirect uri specified while getting code
+
+        Returns:
+            dict: dict containing:
+              access_token(str): The OAuth 2.0 token
+
+              token_type(str): The OAuth 2.0 token type
+        """
+        data = "client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s" % (
+            self.consumer_key, self.consumer_secret, code, redirect_uri)
+
+        content = self.__makeRequest(Splitwise.OAUTH2_TOKEN_URL, 'POST', data=data)
+        if content == "false":
+            return None
+
+        content = json.loads(content)
+        return content
 
     def getAccessToken(self, oauth_token, oauth_token_secret, oauth_verifier):
         """ Provides the OAuth1.0 access token
@@ -213,6 +227,23 @@ class Splitwise(object):
 
         self.auth = oauth1
 
+    def setOAuth2AccessToken(self, access_token):
+        """ Sets the OAuth2.0 access token, this should be done to make any authorized calls
+
+        Args:
+            access_token(:obj:`dict`): dict containing
+
+                                access_token(str): The OAuth 2.0 token
+
+                                token_type(str): The OAuth 2.0 token type
+
+
+        """
+        oauth2 = OAuth2(self.consumer_key,
+                        token=access_token)
+
+        self.auth = oauth2
+
     def __makeRequest(self, url, method="GET", data=None, auth=None):
 
         if auth is None and self.auth:
@@ -221,12 +252,9 @@ class Splitwise(object):
         requestObj = Request(method=method, url=url, data=data, auth=auth)
 
         prep_req = requestObj.prepare()
-        Splitwise.printRequest(prep_req)
 
         with sessions.Session() as session:
             response = session.send(prep_req)
-
-        Splitwise.printResponse(response)
 
         if response.status_code == 200:
             if (response.content and hasattr(response.content, "decode")):
