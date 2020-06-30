@@ -90,3 +90,5 @@ ENV/
 
 .DS_Store
 .pypirc
+.vscode
+/test.py
