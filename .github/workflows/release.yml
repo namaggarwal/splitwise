@@ -1,0 +1,59 @@
+name: Release to python pip
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  build:
+    if: github.actor == 'namaggarwal' && startsWith(github.event.issue.title, 'Release ') && github.event.comment.body == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-regex-match@v2
+        id: check-release
+        with:
+          text: ${{ github.event.issue.title }}
+          regex: '^Release refs/tags/(v\d\.\d\.\d)$'
+      - name: Notify user starting the release
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: '+1'
+      - name: Checkout version ${{ steps.check-release.outputs.group1 }}
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.check-release.outputs.group1 }}
+      - name: Set up Python
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+      - name: Build and publish
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD_PRD }}
+        run: |
+          python setup.py sdist bdist_wheel
+          twine upload dist/*
+      - name: Notify user of successful release
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ github.event.comment.id }}
+          reactions: hooray
+      - name: Close Issue
+        if: ${{ steps.check-release.outputs.group1 != ''}}
+        uses: peter-evans/close-issue@v1
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          comment: Release done
+
+
