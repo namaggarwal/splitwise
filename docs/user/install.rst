@@ -8,9 +8,9 @@ This covers the installation of splitwise
 Using pip
 ---------
 
-To install splitwise, simply run this simple command in your terminal of choice:
+To install splitwise, simply run this simple command in your terminal of choice::
 
-    $ pip install splitwise
+        $ pip install splitwise
 
 Get the source code
 -------------------
