@@ -2,7 +2,7 @@ name: End to End Tests
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
 
 jobs:
   build:

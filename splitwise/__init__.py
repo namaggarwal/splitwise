@@ -86,6 +86,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_expense"
+    DELETE_EXPENSE_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/delete_expense"
     CREATE_GROUP_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_group"
     ADD_USER_TO_GROUP_URL = SPLITWISE_BASE_URL + \
@@ -508,6 +510,40 @@ class Splitwise(object):
                 errors = SplitwiseError(content['errors'])
 
         return expense, errors
+
+    def deleteExpense(self, id):
+        """ Deletes the expense with given id.
+
+        Args:
+            id(long): ID of the expense to be deleted.
+
+        Returns:
+            tuple: tuple containing:
+              success(bool): True if group deleted, False otherwise
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
+        errors = None
+        success = False
+        try:
+            content = self.__makeRequest(
+                Splitwise.DELETE_EXPENSE_URL+"/"+str(id), "POST")
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access expense with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Expense with id %d does not exist" % id)
+            raise
+
+        content = json.loads(content)
+        if 'success' in content:
+            success = content["success"]
+
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        return success, errors
 
     def createGroup(self, group):
         """ Creates a new Group.

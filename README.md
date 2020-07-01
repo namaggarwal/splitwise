@@ -293,6 +293,19 @@ success, errors = sObj.deleteGroup(4456)
 print(success)
 ```
 
+### Delete expense
+You can use ```deleteExpense(expense_id)``` to delete an existing expense.
+
+```python
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+success, errors = sObj.deleteExpense(4456)
+
+print(success)
+```
+
 
 ## Objects
 

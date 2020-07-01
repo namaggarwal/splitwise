@@ -123,6 +123,15 @@ Creating a new expense
         >>> print(nExpense.getId())
             123332
 
+.. _exDExpense:
+
+Delete an Expense
+^^^^^^^^^^^^^^^^^
+
+        >>> success, errors = s.deleteExpense(123445)
+        >>> print(success)
+            True
+
 
 UnAuthenticated APIs
 --------------------
