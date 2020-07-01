@@ -10,7 +10,7 @@ Using pip
 
 To install splitwise, simply run this simple command in your terminal of choice:
 
-        $ pip install splitwise
+    $ pip install splitwise
 
 Get the source code
 -------------------
@@ -30,5 +30,5 @@ Or, download the `tarball <https://github.com/namaggarwal/splitwise/tarball/mast
 Once you have a copy of the source, you can embed it in your own Python
 package, or install it into your site-packages easily::
 
-    $ cd requests
+    $ cd splitwise
     $ pip install .
