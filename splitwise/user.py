@@ -123,6 +123,9 @@ class User(object):
         """
         self.id = id
 
+    def __getattr__(self, item):
+        return None
+
 
 class CurrentUser(User):
     """ Represents the current logged in user.

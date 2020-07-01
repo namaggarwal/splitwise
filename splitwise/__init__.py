@@ -70,6 +70,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/get_current_user"
     GET_USER_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_user"
+    UPDATE_USER_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/update_user"
     GET_FRIENDS_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_friends"
     GET_GROUPS_URL = SPLITWISE_BASE_URL + \
@@ -310,6 +312,46 @@ class Splitwise(object):
 
         content = json.loads(content)
         return User(content["user"])
+
+    def updateUser(self, user):
+        """ Updates the user.
+
+        Args:
+            :obj:`splitwise.user.CurrentUser`: User object with atleast id set
+
+        Returns:
+            tuple: tuple containing:
+              user(:obj:`splitwise.user.CurrentUser`): Object with User detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
+
+        if user.getId() is None:
+            raise SplitwiseBadRequestException("User ID is required to update user")
+
+        user_data = user.__dict__
+
+        try:
+            content = self.__makeRequest(Splitwise.UPDATE_USER_URL, 'POST', user_data)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access user with id %d" % user.getId())
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("User with id %d does not exist" % user.getId())
+            raise
+        content = json.loads(content)
+
+        user = None
+        errors = None
+        if "user" in content:
+            if content["user"] is not None:
+                user = CurrentUser(content["user"])
+
+        if "errors" in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content["errors"])
+
+        return user, errors
 
     def getFriends(self):
         """ Gets the list of users friends.
