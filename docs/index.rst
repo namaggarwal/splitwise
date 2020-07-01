@@ -42,6 +42,7 @@ splitwise SDK supports
 
 - :ref:`Fetching current user info <exCurrentUser>`
 - :ref:`Fetching user's friends <exFriends>`
+- :ref:`Updating a user <exUpdateUser>`
 - :ref:`Fetching user's expenses <exExpenses>`
 - :ref:`Creating a new expense <exNExpense>`
 - :ref:`Delete an expense <exDExpense>`

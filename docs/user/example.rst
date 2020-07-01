@@ -38,6 +38,19 @@ Fetching user's friends
         >>> print(friends[0].getFirstName())
             Atul
 
+.. _exUpdateUser:
+
+Updating a user
+^^^^^^^^^^^^^^^
+        >>> u = User()
+        >>> u.setId(10)
+        >>> u.setFirstName("Naman")
+        >>> updatedU, error = s.updateUser(u)
+        >>> print(updatedU.getFirstName())
+            10
+        >>> print(u.getFirstName())
+            Naman
+
 .. _exExpenses:
 
 Fetching user's expenses

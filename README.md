@@ -113,6 +113,23 @@ id = 7123
 user = sObj.getUser(id)
 ```
 
+### Update User
+
+You can use ```updateUser(user)``` to update the user. It takes in a  partial `CurrentUser` object
+with atleast `id` set. It returns a ```CurrentUser``` object.
+Note that you can update anything for your user and `first_name`, `last_name` and `email` for
+any acquaintances who has not created account yet.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+user = User()
+user.setId(10)
+user.setFirstName("naman")
+updated_user, error = sObj.updateUser(user)
+print(updated_user.getFirstName())
+```
+
 ### Get Friends
 
 You can use ```getFriends()``` to get all the friends of the current user along with the balances. It returns a list of ```Friend``` objects.
