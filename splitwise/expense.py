@@ -433,7 +433,7 @@ class Expense(object):
         self.users.append(user)
 
     def setSplitEqually(self, should_split=True):
-        """ Set if expense should be split equally
+        """ Set if expense should be split equally. Note that group_id should be set to use this
 
         Args:
             should_split(bool, optional): Should the expense be split equally. Default value is True

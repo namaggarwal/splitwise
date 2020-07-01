@@ -20,6 +20,8 @@ class ExpenseTestCase(unittest.TestCase):
         expense = Expense()
         expense.setDescription("End2EndTest")
         expense.setCost('10')
+        expense.setGroupId(19571167)
+        expense.setSplitEqually()
         # create expense
         expense, error = self.sObj.createExpense(expense)
         self.assertIsNone(error)
