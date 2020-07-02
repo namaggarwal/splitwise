@@ -9,7 +9,7 @@ This is the python sdk for Splitwise APIs. Pull requests and bug reports are wel
 
 ## Latest Version
 
-The latest version of splitwise SDK is Splitwise-2.0.2
+The latest version of splitwise SDK is Splitwise-2.1.0
 
 ## Docs
 
@@ -111,6 +111,23 @@ sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 id = 7123
 user = sObj.getUser(id)
+```
+
+### Update User
+
+You can use ```updateUser(user)``` to update the user. It takes in a  partial `CurrentUser` object
+with atleast `id` set. It returns a ```CurrentUser``` object.
+Note that you can update anything for your user and `first_name`, `last_name` and `email` for
+any acquaintances who has not created account yet.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+user = User()
+user.setId(10)
+user.setFirstName("naman")
+updated_user, error = sObj.updateUser(user)
+print(updated_user.getFirstName())
 ```
 
 ### Get Friends
@@ -289,6 +306,19 @@ sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 
 success, errors = sObj.deleteGroup(4456)
+
+print(success)
+```
+
+### Delete expense
+You can use ```deleteExpense(expense_id)``` to delete an existing expense.
+
+```python
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+success, errors = sObj.deleteExpense(4456)
 
 print(success)
 ```

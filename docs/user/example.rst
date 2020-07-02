@@ -38,6 +38,19 @@ Fetching user's friends
         >>> print(friends[0].getFirstName())
             Atul
 
+.. _exUpdateUser:
+
+Updating a user
+^^^^^^^^^^^^^^^
+        >>> u = User()
+        >>> u.setId(10)
+        >>> u.setFirstName("Naman")
+        >>> updatedU, error = s.updateUser(u)
+        >>> print(updatedU.getFirstName())
+            10
+        >>> print(u.getFirstName())
+            Naman
+
 .. _exExpenses:
 
 Fetching user's expenses
@@ -122,6 +135,15 @@ Creating a new expense
         >>> nExpense, errors = s.createExpense(expense)
         >>> print(nExpense.getId())
             123332
+
+.. _exDExpense:
+
+Delete an Expense
+^^^^^^^^^^^^^^^^^
+
+        >>> success, errors = s.deleteExpense(123445)
+        >>> print(success)
+            True
 
 
 UnAuthenticated APIs
