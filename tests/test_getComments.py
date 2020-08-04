@@ -5,6 +5,7 @@ try:
 except ImportError:  # Python 2
     from mock import patch
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class GetComments(unittest.TestCase):
 
@@ -30,6 +31,6 @@ class GetComments(unittest.TestCase):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):
-            comment = self.sObj.getComments(982430660)
+            self.sObj.getComments(982430660)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/get_comments?expense_id=982430660")

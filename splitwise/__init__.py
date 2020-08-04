@@ -717,25 +717,24 @@ class Splitwise(object):
                 user_array["users__" +
                            str(count) + "__" + gen_key] = user_dict[key]
 
-    def getComments(self,id):
+    def getComments(self, expense_id):
         """
         Get expense comments.
 
         Args:
-            id(long): Expense Id
+            expense_id(long): Expense Id
 
         Returns:
             :obj:`splitwise.comment.Comment`: Object representing a comment
         """
 
         try:
-            content = self.__makeRequest(Splitwise.GET_COMMENTS_URL + "?expense_id=" + str(id))
-            print(content)
+            content = self.__makeRequest(Splitwise.GET_COMMENTS_URL + "?expense_id=" + str(expense_id))
         except SplitwiseNotAllowedException as e:
-            e.setMessage("You are not allowed to fetch user with id %d" % id)
+            e.setMessage("You are not allowed to fetch user with id %d" % expense_id)
             raise
         except SplitwiseNotFoundException as e:
-            e.setMessage("Expense with id %d does not exist" % id)
+            e.setMessage("Expense with id %d does not exist" % expense_id)
             raise
 
         content = json.loads(content)
@@ -744,15 +743,5 @@ class Splitwise(object):
             for c in content["comments"]:
                 comments.append(Comment(c))
 
-            return comments
+        return comments
 
-
-
-        # try:
-        #     content = self.__makeRequest(Splitwise.GET_USER_URL + "/"+str(id))
-        # except SplitwiseNotAllowedException as e:
-        #     e.setMessage("You are not allowed to fetch user with id %d" % id)
-        #     raise
-        # except SplitwiseNotFoundException as e:
-        #     e.setMessage("User with id %d does not exist" % id)
-        #     raise

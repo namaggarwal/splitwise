@@ -323,6 +323,16 @@ success, errors = sObj.deleteExpense(4456)
 print(success)
 ```
 
+### Get Comments
+
+You can use ```getComments(id)``` to get the comments made on an expense. It returns a ```Comment``` object.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+id = 982430660
+user = sObj.getComments(id)
+
 
 ## Objects
 
@@ -495,6 +505,20 @@ Methods:
 
 1. getOriginal() - Returns the link to the original uploaded receipt
 2. getLarge() - Returns the link to large image of uploaded receipt
+
+### User
+
+Methods:
+
+1. getId() - Returns the id of the comment
+2. getContent() - Returns comment message
+3. getCommentType() - Returns comment type
+4. getRelationType() - Returns relation type of the comment
+5. getRelationId() - Returns relation id
+6. getCreatedAt() - Returns datetime at which comment was created
+7. getDeletedAt(id) - Returns datetime at which comment was deleted
+8. getUser() - Returns a ```User``` object containing user details
+
 
 
 ## Sample Application
