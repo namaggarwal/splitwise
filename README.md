@@ -325,7 +325,7 @@ print(success)
 
 ### Get Comments
 
-You can use ```getComments(id)``` to get the comments made on an expense. It returns a ```Comment``` object.
+You can use ```getComments(id)``` to get the comments made on an expense. It returns an array of ```Comment``` object.
 
 ```python
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
@@ -506,7 +506,7 @@ Methods:
 1. getOriginal() - Returns the link to the original uploaded receipt
 2. getLarge() - Returns the link to large image of uploaded receipt
 
-### User
+### Comment
 
 Methods:
 

@@ -52,6 +52,7 @@ splitwise SDK supports
 - :ref:`Deleting an existing group <exDGroup>`
 - :ref:`Fetching currencies <exCurrencies>`
 - :ref:`Fetching categories <exCategories>`
+- :ref:`Fetching comments <exComments>`
 
 Splitwise officially supports Python 2.7 & 3.4–3.7, and runs great on PyPy.
 

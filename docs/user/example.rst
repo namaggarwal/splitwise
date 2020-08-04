@@ -172,10 +172,10 @@ Fetching categories
         >>> print(categories[0].getName())
             Groceries
 
-.. _exGetComments:
+.. _exComments:
 
 Fetching Comments with id
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
         >>> comments = s.getComments(982430660)
         >>> print(comments[0].getContent())

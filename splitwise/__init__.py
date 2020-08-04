@@ -744,5 +744,3 @@ class Splitwise(object):
                 comments.append(Comment(c))
 
         return comments
-
-
