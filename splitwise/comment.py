@@ -1,5 +1,6 @@
 from splitwise.user import User
 
+
 class Comment(object):
     """
     Contains comments made on an expense
