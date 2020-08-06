@@ -248,12 +248,11 @@ class Splitwise(object):
 
         self.auth = oauth2
 
-    def __makeRequest(self, url, method="GET", data=None, auth=None):
+    def __makeRequest(self, url, method="GET", data=None, auth=None, files=None):
 
         if auth is None and self.auth:
             auth = self.auth
-
-        requestObj = Request(method=method, url=url, data=data, auth=auth)
+        requestObj = Request(method=method, url=url, data=data, auth=auth, files=files)
 
         prep_req = requestObj.prepare()
 
@@ -537,11 +536,19 @@ class Splitwise(object):
         if category:
             expense_data["category_id"] = category.getId()
 
+        receipt = expense.getReceiptPath()
+        files = None
+        if receipt:
+            files = {"receipt":  open(receipt, "rb")}
+
         content = self.__makeRequest(
-            Splitwise.CREATE_EXPENSE_URL, "POST", expense_data)
+            Splitwise.CREATE_EXPENSE_URL, "POST", expense_data, files=files)
         content = json.loads(content)
         expense = None
         errors = None
+
+        if files:
+            files["receipt"].close()
 
         if 'expenses' in content:
             if len(content['expenses']) > 0:

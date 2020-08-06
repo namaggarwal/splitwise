@@ -440,11 +440,29 @@ class Expense(object):
         """
         self.split_equally = should_split
 
-    def getTransactionId(self):
-        """ Sets the transaction id of the expense
+    def setReceipt(self, receipt):
+        """ Sets the receipt of the expense
 
         Args:
-            transaction_id(long): transaction id of the expense
+            receipt(string): path to the receipt file
+        """
+
+        self.receiptPath = receipt
+
+    def getReceiptPath(self):
+        """ Sets the receipt of the expense
+
+        Args:
+            receipt(string): path to the receipt file
+        """
+
+        return self.receiptPath
+
+    def getTransactionId(self):
+        """ Returns the transaction id of the expense
+
+        Returns:
+            long: Transaction ID of the expense
         """
         return self.transaction_id
 
