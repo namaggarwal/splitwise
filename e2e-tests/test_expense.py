@@ -17,11 +17,13 @@ class ExpenseTestCase(unittest.TestCase):
         self.sObj.setAccessToken({'oauth_token': oauth_token, 'oauth_token_secret': oauth_token_secret})
 
     def test_expense_flow(self):
+        receipt = os.path.join(os.path, "receipt.jpg")
         expense = Expense()
         expense.setDescription("End2EndTest")
         expense.setCost('10')
         expense.setGroupId(19571167)
         expense.setSplitEqually()
+        expense.setReceipt(receipt)
         # create expense
         expense, error = self.sObj.createExpense(expense)
         self.assertIsNone(error)
