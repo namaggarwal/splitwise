@@ -450,10 +450,10 @@ class Expense(object):
         self.receiptPath = receipt
 
     def getReceiptPath(self):
-        """ Sets the receipt of the expense
+        """ Returns the receipt of the expense
 
-        Args:
-            receipt(string): path to the receipt file
+        Returns:
+            string: path to the receipt file
         """
 
         return self.receiptPath
