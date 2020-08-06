@@ -17,7 +17,7 @@ class ExpenseTestCase(unittest.TestCase):
         self.sObj.setAccessToken({'oauth_token': oauth_token, 'oauth_token_secret': oauth_token_secret})
 
     def test_expense_flow(self):
-        receipt = os.path.join(os.path.abspath(__file__), "receipt.jpg")
+        receipt = os.path.join(os.path.dirname(os.path.realpath(__file__)), "receipt.jpg")
         expense = Expense()
         expense.setDescription("End2EndTest")
         expense.setCost('10')
