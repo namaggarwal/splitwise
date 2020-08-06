@@ -13,7 +13,7 @@ class CreateExpenseTestCase(unittest.TestCase):
     def setUp(self):
         self.sObj = Splitwise('consumerkey', 'consumersecret')
 
-    @patch('builtins.open')
+    @patch('io.open')
     def test_createExpense_split_equally_with_receipt_success(self, mockOpen, mockMakeRequest):
         mockFile = MagicMock()
         mockOpen.return_value = mockFile

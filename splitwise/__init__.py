@@ -18,6 +18,7 @@ Splitwise Python SDK provides a simple interface to access splitwise APIs
 
 """
 import json
+import io
 from splitwise.user import User, Friend, CurrentUser
 from splitwise.currency import Currency
 from splitwise.group import Group
@@ -26,7 +27,6 @@ from splitwise.expense import Expense
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
 from requests import Request, sessions
-
 from splitwise.exception import (SplitwiseException,
                                  SplitwiseUnauthorizedException,
                                  SplitwiseBadRequestException,
@@ -539,7 +539,7 @@ class Splitwise(object):
         receipt = expense.getReceiptPath()
         files = None
         if receipt:
-            files = {"receipt":  open(receipt, "rb")}
+            files = {"receipt":  io.open(receipt, "rb")}
 
         content = self.__makeRequest(
             Splitwise.CREATE_EXPENSE_URL, "POST", expense_data, files=files)
