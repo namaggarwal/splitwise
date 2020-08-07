@@ -481,6 +481,8 @@ Methods:
 37. setCategory(category) - Sets a ```Category``` object for category
 38. setUsers(users) - Sets a list of ```ExpenseUser``` objects
 39. addUser(user) - Adds to a list of ```ExpenseUser``` objects
+40. setReceipt(receiptPath) - Adds the file as a receipt
+41. setDetails(details) - Sets the expense details
 
 ### Picture
 
