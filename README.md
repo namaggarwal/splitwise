@@ -331,7 +331,7 @@ You can use ```getComments(id)``` to get the comments made on an expense. It ret
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 id = 982430660
-user = sObj.getComments(id)
+comments = sObj.getComments(id)
 
 
 ## Objects
