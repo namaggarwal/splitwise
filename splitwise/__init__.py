@@ -23,6 +23,7 @@ from splitwise.currency import Currency
 from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
+from splitwise.comment import Comment
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
 from requests import Request, sessions
@@ -96,6 +97,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/add_user_to_group"
     DELETE_GROUP_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/delete_group"
+    GET_COMMENTS_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_comments"
 
     debug = False
 
@@ -713,3 +716,31 @@ class Splitwise(object):
                     gen_key = key
                 user_array["users__" +
                            str(count) + "__" + gen_key] = user_dict[key]
+
+    def getComments(self, expense_id):
+        """
+        Get expense comments.
+
+        Args:
+            expense_id(long): Expense Id
+
+        Returns:
+            :obj:`splitwise.comment.Comment`: Object representing a comment
+        """
+
+        try:
+            content = self.__makeRequest(Splitwise.GET_COMMENTS_URL + "?expense_id=" + str(expense_id))
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch user with id %d" % expense_id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Expense with id %d does not exist" % expense_id)
+            raise
+
+        content = json.loads(content)
+        comments = []
+        if "comments" in content:
+            for c in content["comments"]:
+                comments.append(Comment(c))
+
+        return comments

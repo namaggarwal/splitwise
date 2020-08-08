@@ -171,3 +171,13 @@ Fetching categories
         >>> categories = s.getcategories()
         >>> print(categories[0].getName())
             Groceries
+
+.. _exComments:
+
+Fetching Comments with id
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        >>> comments = s.getComments(982430660)
+        >>> print(comments[0].getContent())
+            I copied this from hangout
+
