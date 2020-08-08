@@ -334,6 +334,23 @@ class Expense(object):
         """
         return self.repayments
 
+    def getReceiptPath(self):
+        """ Returns the receipt of the expense
+
+        Returns:
+            string: path to the receipt file
+        """
+
+        return self.receiptPath
+
+    def getTransactionId(self):
+        """ Returns the transaction id of the expense
+
+        Returns:
+            long: Transaction ID of the expense
+        """
+        return self.transaction_id
+
     def setGroupId(self, id):
         """ Sets the group id of the expense
 
@@ -440,13 +457,22 @@ class Expense(object):
         """
         self.split_equally = should_split
 
-    def getTransactionId(self):
-        """ Sets the transaction id of the expense
+    def setReceipt(self, receipt):
+        """ Sets the receipt of the expense
 
         Args:
-            transaction_id(long): transaction id of the expense
+            receipt(string): path to the receipt file
         """
-        return self.transaction_id
+
+        self.receiptPath = receipt
+
+    def setDetails(self, details):
+        """  Sets the details of the expense
+
+        Returns:
+            details(string): details of the expense
+        """
+        self.details = details
 
     def __getattr__(self, item):
         return None

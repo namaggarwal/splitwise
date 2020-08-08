@@ -221,6 +221,7 @@ sObj.setAccessToken(session['access_token'])
 expense = Expense()
 expense.setCost('10')
 expense.setDescription("Testing")
+expense.setReceipt("/Users/naman/receipt.jpg")
 
 user1 = ExpenseUser()
 user1.setId(79774)
@@ -490,6 +491,8 @@ Methods:
 37. setCategory(category) - Sets a ```Category``` object for category
 38. setUsers(users) - Sets a list of ```ExpenseUser``` objects
 39. addUser(user) - Adds to a list of ```ExpenseUser``` objects
+40. setReceipt(receiptPath) - Adds the file as a receipt
+41. setDetails(details) - Sets the expense details
 
 ### Picture
 
