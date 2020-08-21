@@ -779,7 +779,3 @@ class Splitwise(object):
                     errors = SplitwiseError(content['errors'])
 
             return comment, errors
-
-
-
-

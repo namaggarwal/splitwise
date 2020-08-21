@@ -6,8 +6,6 @@ try:
 except ImportError:  # Python 2
     from mock import patch
 
-import json
-
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class CreateCommentTestCase(unittest.TestCase):
@@ -37,7 +35,7 @@ class CreateCommentTestCase(unittest.TestCase):
         self.assertEqual(user.getLastName(), None)
 
     def test_createComment_error(self,mockMakeRequest):
-        mockMakeRequest.return_value = '"comment":{},"errors":{"base":["An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!"]}'  # noqa: E501
+        mockMakeRequest.return_value = '"comment":{}, "errors":{"base":["An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!"]}'  # noqa: E501
         data = Comment()
         comment, errors = self.sObj.createComment(data)
         mockMakeRequest.assert_called_with("https://secure.splitwise.com/api/v3.0/create_comment",
@@ -58,11 +56,3 @@ Sorry for the trouble!'
             mockMakeRequest.assert_called_with("https://secure.splitwise.com/api/v3.0/create_comment",
                                                "POST",
                                                data)
-
-
-
-
-
-
-
-
