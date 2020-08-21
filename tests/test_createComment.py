@@ -1,5 +1,4 @@
 from splitwise import Splitwise
-from splitwise.comment import Comment
 import unittest
 try:
     from unittest.mock import patch
