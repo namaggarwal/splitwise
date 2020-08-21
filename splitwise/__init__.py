@@ -99,6 +99,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/delete_group"
     GET_COMMENTS_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_comments"
+    CREATE_COMMENT_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/create_comment"
 
     debug = False
 
@@ -744,3 +746,40 @@ class Splitwise(object):
                 comments.append(Comment(c))
 
         return comments
+
+    def createComment(self, data):
+        """ Creates a new comment.
+
+        Args:
+            data(dict): Query parameters - expense_id and comment content.
+
+        Returns:
+            tuple: tuple containing:
+              comment(:obj:`splitwise.comment.Comment`): Object with Comment detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
+
+        comment = None
+        errors = None
+
+        if "content" not in data:
+            raise SplitwiseBadRequestException("Incorrect query parameters sent.Comment cannot be empty")
+        else:
+            content = self.__makeRequest(
+                Splitwise.CREATE_COMMENT_URL, "POST", data)
+            content = json.loads(content)
+
+            if 'comment' in content:
+                if len(content['comment']) > 0:
+                    comment = Comment(content['comment'])
+
+            if 'errors' in content:
+                if len(content['errors']) != 0:
+                    errors = SplitwiseError(content['errors'])
+
+            return comment, errors
+
+
+
+

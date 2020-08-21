@@ -181,3 +181,18 @@ Fetching Comments with id
         >>> print(comments[0].getContent())
             I copied this from hangout
 
+.. _exNComment:
+
+Creating a new comment
+^^^^^^^^^^^^^^^^^^^^^^
+
+        >>>from splitwise import Splitwise
+        >>>sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+        >>>sObj.setAccessToken(session['access_token'])
+        >>>data = {}
+        >>>data["expense_id"] = 982430660
+        >>>data["content"] = "Test for create comment"
+        >>>content, errors = sObj.createComment(data)
+        >>>print("content:", content.getContent())
+           content: Test for create comment
+
