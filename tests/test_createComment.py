@@ -34,8 +34,8 @@ class CreateCommentTestCase(unittest.TestCase):
         self.assertEqual(user.getFirstName(), 'ruks')
         self.assertEqual(user.getLastName(), None)
 
-    def test_createComment_error(self,mockMakeRequest):
-        mockMakeRequest.return_value = '"comment":{}, "errors":{"base":["An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!"]}'  # noqa: E501
+    def test_createComment_error(self, mockMakeRequest):
+        mockMakeRequest.return_value = '"comment":{},"errors":{"base":["An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!"]}'  # noqa: E501
         data = Comment()
         comment, errors = self.sObj.createComment(data)
         mockMakeRequest.assert_called_with("https://secure.splitwise.com/api/v3.0/create_comment",
@@ -47,7 +47,7 @@ class CreateCommentTestCase(unittest.TestCase):
 Sorry for the trouble!'
             ]})
 
-    def test_createComment_exception(self,mockMakeRequest):
+    def test_createComment_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         data = Comment()
