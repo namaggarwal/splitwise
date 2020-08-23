@@ -747,11 +747,12 @@ class Splitwise(object):
 
         return comments
 
-    def createComment(self, data):
+    def createComment(self, expense_id, content):
         """ Creates a new comment.
 
         Args:
-            data(dict): Query parameters - expense_id and comment content.
+            expense_id: Expense transaction on which a comment has to be made
+            comment content: Content of the comment
 
         Returns:
             tuple: tuple containing:
@@ -763,19 +764,30 @@ class Splitwise(object):
         comment = None
         errors = None
 
-        if "content" not in data:
-            raise SplitwiseBadRequestException("Incorrect query parameters sent.Comment cannot be empty")
-        else:
+        if content is None:
+            raise SplitwiseBadRequestException("Incorrect query parameters sent.Expense id or content cannot be empty")
+
+        data = dict()
+        data["expense_id"] = expense_id
+        data["content"] = content
+
+        try:
             content = self.__makeRequest(
                 Splitwise.CREATE_COMMENT_URL, "POST", data)
-            content = json.loads(content)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access expense with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Expense with id %d does not exist" % id)
 
-            if 'comment' in content:
-                if len(content['comment']) > 0:
-                    comment = Comment(content['comment'])
+        content = json.loads(content)
 
-            if 'errors' in content:
-                if len(content['errors']) != 0:
-                    errors = SplitwiseError(content['errors'])
+        if 'comment' in content:
+            if len(content['comment']) > 0:
+                comment = Comment(content['comment'])
 
-            return comment, errors
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        return comment, errors
