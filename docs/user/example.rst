@@ -186,13 +186,8 @@ Fetching Comments with id
 Creating a new comment
 ^^^^^^^^^^^^^^^^^^^^^^
 
-        >>>from splitwise import Splitwise
-        >>>sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
-        >>>sObj.setAccessToken(session['access_token'])
-        >>>data = {}
         >>>expense_id = 982430660
         >>>content = "Test for create comment"
-        >>>content, errors = sObj.createComment(expense_id,content)
+        >>>content, errors = s.createComment(expense_id,content)
         >>>print("content:", content.getContent())
            content: Test for create comment
-

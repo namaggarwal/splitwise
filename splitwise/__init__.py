@@ -765,7 +765,7 @@ class Splitwise(object):
         errors = None
 
         if content is None:
-            raise SplitwiseBadRequestException("Incorrect query parameters sent.Expense id or content cannot be empty")
+            raise SplitwiseBadRequestException("Incorrect query parameters sent. git statContent cannot be empty")
 
         data = dict()
         data["expense_id"] = expense_id
