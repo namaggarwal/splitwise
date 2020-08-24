@@ -88,6 +88,12 @@ Currency
 .. autoclass:: splitwise.currency.Currency
    :members:
 
+Comment
+^^^^^^^
+
+.. autoclass:: splitwise.comment.Comment
+   :members:
+
 
 Errors
 ------

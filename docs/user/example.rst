@@ -174,8 +174,8 @@ Fetching categories
 
 .. _exComments:
 
-Fetching Comments with id
-^^^^^^^^^^^^^^^^^^^^^^^^^
+Fetching comments
+^^^^^^^^^^^^^^^^^
 
         >>> comments = s.getComments(982430660)
         >>> print(comments[0].getContent())
@@ -186,8 +186,8 @@ Fetching Comments with id
 Creating a new comment
 ^^^^^^^^^^^^^^^^^^^^^^
 
-        >>>expense_id = 982430660
-        >>>content = "Test for create comment"
-        >>>content, errors = s.createComment(expense_id,content)
-        >>>print("content:", content.getContent())
-           content: Test for create comment
+        >>> expense_id = 982430660
+        >>> content = "Test for create comment"
+        >>> comment, errors = s.createComment(expense_id,content)
+        >>> print("content:", comment.getContent())
+            content: Test for create comment
