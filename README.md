@@ -354,9 +354,9 @@ sObj.setAccessToken(session['access_token'])
 expense_id = 982430660
 content = "Test for create comment"
 
-content, errors = sObj.createComment(expense_id,content)
+comment, errors = sObj.createComment(expense_id,content)
 
-print("content:", content.getContent())
+print("content:", comment.getContent())
 print("errors:", errors)
 ```
 
