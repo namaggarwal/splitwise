@@ -53,6 +53,8 @@ splitwise SDK supports
 - :ref:`Fetching currencies <exCurrencies>`
 - :ref:`Fetching categories <exCategories>`
 - :ref:`Fetching comments <exComments>`
+- :ref:`Creating new comment <exNComment>`
+
 
 Splitwise officially supports Python 2.7 & 3.4–3.7, and runs great on PyPy.
 

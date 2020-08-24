@@ -99,6 +99,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/delete_group"
     GET_COMMENTS_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_comments"
+    CREATE_COMMENT_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/create_comment"
 
     debug = False
 
@@ -751,3 +753,48 @@ class Splitwise(object):
                 comments.append(Comment(c))
 
         return comments
+
+    def createComment(self, expense_id, content):
+        """ Creates a new comment.
+
+        Args:
+            expense_id: Expense transaction on which a comment has to be made
+            comment content: Content of the comment
+
+        Returns:
+            tuple: tuple containing:
+              comment(:obj:`splitwise.comment.Comment`): Object with Comment detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
+
+        comment = None
+        errors = None
+
+        if content is None:
+            raise SplitwiseBadRequestException("Incorrect query parameters sent. git statContent cannot be empty")
+
+        data = dict()
+        data["expense_id"] = expense_id
+        data["content"] = content
+
+        try:
+            content = self.__makeRequest(
+                Splitwise.CREATE_COMMENT_URL, "POST", data)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access expense with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Expense with id %d does not exist" % id)
+
+        content = json.loads(content)
+
+        if 'comment' in content:
+            if len(content['comment']) > 0:
+                comment = Comment(content['comment'])
+
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        return comment, errors

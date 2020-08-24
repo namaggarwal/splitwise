@@ -181,3 +181,13 @@ Fetching Comments with id
         >>> print(comments[0].getContent())
             I copied this from hangout
 
+.. _exNComment:
+
+Creating a new comment
+^^^^^^^^^^^^^^^^^^^^^^
+
+        >>>expense_id = 982430660
+        >>>content = "Test for create comment"
+        >>>content, errors = s.createComment(expense_id,content)
+        >>>print("content:", content.getContent())
+           content: Test for create comment

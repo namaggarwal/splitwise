@@ -333,7 +333,32 @@ sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
 sObj.setAccessToken(session['access_token'])
 id = 982430660
 comments = sObj.getComments(id)
+```
 
+### Create Comment
+
+You can use ```createComment(Comment)``` to create a new Comment. It takes in parameters expense_id and content and returns a ```Comment``` object.
+
+Following are the parameters passed.
+
+1. expense_id
+2. content
+
+```python
+
+from splitwise import Splitwise
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+expense_id = 982430660
+content = "Test for create comment"
+
+content, errors = sObj.createComment(expense_id,content)
+
+print("content:", content.getContent())
+print("errors:", errors)
+```
 
 ## Objects
 
