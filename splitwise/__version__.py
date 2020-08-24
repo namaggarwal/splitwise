@@ -1,6 +1,6 @@
 __title__ = 'splitwise'
 __description__ = 'Splitwise Python SDK'
-__version__ = '2.1.0'
+__version__ = '2.2.0'
 __url__ = 'https://github.com/namaggarwal/splitwise'
 __download_url__ = 'https://github.com/namaggarwal/splitwise/tarball/v'+__version__
 __build__ = 0x022400
