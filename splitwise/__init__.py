@@ -104,7 +104,7 @@ class Splitwise(object):
 
     debug = False
 
-    def __init__(self, consumer_key, consumer_secret, access_token=None, oauth2_access_token=None):
+    def __init__(self, consumer_key, consumer_secret, access_token=None, oauth2_access_token=None, api_key=None):
         """
 
         Args:
@@ -114,11 +114,13 @@ class Splitwise(object):
                                         oauth_token and oauth_token_secret
             oauth2_access_token(:obj:`dict`, optional): OAuth2 Access Token is a combination of
                                         access_token and token_type
+            api_key(str, optional):  API key provided by Splitwise
 
         """
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
         self.auth = None
+        self.api_key = api_key
         # If access token is present then set the Access token
         if access_token:
             self.setAccessToken(access_token)
@@ -254,10 +256,15 @@ class Splitwise(object):
         self.auth = oauth2
 
     def __makeRequest(self, url, method="GET", data=None, auth=None, files=None):
+        headers = {}
 
-        if auth is None and self.auth:
-            auth = self.auth
-        requestObj = Request(method=method, url=url, data=data, auth=auth, files=files)
+        if auth is None:
+            if self.auth:
+                auth = self.auth
+            elif self.api_key:
+                headers = {'Authorization': 'Bearer {}'.format(self.api_key)}
+
+        requestObj = Request(method=method, url=url, headers=headers, data=data, auth=auth, files=files)
 
         prep_req = requestObj.prepare()
 
