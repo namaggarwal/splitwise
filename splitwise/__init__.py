@@ -19,16 +19,16 @@ Splitwise Python SDK provides a simple interface to access splitwise APIs
 """
 import json
 import io
-from splitwise.user import User, Friend, CurrentUser
-from splitwise.currency import Currency
-from splitwise.group import Group
-from splitwise.category import Category
-from splitwise.expense import Expense
-from splitwise.comment import Comment
-from splitwise.error import SplitwiseError
+from _splitwise.user import User, Friend, CurrentUser
+from _splitwise.currency import Currency
+from _splitwise.group import Group
+from _splitwise.category import Category
+from _splitwise.expense import Expense
+from _splitwise.comment import Comment
+from _splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
-from requests import Request, sessions
-from splitwise.exception import (SplitwiseException,
+from requests import Request, sessions, auth
+from _splitwise.exception import (SplitwiseException,
                                  SplitwiseUnauthorizedException,
                                  SplitwiseBadRequestException,
                                  SplitwiseNotAllowedException,
@@ -43,6 +43,14 @@ try:
 except ImportError:  # Python 3
     from urllib.parse import parse_qs, urlencode
 
+print("importing technillogue's debuggy splitwise")
+
+class BearerAuth(auth.AuthBase):
+    def __init__(self, token):
+        self.token = token
+    def __call__(self, req):
+        req.headers["authorization"] = "Bearer " + self.token
+        return req
 
 class Splitwise(object):
     """ The Splitwise class that provides all the functionality.
@@ -104,7 +112,7 @@ class Splitwise(object):
 
     debug = False
 
-    def __init__(self, consumer_key, consumer_secret, access_token=None, oauth2_access_token=None):
+    def __init__(self, consumer_key, consumer_secret, access_token=None, oauth2_access_token=None, api_key=""):
         """
 
         Args:
@@ -119,6 +127,8 @@ class Splitwise(object):
         self.consumer_key = consumer_key
         self.consumer_secret = consumer_secret
         self.auth = None
+        if api_key:
+            self.auth = BearerAuth(api_key)
         # If access token is present then set the Access token
         if access_token:
             self.setAccessToken(access_token)
@@ -270,18 +280,18 @@ class Splitwise(object):
             return response.content
 
         if response.status_code == 401:
-            raise SplitwiseUnauthorizedException("Please check your token or consumer id and secret", response=response)
+            raise SplitwiseUnauthorizedException("Please check your token or consumer id and secret", response, prep_req)
 
         if response.status_code == 403:
-            raise SplitwiseNotAllowedException("You are not allowed to perform this operation", response=response)
+            raise SplitwiseNotAllowedException("You are not allowed to perform this operation", response, prep_req)
 
         if response.status_code == 400:
-            raise SplitwiseBadRequestException("Please check your request", response=response)
+            raise SplitwiseBadRequestException("Please check your request", response, prep_req)
 
         if response.status_code == 404:
-            raise SplitwiseNotFoundException("Required resource is not found", response)
+            raise SplitwiseNotFoundException("Required resource is not found", response, prep_req)
 
-        raise SplitwiseException("Unknown error happened", response)
+        raise SplitwiseException("Unknown error happened", response, prep_req)
 
     def __prepareOptionsUrl(self, options={}):
         return "?"+urlencode(options)
