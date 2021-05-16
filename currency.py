@@ -1,0 +1,1 @@
+splitwise/currency.py
