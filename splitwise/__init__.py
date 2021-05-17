@@ -19,16 +19,16 @@ Splitwise Python SDK provides a simple interface to access splitwise APIs
 """
 import json
 import io
-from _splitwise.user import User, Friend, CurrentUser
-from _splitwise.currency import Currency
-from _splitwise.group import Group
-from _splitwise.category import Category
-from _splitwise.expense import Expense
-from _splitwise.comment import Comment
-from _splitwise.error import SplitwiseError
+from splitwise.user import User, Friend, CurrentUser
+from splitwise.currency import Currency
+from splitwise.group import Group
+from splitwise.category import Category
+from splitwise.expense import Expense
+from splitwise.comment import Comment
+from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
 from requests import Request, sessions, auth
-from _splitwise.exception import (SplitwiseException,
+from splitwise.exception import (SplitwiseException,
                                  SplitwiseUnauthorizedException,
                                  SplitwiseBadRequestException,
                                  SplitwiseNotAllowedException,
