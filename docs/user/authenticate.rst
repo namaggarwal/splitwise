@@ -56,3 +56,11 @@ You can also use OAuth2.0 to authenticate a user
 
         >>> s.setOAuth2AccessToken(access_token)
         >>> user = s.getCurrentUser()
+
+API Key
+-------
+
+If you just want to test the APIs for your user without going through the OAuth flow, you can do that with the API key provided on your project's detail page in Splitwise.
+
+        >>> sObj = Splitwise("<consumer key>","<consumer secret>",api_key="<api key>")
+        >>> current = sObj.getCurrentUser()

@@ -82,6 +82,15 @@ Before you can make call to splitwise, you need to get access token of the user 
 
 It is now possible to use OAuth2 with Splitwise. For details you can refer to [readthedocs.org](https://readthedocs.org/projects/splitwise/)
 
+#### API Key
+
+You can use API Key provided by Splitwise to test APIs for your user.
+
+```python
+sObj = Splitwise("<consumer key>","<consumer secret>",api_key="<api key>")
+current = sObj.getCurrentUser()
+```
+
 ### Get data from splitwise
 
 Once you have the access token you can make the calls to splitwise. Get the splitwise instance and set the access token and then make authorized calls.
