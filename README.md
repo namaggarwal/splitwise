@@ -320,6 +320,32 @@ success, errors = sObj.deleteGroup(4456)
 print(success)
 ```
 
+
+### Update Expense
+
+You can use ```updateExpense(Expense)``` to update an existing Expense. It takes in parameter a partial ```Expense``` object and returns an ```Expense``` object.
+
+Following things need to be set on the ```Expense``` object.
+
+1. Id
+2. any field you would want to update 
+
+
+```python
+from splitwise.expense import Expense
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+expense = Expense()
+expense.id = 12345678
+expense.setCost('10')
+expense.setDescription("Updated description")
+
+expense, errors = sObj.updateExpense(expense)
+print(expense.getId())
+```
+
 ### Delete expense
 You can use ```deleteExpense(expense_id)``` to delete an existing expense.
 
