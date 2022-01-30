@@ -89,6 +89,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/get_expense"
     CREATE_EXPENSE_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_expense"
+    UPDATE_EXPENSE_URL = SPLITWISE_BASE_URL + \
+        "api/" + SPLITWISE_VERSION + "/update_expense"
     DELETE_EXPENSE_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/delete_expense"
     CREATE_GROUP_URL = SPLITWISE_BASE_URL + \
@@ -555,6 +557,66 @@ class Splitwise(object):
 
         content = self.__makeRequest(
             Splitwise.CREATE_EXPENSE_URL, "POST", expense_data, files=files)
+        content = json.loads(content)
+        expense = None
+        errors = None
+
+        if files:
+            files["receipt"].close()
+
+        if 'expenses' in content:
+            if len(content['expenses']) > 0:
+                expense = Expense(content["expenses"][0])
+
+        if 'errors' in content:
+            if len(content['errors']) != 0:
+                errors = SplitwiseError(content['errors'])
+
+        return expense, errors
+
+    def updateExpense(self, expense):
+        """ Updates an existing expense.
+
+        Args:
+            expense(:obj:`splitwise.expense.Expense`): Splitwise Expense Object.
+            expense id must be set. Include only the fields that should be updated. null fields are ignored
+
+        Returns:
+            tuple: tuple containing:
+              expense(:obj:`splitwise.expense.Expense`): Object with Expense detail
+
+              errors(:obj:`splitwise.error.SplitwiseError`): Object representing errors
+        """
+        expense_id = expense.id
+        if expense_id is None:
+            raise SplitwiseBadRequestException("Incorrect query parameters sent. Expense Id cannot be null")
+
+        # Get the expense Dict
+        expense_data = expense.__dict__
+
+        del expense_data['id']
+
+        # Get users and store in a separate var
+        expense_users = expense.getUsers()
+
+        if expense_users:
+            # Delete users from original dict as we
+            # need to put like users_1_
+            del expense_data['users']
+            # Add user values to expense_data
+            Splitwise.setUserArray(expense_users, expense_data)
+
+        category = expense.getCategory()
+        if category:
+            expense_data["category_id"] = category.getId()
+
+        receipt = expense.getReceiptPath()
+        files = None
+        if receipt:
+            files = {"receipt":  io.open(receipt, "rb")}
+
+        content = self.__makeRequest(
+            Splitwise.UPDATE_EXPENSE_URL+"/"+str(expense_id), "POST", expense_data, files=files)
         content = json.loads(content)
         expense = None
         errors = None
