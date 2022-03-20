@@ -1,6 +1,6 @@
 class Notification(object):
     """
-    Contains comments made on an expense
+    Contains notification details
     Attributes:
         id(long): Notification Id
         content(string): Notification content
@@ -25,7 +25,7 @@ class Notification(object):
             self.created_by = data["created_by"]
             self.image_shape = data["image_shape"]
             self.image_url = data["image_url"]
-            self.source = data["source"]
+            self.source = Source(data["source"])
 
     def getId(self):
         """ Returns Notifications's Id
@@ -83,3 +83,33 @@ class Notification(object):
 
         return self.image_url
 
+
+class Source(object):
+    """
+    Contains  made on an expense
+    Attributes:
+        id(long): Notification Source Id
+        type(long): Notification Source type
+        url(string): Url
+    """
+    def __init__(self, data=None):
+        """
+          Args:
+              data(:obj:`json`, optional): JSON object representing source object
+        """
+
+        if data:
+            self.id = data["id"]
+            self.type = data["type"]
+            self.url = data["url"]
+
+    def getType(self):
+        return self.type
+
+    def getId(self):
+        return self.id
+
+    def getUrl(self):
+        return self.url
+
+     
