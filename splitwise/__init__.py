@@ -887,7 +887,7 @@ class Splitwise(object):
         try:
             content = self.__makeRequest(Splitwise.GET_NOTIFICATIONS_URL)
         except SplitwiseNotAllowedException as e:
-            e.setMessage("You are not allowed to fetch user with id %d" % expense_id)
+            e.setMessage("You are not allowed to fetch notifications")
             raise
 
         content = json.loads(content)
