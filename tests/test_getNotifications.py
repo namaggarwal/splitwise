@@ -21,9 +21,11 @@ class GetNotifications(unittest.TestCase):
         self.assertEqual(notifications[0].getType(), 0) # TODO: Constants?
         self.assertEqual(notifications[0].getCreatedAt(), "2019-08-24T14:15:22Z") # TODO: Does this API cast to date objects elsewhere?
         self.assertEqual(notifications[0].getCreatedBy(), 2) # TODO: Users?
-        self.assertEqual(notifications[0].getImageUrl(), "https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png")
+        self.assertEqual(notifications[0].getImageUrl(), 
+                         "https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png")
         self.assertEqual(notifications[0].getImageShape(), "square")
-        self.assertEqual(notifications[0].getContent(), "<strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\\\"#5bc5a7\\\">You paid $23.45</font>")
+        self.assertEqual(notifications[0].getContent(),
+                         "<strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\\\"#5bc5a7\\\">You paid $23.45</font>")
 
         self.assertEqual(notifications[0].source.getType(), "Expense")
         self.assertEqual(notifications[0].source.getId(), 865077)

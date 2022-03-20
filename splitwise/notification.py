@@ -1,6 +1,3 @@
-from splitwise.user import User
-
-
 class Notification(object):
     """
     Contains comments made on an expense
