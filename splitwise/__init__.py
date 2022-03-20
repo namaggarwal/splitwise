@@ -25,6 +25,7 @@ from splitwise.group import Group
 from splitwise.category import Category
 from splitwise.expense import Expense
 from splitwise.comment import Comment
+from splitwise.notification import Notification
 from splitwise.error import SplitwiseError
 from requests_oauthlib import OAuth1, OAuth2Session, OAuth2
 from requests import Request, sessions
@@ -103,6 +104,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/get_comments"
     CREATE_COMMENT_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/create_comment"
+    GET_NOTIFICATIONS_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/get_notifications"
 
     debug = False
 
@@ -867,3 +870,30 @@ class Splitwise(object):
                 errors = SplitwiseError(content['errors'])
 
         return comment, errors
+
+    # TODO: Implement optional args
+    def getNotifications(self, updated_since=None, limit=None):
+        """
+        Get notifications.
+
+        Args:
+            updated_since(string): Optional. ISO8601 Timestamp.
+            limit(long): Optional. Defaults to 0
+
+        Returns:
+            :obj:`splitwise.notification.Notifications`: Object representing Notifications
+        """
+
+        try:
+            content = self.__makeRequest(Splitwise.GET_NOTIFICATIONS_URL)
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to fetch user with id %d" % expense_id)
+            raise
+
+        content = json.loads(content)
+        notifications = []
+        if "notifications" in content:
+            for n in content["notifications"]:
+                notifications.append(Notification(n))
+
+        return notifications
