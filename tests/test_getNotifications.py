@@ -25,7 +25,7 @@ class GetNotifications(unittest.TestCase):
                          "https://s3.amazonaws.com/splitwise/uploads/notifications/v2/0-venmo.png")
         self.assertEqual(notifications[0].getImageShape(), "square")
         self.assertEqual(notifications[0].getContent(),
-                         "<strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\\\"#5bc5a7\\\">You paid $23.45</font>")
+                         "<strong>You</strong> paid <strong>Jon H.</strong>.<br><font color=\"#5bc5a7\">You paid $23.45</font>")
 
         self.assertEqual(notifications[0].source.getType(), "Expense")
         self.assertEqual(notifications[0].source.getId(), 865077)
@@ -37,4 +37,4 @@ class GetNotifications(unittest.TestCase):
         with self.assertRaises(Exception):
             self.sObj.getNotifications()
         mockMakeRequest.assert_called_with(
-            "https://secure.splitwise.com/api/v3.0/get_comments")
+            "https://secure.splitwise.com/api/v3.0/get_notifications")

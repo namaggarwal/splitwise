@@ -82,3 +82,4 @@ class Notification(object):
         """
 
         return self.image_url
+
