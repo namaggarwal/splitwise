@@ -395,6 +395,17 @@ print("content:", comment.getContent())
 print("errors:", errors)
 ```
 
+### Get Notifications
+
+You can use ```getNotifications()``` to get recent Notifications. It returns an array of ```Notification``` object.
+
+```python
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+id = 982430660
+notifications = sObj.getNotifications()
+```
+
 ## Objects
 
 ### User
@@ -582,7 +593,27 @@ Methods:
 7. getDeletedAt(id) - Returns datetime at which comment was deleted
 8. getUser() - Returns a ```User``` object containing user details
 
+### Notification
 
+Methods:
+
+1. getId() - Returns the id
+2. getContent() - Returns message
+3. getImageShape() - Returns comment type
+4. getImageType() - Returns relation type of the comment
+5. source - Returns source object
+6. getCreatedAt() - Returns datetime at which notification was created
+7. getCreatedBy() - Returns id of user who created notification
+
+### Source
+
+Used with Notifications.
+
+Methods:
+
+1. getId() - Returns the id
+2. getType() - Returns type. Use in combination with ID to fetch structured data
+3. getUrl() - Returns url
 
 ## Sample Application
 
