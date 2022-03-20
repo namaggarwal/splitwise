@@ -123,4 +123,3 @@ class Source(object):
             str: Notification Source's Url
         """
         return self.url
-
