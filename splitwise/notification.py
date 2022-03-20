@@ -28,7 +28,7 @@ class Notification(object):
             self.source = Source(data["source"])
 
     def getId(self):
-        """ Returns Notifications's Id
+        """ Returns Notification's Id
         Returns:
             str: Notification's Id
         """
@@ -54,7 +54,7 @@ class Notification(object):
     def getCreatedBy(self):
         """ Returns id who triggered Notification was created
         Returns:
-            long: Notifications's creator id
+            long: Notification's creator id
         """
 
         return self.created_by
@@ -62,7 +62,7 @@ class Notification(object):
     def getCreatedAt(self):
         """ Returns datetime at which notification was created
         Returns:
-            datetime: Notificaton's creation date
+            datetime: Notification's creation date
         """
 
         return self.created_at
@@ -104,12 +104,23 @@ class Source(object):
             self.url = data["url"]
 
     def getType(self):
+        """ Returns Notification Source's Type
+        Returns:
+            str: Notification Source's Type, ie Expense
+        """
         return self.type
 
     def getId(self):
+        """ Returns Notification Source's Id
+        Returns:
+            long: Notification Source's Id
+        """
         return self.id
 
     def getUrl(self):
+        """ Returns Notification Source's Url
+        Returns:
+            str: Notification Source's Url
+        """
         return self.url
 
-     
