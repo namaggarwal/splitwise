@@ -458,6 +458,7 @@ class Splitwise(object):
     def getExpenses(self,
                     offset=None,
                     limit=None,
+                    visible=None,
                     group_id=None,
                     friendship_id=None,
                     dated_after=None,
@@ -470,7 +471,8 @@ class Splitwise(object):
         Args:
             offset(int, optional): Number of expenses to be skipped
             limit(int, optional): Number of expenses to be returned
-            group_id(long, optional): GroupID of the expenses
+            limit(int, optional): Number of expenses to be returned
+            visible(bol, optional): If true call will not return the deleted expenses
             friendship_id(long, optional): FriendshipID of the expenses
             dated_after(str, optional): ISO 8601 Date time. Return expenses later that this date
             dated_before(str, optional): ISO 8601 Date time. Return expenses earlier than this date
