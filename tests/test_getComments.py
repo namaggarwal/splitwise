@@ -27,7 +27,7 @@ class GetComments(unittest.TestCase):
         self.assertEqual(comment[0].getCommentedUser().getFirstName(), "Naman")
         self.assertEqual(comment[0].getCommentedUser().getLastName(), "Aggarwal")
 
-    def test_getUser_exception(self, mockMakeRequest):
+    def test_getComments_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         with self.assertRaises(Exception):

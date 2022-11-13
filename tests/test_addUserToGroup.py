@@ -78,7 +78,7 @@ class AddUserToGroupTestCase(unittest.TestCase):
         self.assertFalse(success)
         self.assertEqual(errors.getErrors(), {'memberships.user.first_name': ["can't be blank"]})
 
-    def test_createGroup_exception(self, mockMakeRequest):
+    def test_addUserToGroup_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         user = User()
