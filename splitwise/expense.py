@@ -351,6 +351,14 @@ class Expense(object):
         """
         return self.transaction_id
 
+    def setId(self, id):
+        """ Sets the id of the expense
+
+        Args:
+            id(long): ID of the expense
+        """
+        self.id = id
+
     def setGroupId(self, id):
         """ Sets the group id of the expense
 

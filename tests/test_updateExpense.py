@@ -274,7 +274,7 @@ class UpdateExpenseTestCase(unittest.TestCase):
         mockMakeRequest.side_effect = Exception(
             "Invalid response %s. Please check your consumer key and secret." % 404)
         expense = Expense()
-        expense.id = 1010934284
+        expense.setId(1010934284)
         expense.setCost('10')
         expense.setDescription("Testing")
         user1 = ExpenseUser()
