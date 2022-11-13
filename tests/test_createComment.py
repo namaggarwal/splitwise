@@ -47,8 +47,8 @@ class CreateCommentTestCase(unittest.TestCase):
                                            data)
         self.assertEqual(errors.getErrors(), {
             'base': [
-                'An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. \
-Sorry for the trouble!'
+                'An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated \
+                    issues. Sorry for the trouble!'
             ]})
 
     def test_createComment_exception(self, mockMakeRequest):
