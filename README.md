@@ -9,7 +9,7 @@ This is the python sdk for Splitwise APIs. Pull requests and bug reports are wel
 
 ## Latest Version
 
-The latest version of splitwise SDK is Splitwise-2.3.0
+The latest version of splitwise SDK is Splitwise-2.4.0
 
 ## Docs
 
@@ -328,7 +328,7 @@ You can use ```updateExpense(Expense)``` to update an existing Expense. It takes
 Following things need to be set on the ```Expense``` object.
 
 1. Id
-2. any field you would want to update 
+2. any field you would want to update
 
 
 ```python
