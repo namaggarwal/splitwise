@@ -93,7 +93,8 @@ class UpdateExpenseTestCase(unittest.TestCase):
         expenseRes, errors = self.sObj.updateExpense(expense)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/update_expense/1010906976", "POST",
-            {'cost': '13', 'description': 'Testing', 'details': 'Full details of the expense', 'group_id': 19433671, 'split_equally': True}, files=None)
+            {'cost': '13', 'description': 'Testing', 'details': 'Full details of the expense',
+             'group_id': 19433671, 'split_equally': True}, files=None)
         self.assertIsNone(errors)
         self.assertEqual(expenseRes.getId(), 1010906976)
         self.assertEqual(expenseRes.getGroupId(), 19433671)
