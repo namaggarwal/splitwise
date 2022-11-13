@@ -1,10 +1,12 @@
+import unittest
+
 from splitwise import Splitwise, SplitwiseBadRequestException
 from splitwise.expense import Expense, ExpenseUser
-import unittest
+
 try:
-    from unittest.mock import patch, MagicMock
+    from unittest.mock import MagicMock, patch
 except ImportError:  # Python 2
-    from mock import patch, MagicMock
+    from mock import MagicMock, patch
 
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
@@ -249,7 +251,7 @@ class UpdateExpenseTestCase(unittest.TestCase):
         users.append(user1)
         users.append(user2)
         expense.setUsers(users)
-        expenseRes, errors = self.sObj.updateExpense(expense)
+        _, errors = self.sObj.updateExpense(expense)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/update_expense/1010934284", "POST",
             {'cost': '10',
@@ -261,11 +263,12 @@ class UpdateExpenseTestCase(unittest.TestCase):
              'users__1__paid_share': '0.00',
              'users__1__owed_share': '8.00'
              }, files=None)
-        self.assertEqual(errors.getErrors(), {
-            'base': [
-                'An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. \
-Sorry for the trouble!'
-            ]})
+        self.assertEqual(
+            errors.getErrors(),
+            {
+                'base': ['An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!']  # noqa: E501
+            }
+        )
 
     def test_updateExpense_exception(self, mockMakeRequest):
         mockMakeRequest.side_effect = Exception(

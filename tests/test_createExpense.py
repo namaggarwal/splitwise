@@ -1,10 +1,12 @@
+import unittest
+
 from splitwise import Splitwise
 from splitwise.expense import Expense, ExpenseUser
-import unittest
+
 try:
-    from unittest.mock import patch, MagicMock
+    from unittest.mock import MagicMock, patch
 except ImportError:  # Python 2
-    from mock import patch, MagicMock
+    from mock import MagicMock, patch
 
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
@@ -260,8 +262,7 @@ class CreateExpenseTestCase(unittest.TestCase):
              }, files=None)
         self.assertEqual(errors.getErrors(), {
             'base': [
-                'An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. \
-Sorry for the trouble!'
+                'An unknown error occurred. Please try again or contact support@splitwise.com if you experience repeated issues. Sorry for the trouble!'  # noqa: E501
             ]})
 
     def test_createExpense_exception(self, mockMakeRequest):
