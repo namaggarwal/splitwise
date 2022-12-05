@@ -552,6 +552,7 @@ class Splitwise(object):
         category = expense.getCategory()
         if category:
             expense_data["category_id"] = category.getId()
+            del expense_data["category"]
 
         receipt = expense.getReceiptPath()
         files = None
