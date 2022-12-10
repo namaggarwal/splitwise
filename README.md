@@ -9,7 +9,7 @@ This is the python sdk for Splitwise APIs. Pull requests and bug reports are wel
 
 ## Latest Version
 
-The latest version of splitwise SDK is Splitwise-2.4.0
+The latest version of splitwise SDK is Splitwise-2.5.0
 
 ## Docs
 
