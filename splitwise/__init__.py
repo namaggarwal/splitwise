@@ -100,6 +100,8 @@ class Splitwise(object):
         "api/"+SPLITWISE_VERSION+"/add_user_to_group"
     DELETE_GROUP_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/delete_group"
+    EXPORT_GROUP_URL = SPLITWISE_BASE_URL + \
+        "api/"+SPLITWISE_VERSION+"/export_group"
     GET_COMMENTS_URL = SPLITWISE_BASE_URL + \
         "api/"+SPLITWISE_VERSION+"/get_comments"
     CREATE_COMMENT_URL = SPLITWISE_BASE_URL + \
@@ -787,6 +789,27 @@ class Splitwise(object):
                 errors = SplitwiseError(content['errors'])
 
         return success, errors
+
+    def exportGroup(self, id):
+        """ Exports the group with given id.
+
+        Args:
+            id(long): ID of the group to be exported.
+
+        Returns:
+            string:
+                The CSV content as string.
+        """
+        try:
+            content = self.__makeRequest(
+                Splitwise.EXPORT_GROUP_URL+"/"+str(id), "POST")
+        except SplitwiseNotAllowedException as e:
+            e.setMessage("You are not allowed to access group with id %d" % id)
+            raise
+        except SplitwiseNotFoundException as e:
+            e.setMessage("Group with id %d does not exist" % id)
+            raise
+        return content
 
     @staticmethod
     def setUserArray(users, user_array):
