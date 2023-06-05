@@ -219,6 +219,7 @@ Following things need to be set on the ```Expense``` object.
 1. Cost
 2. Description
 3. Users - Should be a list of ```ExpenseUser``` with id and paidShare and owedShare set.
+4. Currency Code
 
 ```python
 from splitwise.expense import Expense
@@ -230,6 +231,7 @@ sObj.setAccessToken(session['access_token'])
 expense = Expense()
 expense.setCost('10')
 expense.setDescription("Testing")
+expense.setCurrencyCode("USD")
 expense.setReceipt("/Users/naman/receipt.jpg")
 
 user1 = ExpenseUser()
