@@ -29,7 +29,7 @@ class CreateExpenseTestCase(unittest.TestCase):
         expenseRes, errors = self.sObj.createExpense(expense)
         mockMakeRequest.assert_called_with(
             "https://secure.splitwise.com/api/v3.0/create_expense", "POST",
-            {'cost': '10', 'description': 'Testing', 'group_id': 19433671, 'split_equally': True, 'receiptPath': 'temp.jpg'},
+            {'cost': '10', 'description': 'Testing', 'group_id': 19433671, 'split_equally': True},
             files={'receipt': mockFile})
         self.assertIsNone(errors)
         self.assertEqual(expenseRes.getId(), 1010906976)
