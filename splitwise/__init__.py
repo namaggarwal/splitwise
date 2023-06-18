@@ -269,7 +269,7 @@ class Splitwise(object):
             elif self.api_key:
                 headers = {'Authorization': 'Bearer {}'.format(self.api_key)}
 
-        requestObj = Request(method=method, url=url, headers=headers, data=data, auth=auth, files=files)
+        requestObj = Request(method=method, url=url, headers=headers, json=data, auth=auth, files=files)
 
         prep_req = requestObj.prepare()
 
