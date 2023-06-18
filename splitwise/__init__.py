@@ -558,6 +558,7 @@ class Splitwise(object):
         files = None
         if receipt:
             files = {"receipt":  io.open(receipt, "rb")}
+            del expense_data["receiptPath"]
 
         content = self.__makeRequest(
             Splitwise.CREATE_EXPENSE_URL, "POST", expense_data, files=files)
