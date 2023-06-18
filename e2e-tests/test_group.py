@@ -25,6 +25,12 @@ class GroupTestCase(unittest.TestCase):
         # Delete Group
         self.sObj.deleteGroup(group.getId())
 
+    def test_get_group(self):
+        group_id = 19571167
+        group = self.sObj.getGroup(group_id)
+        self.assertIsNotNone(group.getId())
+        self.assertEqual(len(group.getMembers()), 2)
+
     def test_group_invalidkeys_fail(self):
         sObj = Splitwise('consumerkey', 'consumersecret', {"oauth_token": "sdsd", "oauth_token_secret": "sdsdd"})
         group = Group()
