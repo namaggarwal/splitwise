@@ -3,11 +3,7 @@ import unittest
 from splitwise import Splitwise
 from splitwise.expense import Expense, ExpenseUser
 
-try:
-    from unittest.mock import MagicMock, patch
-except ImportError:  # Python 2
-    from mock import MagicMock, patch
-
+from unittest.mock import MagicMock, patch
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class CreateExpenseTestCase(unittest.TestCase):

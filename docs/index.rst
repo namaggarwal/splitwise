@@ -56,7 +56,7 @@ splitwise SDK supports
 - :ref:`Creating new comment <exNComment>`
 
 
-Splitwise officially supports Python 2.7 & 3.4–3.7, and runs great on PyPy.
+Splitwise officially supports 3.4-3.11, and runs great on PyPy.
 
 The User Documentation / Guide
 ------------------------------

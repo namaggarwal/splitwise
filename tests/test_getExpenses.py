@@ -1,14 +1,8 @@
 from splitwise import Splitwise
 import unittest
-try:
-    from unittest.mock import patch
-    from urllib.parse import parse_qs
-    import urllib.parse as urlparse
-except ImportError:  # Python 2
-    from mock import patch
-    from urlparse import parse_qs
-    import urlparse
-
+from unittest.mock import patch
+from urllib.parse import parse_qs
+import urllib.parse as urlparse
 
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class GetExpensesTestCase(unittest.TestCase):
