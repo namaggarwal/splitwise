@@ -4,6 +4,7 @@ from splitwise.exception import SplitwiseBadRequestException
 import unittest
 from unittest.mock import patch
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class UpdateUserTestCase(unittest.TestCase):
 

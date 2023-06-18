@@ -2,6 +2,7 @@ from splitwise import Splitwise
 import unittest
 from unittest.mock import patch
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class GetComments(unittest.TestCase):
 

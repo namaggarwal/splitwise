@@ -4,6 +4,7 @@ from splitwise import Splitwise, SplitwiseBadRequestException
 from splitwise.expense import Expense, ExpenseUser
 from unittest.mock import MagicMock, patch
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class UpdateExpenseTestCase(unittest.TestCase):
 

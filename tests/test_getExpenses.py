@@ -4,6 +4,7 @@ from unittest.mock import patch
 from urllib.parse import parse_qs
 import urllib.parse as urlparse
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class GetExpensesTestCase(unittest.TestCase):
 

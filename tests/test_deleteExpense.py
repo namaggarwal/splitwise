@@ -3,6 +3,7 @@ from splitwise.exception import SplitwiseNotFoundException, SplitwiseNotAllowedE
 import unittest
 from unittest.mock import patch
 
+
 @patch('splitwise.Splitwise._Splitwise__makeRequest')
 class DeleteExpenseTestCase(unittest.TestCase):
 
