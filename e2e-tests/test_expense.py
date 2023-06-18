@@ -33,6 +33,31 @@ class ExpenseTestCase(unittest.TestCase):
         self.assertIsNone(error)
         self.assertTrue(success)
 
+    def test_expense_update_independent_flow(self):
+        receipt = os.path.join(os.path.dirname(os.path.realpath(__file__)), "receipt.jpg")
+        expense = Expense()
+        expense.setDescription("End2EndTest")
+        expense.setCost('10')
+        expense.setGroupId(19571167)
+        expense.setSplitEqually()
+        expense.setReceipt(receipt)
+        # create expense
+        expense, error = self.sObj.createExpense(expense)
+        self.assertIsNone(error)
+        self.assertIsNotNone(expense.getId())
+        # update expense
+        newexpense = Expense()
+        newexpense.setId(expense.getId())
+        newexpense.setDescription("End2EndTestUpdated")
+        expense, error = self.sObj.updateExpense(newexpense)
+        self.assertIsNone(error)
+        self.assertIsNotNone(expense.getId())
+        self.assertEqual(expense.getDescription(), "End2EndTestUpdated")
+        # delete expense
+        success, error = self.sObj.deleteExpense(expense.getId())
+        self.assertIsNone(error)
+        self.assertTrue(success)
+
     def test_expense_invalidkeys_fail(self):
         sObj = Splitwise('consumerkey', 'consumersecret', {"oauth_token": "sdsd", "oauth_token_secret": "sdsdd"})
         expense = Expense()
