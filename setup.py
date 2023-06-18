@@ -3,7 +3,7 @@ from os import path
 from io import open
 
 INSTALL_REQUIRES = []
-INSTALL_REQUIRES.append('requests>=2.24.0,<3')
+INSTALL_REQUIRES.append('requests>=2.31.0,<3')
 INSTALL_REQUIRES.append('requests-oauthlib>=1.3.0,<2')
 
 TEST_REQUIRES = []
@@ -35,16 +35,12 @@ setup(name=about['__title__'],
           'Natural Language :: English',
           'Operating System :: OS Independent',
           'Programming Language :: Python',
-          'Programming Language :: Python :: 2',
-          'Programming Language :: Python :: 2.6',
-          'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
-          'Programming Language :: Python :: 3.3',
-          'Programming Language :: Python :: 3.4',
-          'Programming Language :: Python :: 3.5',
-          'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
+          'Programming Language :: Python :: 3.10',
+          'Programming Language :: Python :: 3.11',
           'Topic :: Software Development :: Libraries :: Python Modules'
 ],
     install_requires=INSTALL_REQUIRES,
