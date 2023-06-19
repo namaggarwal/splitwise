@@ -473,7 +473,8 @@ class Splitwise(object):
                     dated_after=None,
                     dated_before=None,
                     updated_after=None,
-                    updated_before=None
+                    updated_before=None,
+                    visible=None
                     ):
         """ Gets the list of expenses given parameters.
 
@@ -486,6 +487,7 @@ class Splitwise(object):
             dated_before(str, optional): ISO 8601 Date time. Return expenses earlier than this date
             updated_after(str, optional): ISO 8601 Date time. Return expenses updated after this date
             updated_before(str, optional): ISO 8601 Date time. Return expenses updated before this date
+            visible(bool, optional): Boolean to show only not deleted expenses
 
         Returns:
             :obj:`list` of :obj:`splitwise.expense.Expense`: List of Expense
@@ -500,7 +502,10 @@ class Splitwise(object):
         params = localCopy.keys()
         for param in params:
             if param != 'self' and param != 'options' and localCopy.get(param) is not None:
-                options[param] = localCopy.get(param)
+                paramVal = localCopy.get(param)
+                options[param] = paramVal
+                if isinstance(paramVal, bool):
+                    options[param] = str(paramVal).lower()
 
         url = Splitwise.GET_EXPENSES_URL
 
@@ -654,7 +659,7 @@ class Splitwise(object):
         if 'expenses' in content:
             if len(content['expenses']) > 0:
                 expense = Expense(content["expenses"][0])
-        print(content)
+
         if 'errors' in content:
             if len(content['errors']) != 0:
                 errors = SplitwiseError(content['errors'])
