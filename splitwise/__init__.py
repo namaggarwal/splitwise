@@ -269,7 +269,14 @@ class Splitwise(object):
             elif self.api_key:
                 headers = {'Authorization': 'Bearer {}'.format(self.api_key)}
 
-        requestObj = Request(method=method, url=url, headers=headers, json=data, auth=auth, files=files)
+        # convert the uppercase True/False to lower
+        # Splitwise server considers False as true value
+        if data is not None:
+            for key, val in data.items():
+                if isinstance(val, bool):
+                    data[key] = str(val).lower()
+
+        requestObj = Request(method=method, url=url, headers=headers, data=data, auth=auth, files=files)
 
         prep_req = requestObj.prepare()
 
@@ -620,6 +627,20 @@ class Splitwise(object):
         files = None
         if receipt:
             files = {"receipt":  io.open(receipt, "rb")}
+            del expense_data["receiptPath"]
+
+        # del expense_data["created_by"]
+        # del expense_data["repayments"]
+        # del expense_data["next_repeat"]
+        # del expense_data["comments_count"]
+        # del expense_data["updated_by"]
+        # del expense_data["transaction_confirmed"]
+        # del expense_data["deleted_at"]
+        # del expense_data["friendship_id"]
+        # del expense_data["expense_bundle_id"]
+        # del expense_data["updated_at"]
+        # del expense_data["deleted_by"]
+        # del expense_data["created_at"]
 
         content = self.__makeRequest(
             Splitwise.UPDATE_EXPENSE_URL+"/"+str(expense_id), "POST", expense_data, files=files)
@@ -633,7 +654,7 @@ class Splitwise(object):
         if 'expenses' in content:
             if len(content['expenses']) > 0:
                 expense = Expense(content["expenses"][0])
-
+        print(content)
         if 'errors' in content:
             if len(content['errors']) != 0:
                 errors = SplitwiseError(content['errors'])
@@ -796,6 +817,8 @@ class Splitwise(object):
             for key in user_dict:
                 if key == "id":
                     gen_key = "user_id"
+                elif key == "picture":
+                    continue
                 else:
                     gen_key = key
                 user_array["users__" +
