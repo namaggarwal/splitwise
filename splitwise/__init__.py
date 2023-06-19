@@ -269,12 +269,7 @@ class Splitwise(object):
             elif self.api_key:
                 headers = {'Authorization': 'Bearer {}'.format(self.api_key)}
 
-        # convert the uppercase True/False to lower
-        # Splitwise server considers False as true value
-        if data is not None:
-            for key, val in data.items():
-                if isinstance(val, bool):
-                    data[key] = str(val).lower()
+        data = Splitwise.__handleUppercaseBoolean(data)
 
         requestObj = Request(method=method, url=url, headers=headers, data=data, auth=auth, files=files)
 
@@ -283,6 +278,11 @@ class Splitwise(object):
         with sessions.Session() as session:
             response = session.send(prep_req)
 
+        content = self.__handleResponse(response)
+
+        return content
+
+    def __handleResponse(self, response):
         if response.status_code == 200:
             if (response.content and hasattr(response.content, "decode")):
                 return response.content.decode("utf-8")
@@ -809,6 +809,20 @@ class Splitwise(object):
                 errors = SplitwiseError(content['errors'])
 
         return success, errors
+
+    @staticmethod
+    def __handleUppercaseBoolean(data):
+        # convert the uppercase True/False to lower
+        # Splitwise server considers False as true value
+        try:
+            if data is not None:
+                for key, val in data.items():
+                    if isinstance(val, bool):
+                        data[key] = str(val).lower()
+        except Exception:
+            pass
+
+        return data
 
     @staticmethod
     def setUserArray(users, user_array):
