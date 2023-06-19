@@ -346,6 +346,22 @@ expense, errors = sObj.updateExpense(expense)
 print(expense.getId())
 ```
 
+or update the fetched expense
+
+
+```python
+from splitwise.expense import Expense
+
+sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
+sObj.setAccessToken(session['access_token'])
+
+expense, error = sObj.getExpense(12345)
+expense.setDescription("Updated description")
+
+expense, errors = sObj.updateExpense(expense)
+print(expense.getDescription())
+```
+
 ### Delete expense
 You can use ```deleteExpense(expense_id)``` to delete an existing expense.
 
