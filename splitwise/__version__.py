@@ -1,10 +1,10 @@
 __title__ = 'splitwise'
 __description__ = 'Splitwise Python SDK'
-__version__ = '2.5.0'
+__version__ = '3.0.0'
 __url__ = 'https://github.com/namaggarwal/splitwise'
 __download_url__ = 'https://github.com/namaggarwal/splitwise/tarball/v'+__version__
 __build__ = 0x022400
 __author__ = 'Naman Aggarwal'
 __author_email__ = 'aggarwal.nam@gmail.com'
 __license__ = 'MIT'
-__copyright__ = 'Copyright 2021 Naman Aggarwal'
+__copyright__ = 'Copyright 2023 Naman Aggarwal'
