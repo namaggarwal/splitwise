@@ -629,18 +629,18 @@ class Splitwise(object):
             files = {"receipt":  io.open(receipt, "rb")}
             del expense_data["receiptPath"]
 
-        # del expense_data["created_by"]
-        # del expense_data["repayments"]
-        # del expense_data["next_repeat"]
-        # del expense_data["comments_count"]
-        # del expense_data["updated_by"]
-        # del expense_data["transaction_confirmed"]
-        # del expense_data["deleted_at"]
-        # del expense_data["friendship_id"]
-        # del expense_data["expense_bundle_id"]
-        # del expense_data["updated_at"]
-        # del expense_data["deleted_by"]
-        # del expense_data["created_at"]
+        expense_data.pop("created_by", None)
+        expense_data.pop("repayments", None)
+        expense_data.pop("next_repeat", None)
+        expense_data.pop("comments_count", None)
+        expense_data.pop("updated_by", None)
+        expense_data.pop("transaction_confirmed", None)
+        expense_data.pop("deleted_at", None)
+        expense_data.pop("friendship_id", None)
+        expense_data.pop("expense_bundle_id", None)
+        expense_data.pop("updated_at", None)
+        expense_data.pop("deleted_by", None)
+        expense_data.pop("created_at", None)
 
         content = self.__makeRequest(
             Splitwise.UPDATE_EXPENSE_URL+"/"+str(expense_id), "POST", expense_data, files=files)

@@ -28,6 +28,12 @@ class ExpenseTestCase(unittest.TestCase):
         expense, error = self.sObj.createExpense(expense)
         self.assertIsNone(error)
         self.assertIsNotNone(expense.getId())
+        # update expense
+        expense.setDescription("I am now new expense")
+        expense, error = self.sObj.updateExpense(expense)
+        self.assertIsNone(error)
+        self.assertIsNotNone(expense.getId())
+        self.assertEqual(expense.getDescription(), "I am now new expense")
         # delete expense
         success, error = self.sObj.deleteExpense(expense.getId())
         self.assertIsNone(error)
