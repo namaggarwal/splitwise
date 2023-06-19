@@ -469,7 +469,7 @@ class Splitwise(object):
                     offset=None,
                     limit=None,
                     group_id=None,
-                    friendship_id=None,
+                    friend_id=None,
                     dated_after=None,
                     dated_before=None,
                     updated_after=None,
@@ -481,7 +481,7 @@ class Splitwise(object):
             offset(int, optional): Number of expenses to be skipped
             limit(int, optional): Number of expenses to be returned
             group_id(long, optional): GroupID of the expenses
-            friendship_id(long, optional): FriendshipID of the expenses
+            friend_id(long, optional): ID of the friend for which expenses are required
             dated_after(str, optional): ISO 8601 Date time. Return expenses later that this date
             dated_before(str, optional): ISO 8601 Date time. Return expenses earlier than this date
             updated_after(str, optional): ISO 8601 Date time. Return expenses updated after this date

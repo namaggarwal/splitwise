@@ -69,3 +69,7 @@ class ExpenseTestCase(unittest.TestCase):
         expense = Expense()
         with self.assertRaises(SplitwiseUnauthorizedException):
             sObj.createExpense(expense)
+
+    def test_get_expenses_success(self):
+        expenses = self.sObj.getExpenses(limit=2,group_id=19571167)
+        self.assertEqual(len(expenses), 2)
