@@ -154,7 +154,7 @@ class GetExpensesTestCase(unittest.TestCase):
         self.assertEqual(qs['offset'], ['2'])
         self.assertEqual(qs['limit'], ['3'])
         self.assertEqual(qs['group_id'], ['123'])
-        self.assertEqual(qs['friendship_id'], ['1234'])
+        self.assertEqual(qs['friend_id'], ['1234'])
         self.assertEqual(qs['dated_after'], ['2020-12-12'])
         self.assertEqual(qs['dated_before'], ['2020-12-19'])
         self.assertEqual(qs['updated_after'], ['2020-12-13'])

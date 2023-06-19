@@ -192,7 +192,7 @@ sObj.getGroup(43233)
 
 ### Get Expenses
 
-You can use ```getExpenses(offset,limit,group_id,friendship_id,dated_after,dated_before,updated_after,updated_before)``` to get all the expenses of the current user based on filter options. It returns a list of ```Expense``` objects.
+You can use ```getExpenses(offset,limit,group_id,friend_id,dated_after,dated_before,updated_after,updated_before)``` to get all the expenses of the current user based on filter options. It returns a list of ```Expense``` objects.
 
 ```python
 sObj = Splitwise(Config.consumer_key,Config.consumer_secret)
